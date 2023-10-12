@@ -7,7 +7,7 @@ import visitor.Visitor;
 
 import java.util.List;
 
-public class StructType extends AbstractType {
+public class StructType extends AbstractType implements Type{
 
     private List<FieldDeclaration> fields;
 

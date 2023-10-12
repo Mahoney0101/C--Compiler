@@ -2,6 +2,7 @@ package ast;
 
 import ast.statements.Statement;
 import ast.statements.VarDeclaration;
+import types.StructType;
 import visitor.Visitor;
 
 import java.util.List;
@@ -9,15 +10,15 @@ import java.util.List;
 public class Program extends AbstractASTNode {
 
     private List<VarDeclaration> varDeclarations;
-    private List<FuncDefinition> functionDefinitions;
-    private List<StructDefinition> structDefinitions;
-    private List<Statement> mainStatements; // Statements within the 'main' function
+    private List<FunctionDeclaration> functionDefinitions;
+    private List<StructType> structDefinitions;
+    private MainFunctionDeclaration mainStatements; // Statements within the 'main' function
 
     public Program(int line, int column,
                    List<VarDeclaration> varDeclarations,
-                   List<FuncDefinition> functionDefinitions,
-                   List<StructDefinition> structDefinitions,
-                   List<Statement> mainStatements) {
+                   List<FunctionDeclaration> functionDefinitions,
+                   List<StructType> structDefinitions,
+                   MainFunctionDeclaration mainfunction) {
         super(line, column);
         this.varDeclarations = varDeclarations;
         this.functionDefinitions = functionDefinitions;
@@ -25,19 +26,20 @@ public class Program extends AbstractASTNode {
         this.mainStatements = mainStatements;
     }
 
+
     public List<VarDeclaration> getVarDefinitions() {
         return this.varDeclarations;
     }
 
-    public List<FuncDefinition> getFunctionDefinitions() {
+    public List<FunctionDeclaration> getFunctionDefinitions() {
         return this.functionDefinitions;
     }
 
-    public List<StructDefinition> getStructDefinitions() {
+    public List<StructType> getStructDefinitions() {
         return this.structDefinitions;
     }
 
-    public List<Statement> getMainStatements() {
+    public MainFunctionDeclaration getMainStatements() {
         return this.mainStatements;
     }
 
@@ -52,6 +54,6 @@ public class Program extends AbstractASTNode {
                 this.varDeclarations.size(),
                 this.functionDefinitions.size(),
                 this.structDefinitions.size(),
-                this.mainStatements.size());
+                this.mainStatements.toString());
     }
 }

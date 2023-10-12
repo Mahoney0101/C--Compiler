@@ -14,6 +14,7 @@ public class MainFunctionDeclaration extends AbstractASTNode {
         this.returnType = returnType;
         this.functionName = functionName;
         this.functionBody = functionBody;
+        System.out.println("main ctr");
     }
 
     public String getReturnType() {
@@ -31,7 +32,7 @@ public class MainFunctionDeclaration extends AbstractASTNode {
 
     @Override
     public String toString() {
-        return returnType + " " + functionName + " " + functionBody;
+        return returnType + " " + functionName + " " + functionBody.toString();
     }
 
     @Override

@@ -9,9 +9,33 @@ grammar Cmm;
 	import java.util.*;
 }
 // ** PARSER RULES **
-
 // ** Program Structure **
-program : (varDeclaration | functionDeclaration | structType)* mainFunction EOF;
+program returns [Program ast]
+    :
+    {
+        System.out.println("Parsing program");
+
+        List<VarDeclaration> varDecls = new ArrayList<>();
+        List<FunctionDeclaration> funcDefs = new ArrayList<>();
+        List<StructType> structDefs = new ArrayList<>();
+        MainFunctionDeclaration mainFnc = null;
+    }
+    (
+      v=varDeclaration      { varDecls.add($v.ast);         System.out.println("Parsing varDeclaration Type ="+ $v.ast+"");
+}
+    | f=functionDeclaration { funcDefs.add($f.ast);         System.out.println("Parsing funcDeclaration Type ="+ $f.ast+"");
+ }
+    | s=structType          { structDefs.add($s.ast);         System.out.println("Parsing structdef Type ="+ $s.ast+"");
+}
+    )*
+    m=mainFunction {
+                System.out.println("Parsing main");
+    mainFnc = $m.ast;
+
+    $ast = new Program($start.getLine(), $start.getCharPositionInLine()+1, varDecls, funcDefs, structDefs, $m.ast);}
+    EOF
+    ;
+
 
 mainFunction returns [MainFunctionDeclaration ast]:
     v=VOID m=MAIN lp=LPAREN lp=RPAREN b=block
@@ -24,6 +48,7 @@ mainFunction returns [MainFunctionDeclaration ast]:
 varDeclaration returns [VarDeclaration ast]
     : t1=type ids1=idList SEMI
         {
+        System.out.println("Parsing varDeclaration Type ="+ $t1.ast+"");
             Type finalType = $t1.ast;
 
             $ast = new VarDeclaration($t1.start.getLine(), $t1.start.getCharPositionInLine() + 1, $ids1.ast, finalType);
@@ -62,11 +87,21 @@ fieldDeclaration returns [List<FieldDeclaration> ast = new ArrayList<FieldDeclar
         }
     ;
 
-
-structType returns [Type ast]
+structType returns [StructType ast]
     : STRUCT  LBRACE fds=fieldDeclaration+ RBRACE id=ID?
         {
             $ast = new StructType($start.getLine(), $start.getCharPositionInLine()+1, $fds.ast);
+        }
+    ;
+
+structDeclaration returns [StructDefinition ast]
+    : STRUCT LBRACE fds=fieldDeclaration+ RBRACE id=ID?
+        {
+            $ast = new StructDefinition($start.getLine(), $start.getCharPositionInLine()+1, $id.text, $fds.ast, 0);
+        }
+    STRUCT LBRACE fds1=fieldDeclaration+ RBRACE ad1=arrayDimensions id1=ID?
+        {
+            $ast = new StructDefinition($start.getLine(), $start.getCharPositionInLine()+1, $id1.text, $fds1.ast, $ad1.size);
         }
     ;
 
@@ -105,7 +140,6 @@ statements returns [List<Statement> ast]
             $ast = new ArrayList<>();
         }
     ;
-
 
 block returns [Block ast]
 : LBRACE stmts=statements RBRACE
@@ -161,15 +195,14 @@ exprList returns [List<Expression> expressions = new ArrayList<Expression>()]
     ;
 
 paramList returns [List<Parameter> ast = new ArrayList<Parameter>()]
-    : p=param {
-        $ast.add($p.ast);
-      }
-      (COMMA p1=param { $ast.add($p1.ast); })*
+    : p=param
+    { $ast.add($p.ast); }
+    (COMMA p1=param { $ast.add($p1.ast); })*
     ;
 
 param returns [Parameter ast]
     : t=type n=ID
-      { $ast = new Parameter($t.start.getLine(), $t.start.getCharPositionInLine()+1, $n.text, $t.ast); }
+    { $ast = new Parameter($t.start.getLine(), $t.start.getCharPositionInLine()+1, $n.text, $t.ast); }
     ;
 
 type returns [Type ast]

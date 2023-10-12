@@ -1,3 +1,4 @@
+import ast.Program;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import parser.CmmLexer;
@@ -22,6 +23,13 @@ public class Main {
 
 				// Start parsing at the 'program' rule
 				CmmParser.ProgramContext tree = parser.program();
+				Program ast = parser.program().ast;
+
+				if (parser.getNumberOfSyntaxErrors() >0) {
+					System.err.println("Program with syntax errors. No code was generated.");
+					return;
+				}
+
 
 				// Convert Parse tree to DOT language and visualize it.
 				String dotString = toDot(tree, parser);
