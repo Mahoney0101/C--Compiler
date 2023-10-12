@@ -12,7 +12,13 @@ grammar Cmm;
 
 // ** Program Structure **
 program : (varDeclaration | functionDeclaration | structType)* mainFunction EOF;
-mainFunction : VOID MAIN LPAREN RPAREN block;
+
+mainFunction returns [MainFunctionDeclaration ast]:
+    v=VOID m=MAIN lp=LPAREN lp=RPAREN b=block
+    {
+            $ast = new MainFunctionDeclaration($v.getLine(), $v.getCharPositionInLine()+1, $v.text, $m.text, $b.ast);
+    }
+    ;
 
 // ** Declarations **
 varDeclaration returns [VarDeclaration ast]

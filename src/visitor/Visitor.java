@@ -128,4 +128,6 @@ public interface Visitor<TP, TR> {
     TR visit(FunctionDeclaration functionDeclaration, TP param);
 
     TR visit(ExpressionStatement expressionStatement, TP param);
+
+    TR visit(MainFunctionDeclaration mainFunctionDeclaration, TP param);
 }
