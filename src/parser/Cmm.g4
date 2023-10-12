@@ -11,85 +11,67 @@ grammar Cmm;
 // ** PARSER RULES **
 
 // ** Program Structure **
-program : (varDeclaration | functionDeclaration | structDeclaration)* mainFunction EOF;
+program : (varDeclaration | functionDeclaration | structType)* mainFunction EOF;
 mainFunction : VOID MAIN LPAREN RPAREN block;
 
 // ** Declarations **
 varDeclaration returns [VarDeclaration ast]
-    : t=typeOrStruct ad=arrayDimensions? ids=idList SEMI
+    : t1=type ids1=idList SEMI
+        {
+            Type finalType = $t1.ast;
+
+            $ast = new VarDeclaration($t1.start.getLine(), $t1.start.getCharPositionInLine() + 1, $ids1.ast, finalType);
+        }
+    | t=type ad=arrayDimensions ids=idList SEMI
         {
             Type finalType = $t.ast;
-            int line = $t.line;
-            int col = $t.col;
 
-            if ($ad.size > 0) { //Ensure $ad.size > 0 is valid for your case
-                finalType = new ArrayType(line, col, finalType, $ad.size);
-            }
+            finalType = new ArrayType($t.start.getLine(), $t.start.getCharPositionInLine() + 1, finalType, $ad.size);
 
-            $ast = new VarDeclaration(line, col, $ids.ast, finalType);
+            $ast = new VarDeclaration($t.start.getLine(), $t.start.getCharPositionInLine() + 1, $ids.ast, finalType);
         }
     ;
 
-typeOrStruct returns [Type ast, int line, int col]
-    : t1=type
-        {
-            $ast = $t1.ast;
-            $line = $t1.start.getLine();
-            $col = $t1.start.getCharPositionInLine() + 1;
-        }
-    | t2=structTypeDeclaration
-        {
-            $ast = $t2.ast;
-            $line = $t2.start.getLine();
-            $col = $t2.start.getCharPositionInLine() + 1;
-        }
-    ;
 
-fieldDeclaration returns [List<FieldDeclaration> ast]
-    : t=typeOrStruct ad=arrayDimensions? ids=idList SEMI
+fieldDeclaration returns [List<FieldDeclaration> ast = new ArrayList<FieldDeclaration>()]
+    : t=type ad=arrayDimensions ids=idList SEMI
         {
-            $ast = new ArrayList<>();
             Type finalType = $t.ast;
 
-            // Handling array dimensions if provided.
-            if ($ad.size > 0) {
-                finalType = new ArrayType($t.line, $t.col, finalType, $ad.size);
-            }
+            finalType = new ArrayType($t.start.getLine(), $t.start.getCharPositionInLine() + 1, finalType, $ad.size);
 
-            // Construct FieldDeclaration objects and add them to the ast.
             for(String id : $ids.ast) {
-                FieldDeclaration field = new FieldDeclaration($t.line, $t.col, finalType, id);
+                FieldDeclaration field = new FieldDeclaration($t.start.getLine(), $t.start.getCharPositionInLine() + 1, finalType, id);
+                $ast.add(field);
+            }
+        }
+        | t=type ids=idList SEMI
+        {
+            Type finalType = $t.ast;
+
+            for(String id : $ids.ast) {
+                FieldDeclaration field = new FieldDeclaration($t.start.getLine(), $t.start.getCharPositionInLine() + 1, finalType, id);
                 $ast.add(field);
             }
         }
     ;
 
 
-structTypeDeclaration returns [Type ast]
-    : STRUCT id=ID? LBRACE fds=fieldDeclaration+ RBRACE
+structType returns [Type ast]
+    : STRUCT  LBRACE fds=fieldDeclaration+ RBRACE id=ID?
         {
             $ast = new StructType($start.getLine(), $start.getCharPositionInLine()+1, $fds.ast);
         }
     ;
 
-
-
-structDeclaration returns [StructDefinition ast]
-    : STRUCT LBRACE fds=fieldDeclaration+ RBRACE (ad=arrayDimensions)? ID? SEMI
-        {
-            String structName = $ID != null ? $ID.text : null;
-            $ast = new StructDefinition($start.getLine(),
-                                        $start.getCharPositionInLine()+1,
-                                        structName,
-                                        $fds.ast,
-                                        $ad.size);
-        }
-    ;
-
 functionDeclaration returns [FunctionDeclaration ast]
-    : t=type n=ID LPAREN p=paramList? RPAREN b=block
+    : t=type n=ID LPAREN p=paramList RPAREN b=block
+        {
+            $ast = new FunctionDeclaration($t.start.getLine(), $t.start.getCharPositionInLine()+1, $t.ast, $n.text, $p.ast != null ? $p.ast : Collections.emptyList(), $b.ast);
+        }
+    |t1=type n1=ID l1=LPAREN r1=RPAREN b1=block
     {
-        $ast = new FunctionDeclaration($t.start.getLine(), $t.start.getCharPositionInLine()+1, $t.ast, $n.text, $p.ast != null ? $p.ast : Collections.emptyList(), $b.ast);
+        $ast = new FunctionDeclaration($t1.start.getLine(), $t1.start.getCharPositionInLine()+1, $t1.ast, $n1.text, Collections.emptyList(), $b1.ast);
     }
     ;
 
@@ -131,40 +113,13 @@ block returns [Block ast]
 ;
 
 // ** Specific Statement Types **
-ifStatement returns [IfStatement ast]
-    : IF LPAREN expr1=expr RPAREN block1=block (ELSE block2=block)?
-        {
-            $ast = new IfStatement($IF.getLine(),
-                                   $IF.getCharPositionInLine() + 1,
-                                   $expr1.ast,
-                                   $block1.ast,
-                                   ($block2.ast != null) ? $block2.ast : null);
-        }
-    ;
-
-
+ifStatement returns [IfStatement ast]: IF LPAREN expr1=expr RPAREN block1=block (ELSE block2=block)? {$ast = new IfStatement($IF.getLine(),$IF.getCharPositionInLine() + 1,$expr1.ast,$block1.ast,($block2.ast != null) ? $block2.ast : null);};
 assignment returns [Statement ast] : lhs=expr ASSIGN rhs=expr SEMI{$ast = new AssignmentStatement($start.getLine(),$start.getCharPositionInLine()+1,$lhs.ast,$rhs.ast);};
 whileStatement returns [Statement ast] : WHILE LPAREN condition=expr RPAREN blk=block { $ast = new WhileStatement($start.getLine(), $start.getCharPositionInLine()+1, $condition.ast, $blk.ast); };
 returnStatement returns [Statement ast] : RETURN exp=expr SEMI { $ast = new ReturnStatement($start.getLine(), $start.getCharPositionInLine()+1, $exp.ast); };
-
-writeStatement returns [Statement ast]
-: WRITE exprs=exprList SEMI
-    { $ast = new WriteStatement($start.getLine(), $start.getCharPositionInLine()+1, $exprs.expressions); }
-;
-
-readStatement returns [Statement ast]
-: READ exprs=exprList SEMI
-    { $ast = new ReadStatement($start.getLine(), $start.getCharPositionInLine()+1, $exprs.expressions); }
-;
-
-expressionStatement returns [Statement ast]
-    : expr1=expr SEMI
-        {
-            $ast = new ExpressionStatement($expr1.start.getLine(),
-                                            $expr1.start.getCharPositionInLine() + 1,
-                                            $expr1.ast);
-        }
-    ;
+writeStatement returns [Statement ast]: WRITE exprs=exprList SEMI { $ast = new WriteStatement($start.getLine(), $start.getCharPositionInLine()+1, $exprs.expressions); };
+readStatement returns [Statement ast]: READ exprs=exprList SEMI { $ast = new ReadStatement($start.getLine(), $start.getCharPositionInLine()+1, $exprs.expressions); };
+expressionStatement returns [Statement ast]: expr1=expr SEMI{$ast = new ExpressionStatement($expr1.start.getLine(),$expr1.start.getCharPositionInLine() + 1,$expr1.ast);};
 
 
 // ** Expressions and Types **
@@ -194,30 +149,16 @@ expr returns [Expression ast]
      | e1=expr LBRACKET e2=expr RBRACKET { $ast = new ArrayAccessExpression($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $e2.ast); }
      | LPAREN t=type RPAREN e=expr     { $ast = new CastExpression($LPAREN.getLine(), $LPAREN.getCharPositionInLine()+1, $t.ast, $e.ast);     };
 
-
-
-
-exprList returns [List<Expression> expressions]
-    : e+=expr (COMMA e+=expr)*
-    {
-        $expressions = new ArrayList<>();
-        for (ExprContext ec : $e) {
-            $expressions.add(ec.ast);
-        }
-    }
-    | { $expressions = Collections.emptyList(); }
+exprList returns [List<Expression> expressions = new ArrayList<Expression>()]
+    : e=expr            {$expressions.add($e.ast);}
+    (COMMA exp=expr     {$expressions.add($exp.ast);})*
     ;
 
-
-
-
-paramList returns [List<Parameter> ast]
+paramList returns [List<Parameter> ast = new ArrayList<Parameter>()]
     : p=param {
-        $ast = new ArrayList<>();
         $ast.add($p.ast);
       }
       (COMMA p1=param { $ast.add($p1.ast); })*
-    | { $ast = Collections.emptyList(); }
     ;
 
 param returns [Parameter ast]
@@ -225,41 +166,39 @@ param returns [Parameter ast]
       { $ast = new Parameter($t.start.getLine(), $t.start.getCharPositionInLine()+1, $n.text, $t.ast); }
     ;
 
-
 type returns [Type ast]
-    : bt=baseType
-        { $ast = $bt.ast; } // Return the AST node created in baseType
+    : INT
+        { $ast = IntType.getInstance(); }
+    | DOUBLE
+        { $ast = DoubleType.getInstance(); }
+    | CHAR
+        { $ast = CharType.getInstance(); }
+    | VOID
+        { $ast = VoidType.getInstance(); }
     | ID
          { $ast = new UserDefinedType($ID.getLine(), $ID.getCharPositionInLine(), $ID.text); }
+    | t=structType
+        {
+            $ast = $t.ast;
+        }
     ;
 
-baseType returns [Type ast]
-    : INT
-        { $ast = IntType.getInstance(); } // Assuming you have a similar singleton for IntType
-    | DOUBLE
-        { $ast = DoubleType.getInstance(); } // Use the singleton instance
-    | CHAR
-        { $ast = CharType.getInstance(); } // Assuming you have a similar singleton for CharType
-    | VOID
-        { $ast = VoidType.getInstance(); } // Assuming you have a similar singleton for VoidType
-    ;
 
 
 // ** Variable and Function Handling **
-idList returns [List<String> ast]
-    : a=ID arrayDimensions? { $ast = new ArrayList<>(); $ast.add($a.text); }
+idList returns [List<String> ast = new ArrayList<String>()]
+    : a=ID arrayDimensions? { $ast.add($a.text); }
       (COMMA b=ID arrayDimensions? { $ast.add($b.text); })*
     ;
 
-arrayDimensions returns [int size]
+arrayDimensions returns [int size = 0 ]
     : (LBRACKET ic=INT_CONSTANT RBRACKET)+ { $size = Integer.parseInt($ic.text); }
-    | { $size = 0; }
     ;
 
 
 
 functionCall returns [Expression ast]
-    : ID LPAREN el=exprList? RPAREN
+    : ID LPAREN el=exprList RPAREN
     {
         $ast = new FunctionCallExpression(
             $ID.getLine(),
@@ -267,6 +206,15 @@ functionCall returns [Expression ast]
             $ID.getText(),
             $el.expressions
         );
+    }
+    | i1=ID l1=LPAREN r1=RPAREN
+    {
+            $ast = new FunctionCallExpression(
+                $i1.getLine(),
+                $i1.getCharPositionInLine() + 1,
+                $i1.getText(),
+                Collections.emptyList()
+            );
     }
     ;
 
