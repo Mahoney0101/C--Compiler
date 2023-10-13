@@ -3,31 +3,24 @@ package ast.statements;
 import ast.AbstractASTNode;
 import ast.expressions.Expression;
 import ast.expressions.FunctionCallExpression;
-import ast.statements.Statement;
 import visitor.Visitor;
-
-import java.util.List;
 
 public class FunctionCallStatement extends AbstractASTNode implements Statement {
 
-    private FunctionCallExpression functionCallExpr;
+    private FunctionCallExpression functionCallExpression;
 
-    public FunctionCallStatement(int line, int column, String functionName, List<Expression> arguments) {
+    public FunctionCallStatement(int line, int column, FunctionCallExpression functionCallExpression) {
         super(line, column);
-        this.functionCallExpr = new FunctionCallExpression(line, column, functionName, arguments);
+        this.functionCallExpression = functionCallExpression;
     }
 
-    public String getFunctionName() {
-        return this.functionCallExpr.getFunctionName();
-    }
-
-    public List<Expression> getArguments() {
-        return this.functionCallExpr.getArguments();
+    public FunctionCallExpression getFunctionCallExpression() {
+        return functionCallExpression;
     }
 
     @Override
     public String toString() {
-        return functionCallExpr.toString() + ";";
+        return functionCallExpression.toString() + ";";
     }
 
     @Override

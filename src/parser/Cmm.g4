@@ -20,16 +20,17 @@ program returns [Program ast]
         List<StructType> structDefs = new ArrayList<>();
         MainFunctionDeclaration mainFnc = null;
     }
+
     (
       v=varDeclaration      { varDecls.add($v.ast);         System.out.println("Parsing varDeclaration Type ="+ $v.ast+"");
-}
+    }
     | f=functionDeclaration { funcDefs.add($f.ast);         System.out.println("Parsing funcDeclaration Type ="+ $f.ast+"");
- }
+    }
     | s=structType          { structDefs.add($s.ast);         System.out.println("Parsing structdef Type ="+ $s.ast+"");
-}
+    }
     )*
     m=mainFunction {
-                System.out.println("Parsing main");
+                System.out.println("Parsing main" + $m.ast);
     mainFnc = $m.ast;
 
     $ast = new Program($start.getLine(), $start.getCharPositionInLine()+1, varDecls, funcDefs, structDefs, $m.ast);}
@@ -118,14 +119,15 @@ functionDeclaration returns [FunctionDeclaration ast]
 
 // ** Statements and Blocks **
 statement returns [Statement ast]
-          : vd=varDeclaration                      { $ast = $vd.ast; }
+          : f=functionCallStatement                { $ast = $f.ast; }
+          | vd=varDeclaration                      { $ast = $vd.ast; }
           | assign=assignment                      { $ast = $assign.ast; }
           | ifstmnt=ifStatement                    { $ast = $ifstmnt.ast; }
           | whilestmnt=whileStatement              { $ast = $whilestmnt.ast; }
           | ret=returnStatement                    { $ast = $ret.ast; }
           | write=writeStatement                   { $ast = $write.ast; }
           | read=readStatement                     { $ast = $read.ast; }
-          | es=expressionStatement                 { $ast = $es.ast; }
+//          | es=expressionStatement                 { $ast = $es.ast; }
           ;
 
 statements returns [List<Statement> ast]
@@ -154,12 +156,12 @@ block returns [Block ast]
 
 // ** Specific Statement Types **
 ifStatement returns [IfStatement ast]: IF LPAREN expr1=expr RPAREN block1=block (ELSE block2=block)? {$ast = new IfStatement($IF.getLine(),$IF.getCharPositionInLine() + 1,$expr1.ast,$block1.ast,($block2.ast != null) ? $block2.ast : null);};
-assignment returns [Statement ast] : lhs=expr ASSIGN rhs=expr SEMI{$ast = new AssignmentStatement($start.getLine(),$start.getCharPositionInLine()+1,$lhs.ast,$rhs.ast);};
 whileStatement returns [Statement ast] : WHILE LPAREN condition=expr RPAREN blk=block { $ast = new WhileStatement($start.getLine(), $start.getCharPositionInLine()+1, $condition.ast, $blk.ast); };
 returnStatement returns [Statement ast] : RETURN exp=expr SEMI { $ast = new ReturnStatement($start.getLine(), $start.getCharPositionInLine()+1, $exp.ast); };
 writeStatement returns [Statement ast]: WRITE exprs=exprList SEMI { $ast = new WriteStatement($start.getLine(), $start.getCharPositionInLine()+1, $exprs.expressions); };
 readStatement returns [Statement ast]: READ exprs=exprList SEMI { $ast = new ReadStatement($start.getLine(), $start.getCharPositionInLine()+1, $exprs.expressions); };
-expressionStatement returns [Statement ast]: expr1=expr SEMI{$ast = new ExpressionStatement($expr1.start.getLine(),$expr1.start.getCharPositionInLine() + 1,$expr1.ast);};
+//expressionStatement returns [Statement ast]: expr1=expr SEMI{$ast = new ExpressionStatement($expr1.start.getLine(),$expr1.start.getCharPositionInLine() + 1,$expr1.ast);};
+assignment returns [Statement ast] : lhs=expr ASSIGN rhs=expr SEMI{$ast = new AssignmentStatement($start.getLine(),$start.getCharPositionInLine()+1,$lhs.ast,$rhs.ast);};
 
 
 // ** Expressions and Types **
@@ -184,11 +186,11 @@ expr returns [Expression ast]
      | DOUBLE_CONSTANT                { $ast = new DoubleLiteralExpression($DOUBLE_CONSTANT.getLine(), $DOUBLE_CONSTANT.getCharPositionInLine()+1, LexerHelper.lexemeToReal($DOUBLE_CONSTANT.text)); }
      | CHAR_CONSTANT                  { $ast = new CharLiteralExpression($CHAR_CONSTANT.getLine(), $CHAR_CONSTANT.getCharPositionInLine()+1, LexerHelper.lexemeToChar($CHAR_CONSTANT.text)); }
      | ID                             { $ast = new VariableExpression($ID.getLine(), $ID.getCharPositionInLine()+1, $ID.text); }
-     | functionCall
+     | f=functionCallExpression       { $ast = $f.ast; }
      | e1=expr DOT ID                 { $ast = new NestedStructFieldAccessExpression($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $ID.text); }
      | e1=expr LBRACKET e2=expr RBRACKET { $ast = new ArrayAccessExpression($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $e2.ast); }
-     | LPAREN t=type RPAREN e=expr     { $ast = new CastExpression($LPAREN.getLine(), $LPAREN.getCharPositionInLine()+1, $t.ast, $e.ast);     };
-
+     | LPAREN t=type RPAREN e=expr     { $ast = new CastExpression($LPAREN.getLine(), $LPAREN.getCharPositionInLine()+1, $t.ast, $e.ast);     }
+     ;
 exprList returns [List<Expression> expressions = new ArrayList<Expression>()]
     : e=expr            {$expressions.add($e.ast);}
     (COMMA exp=expr     {$expressions.add($exp.ast);})*
@@ -234,9 +236,14 @@ arrayDimensions returns [int size = 0 ]
     : (LBRACKET ic=INT_CONSTANT RBRACKET)+ { $size = Integer.parseInt($ic.text); }
     ;
 
+functionCallStatement returns [FunctionCallStatement ast]
+    : fce=functionCallExpression SEMI
+    {
+        $ast = new FunctionCallStatement($fce.ast.getLine(), $fce.ast.getColumn() + 1, $fce.ast);
+    }
+    ;
 
-
-functionCall returns [Expression ast]
+functionCallExpression returns [FunctionCallExpression ast]
     : ID LPAREN el=exprList RPAREN
     {
         $ast = new FunctionCallExpression(
@@ -256,6 +263,7 @@ functionCall returns [Expression ast]
             );
     }
     ;
+
 
 
 
