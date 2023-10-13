@@ -7,7 +7,7 @@
   * @author  Francisco Ortin
   */
 
-package errorhandler;
+package errorlistener;
 
 import types.ErrorType;
 

@@ -40,8 +40,7 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     public abstract int numberOfBytes();
 
 
-    /************ Debugging *************************
-     * Implement toString to show a representation of the type expression
-     */
-
+    public String toString() {
+        return getClass().getSimpleName();
+    }
 }

@@ -27,7 +27,7 @@ public class StructType extends AbstractType implements Type{
 
     @Override
     public char suffix() {
-        return 's'; // just a placeholder, structs don't have a typical suffix
+        return 's';
     }
 
     @Override
@@ -48,6 +48,5 @@ public class StructType extends AbstractType implements Type{
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this, param);
     }
-
 }
 

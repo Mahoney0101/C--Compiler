@@ -85,8 +85,6 @@ public interface Visitor<TP, TR> {
 
     TR visit(FieldDeclaration fieldDeclaration, TP param);
 
-    TR visit(UserDefinedType userDefinedType, TP param);
-
     TR visit(VoidType voidType, TP param);
 
     TR visit(Parameter parameter, TP param);

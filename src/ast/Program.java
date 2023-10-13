@@ -9,7 +9,7 @@ public class Program extends AbstractASTNode {
 
     private List<VarDeclaration> varDeclarations;
     private List<FunctionDeclaration> functionDefinitions;
-    private MainFunctionDeclaration mainStatements; // Statements within the 'main' function
+    private MainFunctionDeclaration mainFunction;
 
     public Program(int line, int column,
                    List<VarDeclaration> varDeclarations,
@@ -18,7 +18,7 @@ public class Program extends AbstractASTNode {
         super(line, column);
         this.varDeclarations = varDeclarations;
         this.functionDefinitions = functionDefinitions;
-        this.mainStatements = mainfunction;
+        this.mainFunction = mainfunction;
     }
 
 
@@ -32,7 +32,7 @@ public class Program extends AbstractASTNode {
 
 
     public MainFunctionDeclaration getMainStatements() {
-        return this.mainStatements;
+        return this.mainFunction;
     }
 
     @Override
@@ -45,6 +45,6 @@ public class Program extends AbstractASTNode {
         return String.format("Program with %d variable definitions, %d function definitions and %s main statements.",
                 this.varDeclarations.size(),
                 this.functionDefinitions.size(),
-                this.mainStatements.toString());
+                this.mainFunction.toString());
     }
 }

@@ -1,22 +1,21 @@
 //package visitor;
 //
+//import ast.FunctionDeclaration;
+//import ast.MainFunctionDeclaration;
 //import ast.Program;
-//import ast.VarDefinition;
-//import ast.expressions.ArithmeticExpression;
-//import ast.expressions.IntLiteralExpression;
-//import ast.expressions.RealLiteralExpression;
-//import ast.expressions.VariableExpression;
-//import ast.statements.AssignmentStatement;
-//import ast.statements.Statement;
+//import ast.statements.*;
+//import ast.expressions.*;
 //import types.*;
 //
 //public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 //
 //    @Override
 //    public TR visit(Program program, TP param) {
-//        for(VarDefinition varDefinition: program.getVarDefinitions())
-//            varDefinition.accept(this, param);
-//        for(Statement statement: program.getStatements())
+//        for(VarDeclaration varDeclaration: program.getVarDefinitions())
+//            varDeclaration.accept(this, param);
+//        for(FunctionDeclaration functionDeclaration: program.getFunctionDefinitions())
+//            functionDeclaration.accept(this, param);
+//        for(Statement statement: program.getMainStatements().getFunctionBody().getStatements())
 //            statement.accept(this, param);
 //        return null;
 //    }

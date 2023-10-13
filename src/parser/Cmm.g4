@@ -30,7 +30,6 @@ mainFunction returns [MainFunctionDeclaration ast]:
     }
     ;
 
-// ** Declarations **
 varDeclaration returns [VarDeclaration ast]
     : t1=type ids1=idList SEMI
         {
@@ -65,12 +64,6 @@ fieldDeclaration returns [List<FieldDeclaration> ast = new ArrayList<FieldDeclar
         }
     ;
 
-structType returns [StructType ast]
-    : STRUCT  LBRACE fds=fieldDeclaration+ RBRACE id=ID?
-        {
-            $ast = new StructType($start.getLine(), $start.getCharPositionInLine()+1, $fds.ast);
-        }
-    ;
 
 functionDeclaration returns [FunctionDeclaration ast]
     : t=type n=ID LPAREN p=paramList RPAREN b=block
@@ -95,6 +88,10 @@ statement returns [Statement ast]
           | read=readStatement                     { $ast = $read.ast; }
           ;
 
+functionCallStatement returns [FunctionCallStatement ast]
+    : fce=functionCallExpression SEMI { $ast = new FunctionCallStatement($fce.ast.getLine(), $fce.ast.getColumn() + 1, $fce.ast); }
+    ;
+
 statements returns [List<Statement> ast]
     : stmt=statement stmts=statements
         {
@@ -111,7 +108,7 @@ statements returns [List<Statement> ast]
 block returns [Block ast]
     : LBRACE stmts=statements RBRACE
         {
-            $ast = new Block($start.getLine(), $start.getCharPositionInLine()+1, $stmts.ast);
+            $ast = new Block($stmts.start.getLine(), $stmts.start.getCharPositionInLine()+1, $stmts.ast);
         }
     | stmt=statement
         {
@@ -121,10 +118,10 @@ block returns [Block ast]
 
 // ** Specific Statement Types **
 ifStatement returns [IfStatement ast]: IF LPAREN expr1=expr RPAREN block1=block (ELSE block2=block)? {$ast = new IfStatement($IF.getLine(),$IF.getCharPositionInLine() + 1,$expr1.ast,$block1.ast,($block2.ast != null) ? $block2.ast : null);};
-whileStatement returns [Statement ast] : WHILE LPAREN condition=expr RPAREN blk=block { $ast = new WhileStatement($start.getLine(), $start.getCharPositionInLine()+1, $condition.ast, $blk.ast); };
-returnStatement returns [Statement ast] : RETURN exp=expr SEMI { $ast = new ReturnStatement($start.getLine(), $start.getCharPositionInLine()+1, $exp.ast); };
-writeStatement returns [Statement ast]: WRITE exprs=exprList SEMI { $ast = new WriteStatement($start.getLine(), $start.getCharPositionInLine()+1, $exprs.expressions); };
-readStatement returns [Statement ast]: READ exprs=exprList SEMI { $ast = new ReadStatement($start.getLine(), $start.getCharPositionInLine()+1, $exprs.expressions); };
+whileStatement returns [Statement ast] : WHILE LPAREN condition=expr RPAREN blk=block { $ast = new WhileStatement($WHILE.getLine(), $WHILE.getCharPositionInLine()+1, $condition.ast, $blk.ast); };
+returnStatement returns [Statement ast] : RETURN exp=expr SEMI { $ast = new ReturnStatement($RETURN.getLine(), $RETURN.getCharPositionInLine()+1, $exp.ast); };
+writeStatement returns [Statement ast]: WRITE exprs=exprList SEMI { $ast = new WriteStatement($WRITE.getLine(), $WRITE.getCharPositionInLine()+1, $exprs.expressions); };
+readStatement returns [Statement ast]: READ exprs=exprList SEMI { $ast = new ReadStatement($READ.getLine(), $READ.getCharPositionInLine()+1, $exprs.expressions); };
 assignment returns [Statement ast] : lhs=expr ASSIGN rhs=expr SEMI{$ast = new AssignmentStatement($start.getLine(),$start.getCharPositionInLine()+1,$lhs.ast,$rhs.ast);};
 
 
@@ -154,36 +151,33 @@ exprList returns [List<Expression> expressions = new ArrayList<Expression>()]
     ;
 
 paramList returns [List<Parameter> ast = new ArrayList<Parameter>()]
-    : p=param
-    { $ast.add($p.ast); }
-    (COMMA p1=param { $ast.add($p1.ast); })*
+    : p=param           { $ast.add($p.ast); }
+    (COMMA p1=param     { $ast.add($p1.ast); })*
     ;
 
 param returns [Parameter ast]
-    : t=type n=ID
-    { $ast = new Parameter($t.start.getLine(), $t.start.getCharPositionInLine()+1, $n.text, $t.ast); }
+    : t=type n=ID       { $ast = new Parameter($t.start.getLine(), $t.start.getCharPositionInLine()+1, $n.text, $t.ast); }
+    ;
+
+structType returns [StructType ast]
+    : STRUCT  LBRACE fds=fieldDeclaration+ RBRACE id=ID? { $ast = new StructType($start.getLine(), $start.getCharPositionInLine()+1, $fds.ast); }
     ;
 
 type returns [Type ast]
-    : INT           { $ast = IntType.getInstance(); }
-    | DOUBLE        { $ast = DoubleType.getInstance(); }
-    | CHAR          { $ast = CharType.getInstance(); }
-    | VOID          { $ast = VoidType.getInstance(); }
-    | ID            { $ast = new UserDefinedType($ID.getLine(), $ID.getCharPositionInLine(), $ID.text); }
-    | t=structType  { $ast = $t.ast; }
+    : INT                                   { $ast = IntType.getInstance(); }
+    | DOUBLE                                { $ast = DoubleType.getInstance(); }
+    | CHAR                                  { $ast = CharType.getInstance(); }
+    | VOID                                  { $ast = VoidType.getInstance(); }
+    | t=structType                          { $ast = $t.ast; }
     ;
 
 idList returns [List<String> ast = new ArrayList<String>()]
-    : a=ID arrayDimensions?             { $ast.add($a.text); }
-      (COMMA b=ID arrayDimensions?      { $ast.add($b.text); })*
+    : a=ID arrayDimensions?                 { $ast.add($a.text); }
+      (COMMA b=ID arrayDimensions?          { $ast.add($b.text); })*
     ;
 
 arrayDimensions returns [int size = 0 ]
-    : (LBRACKET ic=INT_CONSTANT RBRACKET)+ { $size = Integer.parseInt($ic.text); }
-    ;
-
-functionCallStatement returns [FunctionCallStatement ast]
-    : fce=functionCallExpression SEMI { $ast = new FunctionCallStatement($fce.ast.getLine(), $fce.ast.getColumn() + 1, $fce.ast); }
+    : (LBRACKET ic=INT_CONSTANT RBRACKET)+  { $size = Integer.parseInt($ic.text); }
     ;
 
 functionCallExpression returns [FunctionCallExpression ast]

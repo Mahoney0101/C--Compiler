@@ -2,7 +2,7 @@ package types;
 
 
 import ast.ASTNode;
-import errorhandler.ErrorHandler;
+import errorlistener.ErrorHandler;
 import visitor.Visitor;
 
 public class ErrorType extends AbstractType {
