@@ -23,7 +23,7 @@ public class Program extends AbstractASTNode {
         this.varDeclarations = varDeclarations;
         this.functionDefinitions = functionDefinitions;
         this.structDefinitions = structDefinitions;
-        this.mainStatements = mainStatements;
+        this.mainStatements = mainfunction;
     }
 
 
@@ -50,7 +50,7 @@ public class Program extends AbstractASTNode {
 
     @Override
     public String toString() {
-        return String.format("Program with %d variable definitions, %d function definitions, %d struct definitions, and %d main statements.",
+        return String.format("Program with %d variable definitions, %d function definitions, %d struct definitions, and %s main statements.",
                 this.varDeclarations.size(),
                 this.functionDefinitions.size(),
                 this.structDefinitions.size(),

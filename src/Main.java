@@ -11,7 +11,7 @@ import org.antlr.v4.gui.Trees;
 
 public class Main {
 			public static void main(String[] args) throws Exception {
-				String file = "C:\\Users\\hoooc\\IdeaProjects\\lab4_syntax_recognition\\input.txt";
+				String file = "C:\\Users\\hoooc\\IdeaProjects\\lab5_ast\\input.txt";
 
 				// Create a lexer that feeds off of input CharStream
 				CharStream input = CharStreams.fromFileName(file);
@@ -20,10 +20,14 @@ public class Main {
 				// Create a parser that feeds off the tokens buffer
 				CommonTokenStream tokens = new CommonTokenStream(lexer);
 				CmmParser parser = new CmmParser(tokens);
+				parser.removeErrorListeners();  // Remove the default error listener
+				parser.addErrorListener(new MyErrorListener()); // Add your custom listener
 
 				// Start parsing at the 'program' rule
 				CmmParser.ProgramContext tree = parser.program();
-				Program ast = parser.program().ast;
+				System.out.println("Parsing completed. AST: " + tree.ast);
+				Program ast = tree.ast;
+				//Program ast = parser.program().ast;
 
 				if (parser.getNumberOfSyntaxErrors() >0) {
 					System.err.println("Program with syntax errors. No code was generated.");

@@ -19,8 +19,8 @@ program returns [Program ast]
         List<FunctionDeclaration> funcDefs = new ArrayList<>();
         List<StructType> structDefs = new ArrayList<>();
         MainFunctionDeclaration mainFnc = null;
+        System.out.println("Initialise");
     }
-
     (
       v=varDeclaration      { varDecls.add($v.ast);         System.out.println("Parsing varDeclaration Type ="+ $v.ast+"");
     }
@@ -32,9 +32,12 @@ program returns [Program ast]
     m=mainFunction {
                 System.out.println("Parsing main" + $m.ast);
     mainFnc = $m.ast;
+}
+    EOF {
+                        System.out.println("Creating program");
 
-    $ast = new Program($start.getLine(), $start.getCharPositionInLine()+1, varDecls, funcDefs, structDefs, $m.ast);}
-    EOF
+            $ast = new Program($start.getLine(), $start.getCharPositionInLine()+1, varDecls, funcDefs, structDefs, mainFnc);
+        }
     ;
 
 

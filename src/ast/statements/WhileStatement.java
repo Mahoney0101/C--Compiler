@@ -24,6 +24,18 @@ public class WhileStatement extends AbstractASTNode implements Statement {
     }
 
     @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("while (")
+                .append(condition.toString())
+                .append(") {\n")
+                .append(loopBlock.toString())
+                .append("\n}");
+        return builder.toString();
+    }
+
+
+    @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this, param);
     }
