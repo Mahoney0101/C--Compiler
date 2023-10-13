@@ -10,46 +10,35 @@ import java.io.IOException;
 import org.antlr.v4.gui.Trees;
 
 public class Main {
-			public static void main(String[] args) throws Exception {
-				String file = "C:\\Users\\hoooc\\IdeaProjects\\lab5_ast\\input.txt";
+	public static void main(String[] args) throws Exception {
+		String file = "C:\\Users\\hoooc\\IdeaProjects\\lab5_ast\\input.txt";
 
-				// Create a lexer that feeds off of input CharStream
-				CharStream input = CharStreams.fromFileName(file);
-				CmmLexer lexer = new CmmLexer(input);
+		CharStream input = CharStreams.fromFileName(file);
+		CmmLexer lexer = new CmmLexer(input);
 
-				// Create a parser that feeds off the tokens buffer
-				CommonTokenStream tokens = new CommonTokenStream(lexer);
-				CmmParser parser = new CmmParser(tokens);
-				parser.removeErrorListeners();  // Remove the default error listener
-				parser.addErrorListener(new MyErrorListener()); // Add your custom listener
+		// Create a parser that feeds off the tokens buffer
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		CmmParser parser = new CmmParser(tokens);
+		parser.removeErrorListeners();
+		parser.addErrorListener(new MyErrorListener());
 
-				// Start parsing at the 'program' rule
-				CmmParser.ProgramContext tree = parser.program();
-				System.out.println("Parsing completed. AST: " + tree.ast);
-				Program ast = tree.ast;
-				//Program ast = parser.program().ast;
+		CmmParser.ProgramContext tree = parser.program();
+		System.out.println("Parsing completed. AST: " + tree.ast);
+		Program ast = tree.ast;
+		//Program ast = parser.program().ast;
 
-				if (parser.getNumberOfSyntaxErrors() >0) {
-					System.err.println("Program with syntax errors. No code was generated.");
-					return;
-				}
+		if (parser.getNumberOfSyntaxErrors() > 0) {
+			System.err.println("Program with syntax errors. No code was generated.");
+			return;
+		}
+
+		String dotString = toDot(tree, parser);
+
+		saveDotToFile(dotString, "output.dot");
+		Trees.inspect(tree, parser);
+	}
 
 
-				// Convert Parse tree to DOT language and visualize it.
-				String dotString = toDot(tree, parser);
-
-				saveDotToFile(dotString, "output.dot");
-				Trees.inspect(tree, parser);
-			}
-
-	// ... (other methods as previously provided) ...
-
-	/**
-	 * Saves the DOT language representation to a file.
-	 *
-	 * @param dotString The DOT language representation string.
-	 * @param filePath The file path to save the DOT string.
-	 */
 	public static void saveDotToFile(String dotString, String filePath) {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 			writer.write(dotString);
@@ -58,47 +47,38 @@ public class Main {
 		}
 	}
 
-			/**
-			 * Converts a parse tree to the DOT language representation
-			 * for visualization with tools like Graphviz.
-			 */
-			public static String toDot(ParseTree tree, Parser parser) {
-				StringBuilder builder = new StringBuilder();
-				builder.append("digraph ParseTree {\n");
-				traverse(tree, builder, 0, parser);
-				builder.append("}\n");
-				return builder.toString();
-			}
 
-			/**
-			 * Recursive function to traverse the parse tree and generate
-			 * DOT language representation.
-			 */
-			private static int traverse(ParseTree tree, StringBuilder builder, int index, Parser parser) {
-				int currentIndex = index++;
-				String nodeName = getNodeName(tree, parser);
-				builder.append("  ").append(currentIndex).append(" [label=\"").append(nodeName).append("\"];\n");
+	public static String toDot(ParseTree tree, Parser parser) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("digraph ParseTree {\n");
+		traverse(tree, builder, 0, parser);
+		builder.append("}\n");
+		return builder.toString();
+	}
 
-				for (int i = 0; i < tree.getChildCount(); i++) {
-					ParseTree child = tree.getChild(i);
-					int childIndex = index++;
-					builder.append("  ").append(currentIndex).append(" -> ").append(childIndex).append(";\n");
-					index = traverse(child, builder, index, parser);
-				}
 
-				return index;
-			}
+	private static int traverse(ParseTree tree, StringBuilder builder, int index, Parser parser) {
+		int currentIndex = index++;
+		String nodeName = getNodeName(tree, parser);
+		builder.append("  ").append(currentIndex).append(" [label=\"").append(nodeName).append("\"];\n");
 
-			/**
-			 * Extracts the node name from the parse tree for visualization.
-			 */
-			private static String getNodeName(ParseTree tree, Parser parser) {
-				if (tree instanceof TerminalNode) {
-					Token token = ((TerminalNode) tree).getSymbol();
-					return token.getText();
-				} else {
-					String ruleName = parser.getRuleNames()[((RuleNode) tree).getRuleContext().getRuleIndex()];
-					return ruleName;
-				}
-			}
+		for (int i = 0; i < tree.getChildCount(); i++) {
+			ParseTree child = tree.getChild(i);
+			int childIndex = index++;
+			builder.append("  ").append(currentIndex).append(" -> ").append(childIndex).append(";\n");
+			index = traverse(child, builder, index, parser);
 		}
+
+		return index;
+	}
+
+	private static String getNodeName(ParseTree tree, Parser parser) {
+		if (tree instanceof TerminalNode) {
+			Token token = ((TerminalNode) tree).getSymbol();
+			return token.getText();
+		} else {
+			String ruleName = parser.getRuleNames()[((RuleNode) tree).getRuleContext().getRuleIndex()];
+			return ruleName;
+		}
+	}
+}
