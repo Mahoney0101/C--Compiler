@@ -8,8 +8,6 @@ import types.ErrorType;
 
 public interface Visitor<TP, TR> {
 
-    // ********* Expressions **********
-
     TR visit(ArithmeticExpression arithmeticExpression, TP param);
 
     TR visit(VariableExpression variable, TP param);
@@ -86,22 +84,6 @@ public interface Visitor<TP, TR> {
     TR visit(NestedStructFieldAccessExpression nestedStructFieldExpression, TP param);
 
     TR visit(FieldDeclaration fieldDeclaration, TP param);
-
-    TR visit(GreaterThanExpression greaterThanExpression, TP param);
-
-    TR visit(GreaterThanOrEqualExpression greaterThanOrEqualExpression, TP param);
-
-    TR visit(LessThanExpression lessThanExpression, TP param);
-
-    TR visit(LessThanOrEqualsExpression lessThanOrEqualsExpression, TP param);
-
-    TR visit(EqualsExpression equalsExpression, TP param);
-
-    TR visit(NotEqualsExpression notEqualsExpression, TP param);
-
-    TR visit(LogicalAndExpression logicalAndExpression, TP param);
-
-    TR visit(LogicalOrExpression logicalOrExpression, TP param);
 
     TR visit(UserDefinedType userDefinedType, TP param);
 

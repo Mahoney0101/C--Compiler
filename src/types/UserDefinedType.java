@@ -12,11 +12,6 @@ public class UserDefinedType extends AbstractType {
         this.typeName = typeName;
     }
 
-    // Implementing a singleton pattern for unique user-defined types might be complex
-    // since each user-defined type is unique. Instead, instance creation might
-    // be controlled elsewhere in your compiler to ensure that each distinct user-defined
-    // type is only defined once.
-
     public String getTypeName() {
         return typeName;
     }

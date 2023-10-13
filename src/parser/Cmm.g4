@@ -173,7 +173,6 @@ type returns [Type ast]
     | t=structType  { $ast = $t.ast; }
     ;
 
-
 idList returns [List<String> ast = new ArrayList<String>()]
     : a=ID arrayDimensions?             { $ast.add($a.text); }
       (COMMA b=ID arrayDimensions?      { $ast.add($b.text); })*
@@ -209,13 +208,11 @@ functionCallExpression returns [FunctionCallExpression ast]
     ;
 
 // ** LEXER RULES **
-
-// ** Keywords and Special Symbols **
 IF : 'if';
 ELSE : 'else';
 WHILE : 'while';
 VOID : 'void';
-MAIN : 'main';  // 'main' function identifier.
+MAIN : 'main';
 WRITE : 'write';
 STRUCT : 'struct';
 INT : 'int';
