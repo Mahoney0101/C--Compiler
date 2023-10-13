@@ -8,8 +8,8 @@ grammar Cmm;
 	import java.util.ArrayList;
 	import java.util.*;
 }
+
 // ** PARSER RULES **
-// ** Program Structure **
 program returns [Program ast]
     :
     {
@@ -64,7 +64,6 @@ fieldDeclaration returns [List<FieldDeclaration> ast = new ArrayList<FieldDeclar
         }
     ;
 
-
 functionDeclaration returns [FunctionDeclaration ast]
     : t=type n=ID LPAREN p=paramList RPAREN b=block
     {
@@ -76,7 +75,6 @@ functionDeclaration returns [FunctionDeclaration ast]
     }
     ;
 
-// ** Statements and Blocks **
 statement returns [Statement ast]
           : f=functionCallStatement                { $ast = $f.ast; }
           | vd=varDeclaration                      { $ast = $vd.ast; }
@@ -123,7 +121,6 @@ returnStatement returns [Statement ast] : RETURN exp=expr SEMI { $ast = new Retu
 writeStatement returns [Statement ast]: WRITE exprs=exprList SEMI { $ast = new WriteStatement($WRITE.getLine(), $WRITE.getCharPositionInLine()+1, $exprs.expressions); };
 readStatement returns [Statement ast]: READ exprs=exprList SEMI { $ast = new ReadStatement($READ.getLine(), $READ.getCharPositionInLine()+1, $exprs.expressions); };
 assignment returns [Statement ast] : lhs=expr ASSIGN rhs=expr SEMI{$ast = new AssignmentStatement($start.getLine(),$start.getCharPositionInLine()+1,$lhs.ast,$rhs.ast);};
-
 
 // ** Expressions and Types **
 expr returns [Expression ast]
