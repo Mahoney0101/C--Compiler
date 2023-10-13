@@ -9,9 +9,6 @@ import java.util.stream.Collectors;
 
 public class WriteStatement extends AbstractASTNode implements Statement {
 
-    /**
-     * List of expressions to be written
-     */
     private List<Expression> expressions;
 
     public List<Expression> getExpressions() {
@@ -20,7 +17,6 @@ public class WriteStatement extends AbstractASTNode implements Statement {
 
     @Override
     public String toString() {
-        // Use Java streams to concatenate all expressions with commas in between
         String allExpressions = expressions.stream()
                 .map(Expression::toString)
                 .collect(Collectors.joining(", "));

@@ -1,9 +1,7 @@
 package ast;
 
-import java.util.List;
 import visitor.Visitor;
 import types.*;
-import ast.statements.*;
 
 public class Parameter extends AbstractASTNode {
     private String name;

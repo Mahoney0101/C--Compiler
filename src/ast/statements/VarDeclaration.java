@@ -10,9 +10,6 @@ import java.util.stream.Collectors;
 
 public class VarDeclaration extends AbstractASTNode implements Statement {
 
-    /**
-     * The offset of the variable
-     */
     private int offset;
 
     public int getOffset() {
@@ -23,9 +20,6 @@ public class VarDeclaration extends AbstractASTNode implements Statement {
         this.offset = offset;
     }
 
-    /**
-     * List of variable names
-     */
     private List<String> names;
 
 
@@ -43,7 +37,6 @@ public class VarDeclaration extends AbstractASTNode implements Statement {
 
     @Override
     public String toString() {
-        // Use Java streams to concatenate all names with commas in between
         String allNames = String.join(", ", names);
         return String.format("%s %s; // offset: %d.", this.getType(), allNames, this.getOffset());
     }

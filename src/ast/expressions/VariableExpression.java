@@ -18,7 +18,6 @@ public class VariableExpression extends AbstractExpression {
         this.definition = definition;
     }
 
-
     public VariableExpression(int line, int column, String name) {
         super(line, column);
         this.name=name;

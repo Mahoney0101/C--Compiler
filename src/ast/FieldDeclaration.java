@@ -1,6 +1,5 @@
 package ast;
 
-import java.util.List;
 import visitor.Visitor;
 import types.*;
 

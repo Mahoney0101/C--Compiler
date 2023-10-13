@@ -9,9 +9,6 @@ import java.util.stream.Collectors;
 
 public class ReadStatement extends AbstractASTNode implements Statement {
 
-    /**
-     * List of targets to be read
-     */
     private List<Expression> targets;
 
     public List<Expression> getTargets() {

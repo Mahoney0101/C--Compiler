@@ -7,8 +7,8 @@ import visitor.Visitor;
 public class IfStatement extends AbstractASTNode implements Statement {
 
     private Expression condition;
-    private Statement ifBlock;  // Executed when condition is true
-    private Statement elseBlock;  // Executed when condition is false (may be null)
+    private Statement ifBlock;
+    private Statement elseBlock;
 
     public IfStatement(int line, int column, Expression condition, Statement ifBlock, Statement elseBlock) {
         super(line, column);

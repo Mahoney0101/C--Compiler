@@ -1,7 +1,6 @@
 package ast.statements;
 
 import ast.AbstractASTNode;
-import ast.expressions.Expression;
 import ast.expressions.FunctionCallExpression;
 import visitor.Visitor;
 

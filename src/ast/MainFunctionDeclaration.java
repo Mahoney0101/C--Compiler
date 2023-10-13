@@ -14,7 +14,6 @@ public class MainFunctionDeclaration extends AbstractASTNode {
         this.returnType = returnType;
         this.functionName = functionName;
         this.functionBody = functionBody;
-        System.out.println("main ctr");
     }
 
     public String getReturnType() {

@@ -32,5 +32,4 @@ public class AssignmentStatement extends AbstractASTNode implements Statement{
     public String toString() {
         return ""+leftHandSide+" = "+rightHandSide;
     }
-
 }

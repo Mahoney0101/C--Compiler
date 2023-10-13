@@ -37,7 +37,6 @@ public class Main {
 
 				// Convert Parse tree to DOT language and visualize it.
 				String dotString = toDot(tree, parser);
-				System.out.println(dotString);
 
 				saveDotToFile(dotString, "output.dot");
 				Trees.inspect(tree, parser);

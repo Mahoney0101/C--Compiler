@@ -1,6 +1,5 @@
 package ast;
 
-import ast.statements.VarDeclaration;
 import visitor.Visitor;
 
 import java.util.List;
