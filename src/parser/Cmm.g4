@@ -211,7 +211,6 @@ DOUBLE : 'double';
 CHAR : 'char';
 READ : 'read';
 RETURN : 'return';
-
 ASSIGN : '=';
 LBRACE : '{';
 RBRACE : '}';
