@@ -1,14 +1,10 @@
-package ast.statements;
+package ast;
 
-import ast.AbstractASTNode;
-import ast.statements.Statement;
+import ast.statements.*;
 import types.Type;
 import visitor.Visitor;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class VarDeclaration extends AbstractASTNode implements Statement {
+public class VarDeclaration extends AbstractASTNode implements Statement, Definition {
 
     private int offset;
 
@@ -20,7 +16,7 @@ public class VarDeclaration extends AbstractASTNode implements Statement {
         this.offset = offset;
     }
 
-    private List<String> names;
+    private String name;
 
 
     private Type type;
@@ -29,20 +25,24 @@ public class VarDeclaration extends AbstractASTNode implements Statement {
         return this.type;
     }
 
-    public VarDeclaration(int line, int column, List<String> names, Type type) {
+    public VarDeclaration(int line, int column, String name, Type type) {
         super(line, column);
-        this.names = names;
+        this.name = name;
         this.type = type;
     }
 
     @Override
     public String toString() {
-        String allNames = String.join(", ", names);
-        return String.format("%s %s; // offset: %d.", this.getType(), allNames, this.getOffset());
+        return String.format("%s %s; // offset: %d.", this.getType(), name, this.getOffset());
     }
 
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this,param);
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
     }
 }

@@ -3,6 +3,7 @@ package visitor;
 import ast.*;
 import ast.expressions.*;
 import ast.statements.*;
+import ast.VarDeclaration;
 import types.*;
 import types.ErrorType;
 
@@ -21,8 +22,6 @@ public interface Visitor<TP, TR> {
     TR visit(WriteStatement write, TP param);
 
     TR visit(AssignmentStatement assignment, TP param);
-
-    TR visit(VarDeclaration varDeclaration, TP param);
 
 
     // ************ Program ****************
@@ -63,7 +62,6 @@ public interface Visitor<TP, TR> {
 
     TR visit(IfStatement ifStatement, TP param);
 
-    TR visit(FuncDefinition funcDefinition, TP param);
 
     TR visit(FunctionCallExpression functionCallExpression, TP param);
 
@@ -79,7 +77,6 @@ public interface Visitor<TP, TR> {
 
     TR visit(StructType structType, TP param);
 
-    TR visit(StructDefinition structDefinition, TP param);
 
     TR visit(NestedStructFieldAccessExpression nestedStructFieldExpression, TP param);
 
@@ -91,9 +88,10 @@ public interface Visitor<TP, TR> {
 
     TR visit(FunctionDeclaration functionDeclaration, TP param);
 
-    TR visit(ExpressionStatement expressionStatement, TP param);
 
     TR visit(MainFunctionDeclaration mainFunctionDeclaration, TP param);
 
     TR visit(LogicalExpression logicalExpression, TP param);
+
+    TR visit(VarDeclaration varDeclaration, TP param);
 }

@@ -1,38 +1,28 @@
 package ast;
 
-import ast.statements.VarDeclaration;
+import ast.VarDeclaration;
 import visitor.Visitor;
-
 import java.util.List;
 
 public class Program extends AbstractASTNode {
 
     private List<VarDeclaration> varDeclarations;
     private List<FunctionDeclaration> functionDefinitions;
-    private MainFunctionDeclaration mainFunction;
 
     public Program(int line, int column,
                    List<VarDeclaration> varDeclarations,
-                   List<FunctionDeclaration> functionDefinitions,
-                   MainFunctionDeclaration mainfunction) {
+                   List<FunctionDeclaration> functionDefinitions) {
         super(line, column);
         this.varDeclarations = varDeclarations;
         this.functionDefinitions = functionDefinitions;
-        this.mainFunction = mainfunction;
     }
 
-
-    public List<VarDeclaration> getVarDefinitions() {
+    public List<VarDeclaration> getVarDeclarations() {
         return this.varDeclarations;
     }
 
     public List<FunctionDeclaration> getFunctionDefinitions() {
         return this.functionDefinitions;
-    }
-
-
-    public MainFunctionDeclaration getMainStatements() {
-        return this.mainFunction;
     }
 
     @Override
@@ -42,9 +32,8 @@ public class Program extends AbstractASTNode {
 
     @Override
     public String toString() {
-        return String.format("Program with %d variable definitions, %d function definitions and %s main statements.",
+        return String.format("Program with %d variable declarations and %d function definitions.",
                 this.varDeclarations.size(),
-                this.functionDefinitions.size(),
-                this.mainFunction.toString());
+                this.functionDefinitions.size());
     }
 }

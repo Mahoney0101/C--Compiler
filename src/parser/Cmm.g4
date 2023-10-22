@@ -15,42 +15,39 @@ program returns [Program ast]
     {
         List<VarDeclaration> varDecls = new ArrayList<>();
         List<FunctionDeclaration> funcDefs = new ArrayList<>();
-        MainFunctionDeclaration mainFnc = null;
     }
-    ( v=varDeclaration      { varDecls.add($v.ast); }
+    ( v=varDeclaration      { varDecls.addAll($v.ast); }
     | f=functionDeclaration { funcDefs.add($f.ast); } )*
-    m=mainFunction { mainFnc = $m.ast; }
-    EOF { $ast = new Program($start.getLine(), $start.getCharPositionInLine()+1, varDecls, funcDefs, mainFnc); }
+    //m=mainFunction { mainFnc = $m.ast; }
+    EOF { $ast = new Program($start.getLine(), $start.getCharPositionInLine()+1, varDecls, funcDefs); }
     ;
 
-mainFunction returns [MainFunctionDeclaration ast]:
-    v=VOID m=MAIN lp=LPAREN lp=RPAREN b=block
-    {
-            $ast = new MainFunctionDeclaration($v.getLine(), $v.getCharPositionInLine()+1, $v.text, $m.text, $b.ast);
-    }
-    ;
+//mainFunction returns [MainFunctionDeclaration ast]:
+//    v=VOID m=MAIN lp=LPAREN lp=RPAREN b=block
+//    {
+//            $ast = new MainFunctionDeclaration($v.getLine(), $v.getCharPositionInLine()+1, $v.text, $m.text, $b.ast);
+//    }
+//    ;
 
-varDeclaration returns [VarDeclaration ast]
+varDeclaration returns [List<VarDeclaration> ast = new ArrayList<VarDeclaration>();]
     : t1=type ids1=idList SEMI
         {
             Type finalType = $t1.ast;
-            $ast = new VarDeclaration($t1.start.getLine(), $t1.start.getCharPositionInLine() + 1, $ids1.ast, finalType);
+            for(String id : $ids1.ast) {
+                $ast.add(new VarDeclaration($t1.start.getLine(), $t1.start.getCharPositionInLine() + 1, id, finalType));
+            }
         }
-    | t=type ad=arrayDimensions ids=idList SEMI
-        {
-            Type finalType = $t.ast;
-            finalType = new ArrayType($t.start.getLine(), $t.start.getCharPositionInLine() + 1, finalType, $ad.size);
-            $ast = new VarDeclaration($t.start.getLine(), $t.start.getCharPositionInLine() + 1, $ids.ast, finalType);
-        }
+//    | // Empty match (epsilon)
+//        { $ast = Collections.emptyList(); }
     ;
 
+
 fieldDeclaration returns [List<FieldDeclaration> ast = new ArrayList<FieldDeclaration>()]
-    : t=type ad=arrayDimensions ids=idList SEMI
+    : t=type ids=idList SEMI
         {
             Type finalType = $t.ast;
-            finalType = new ArrayType($t.start.getLine(), $t.start.getCharPositionInLine() + 1, finalType, $ad.size);
             for(String id : $ids.ast) {
-                FieldDeclaration field = new FieldDeclaration($t.start.getLine(), $t.start.getCharPositionInLine() + 1, finalType, id);
+                FieldDeclaration field = new FieldDeclaration($t.start.getLine(), $t.start.getCharPositionInLine() + 1, $t.ast, id);
                 $ast.add(field);
             }
         }
@@ -65,19 +62,19 @@ fieldDeclaration returns [List<FieldDeclaration> ast = new ArrayList<FieldDeclar
     ;
 
 functionDeclaration returns [FunctionDeclaration ast]
-    : t=type n=ID LPAREN p=paramList RPAREN b=block
+    : t=type n=(ID|MAIN) LPAREN p=paramList RPAREN LBRACE vd=varDeclarations stmts=statements RBRACE
     {
-        $ast = new FunctionDeclaration($t.start.getLine(), $t.start.getCharPositionInLine()+1, $t.ast, $n.text, $p.ast != null ? $p.ast : Collections.emptyList(), $b.ast);
+        $ast = new FunctionDeclaration($t.start.getLine(), $t.start.getCharPositionInLine()+1, $t.ast, $n.text, $p.ast != null ? $p.ast : Collections.emptyList(), $vd.ast, $stmts.ast);
     }
-    |t1=type n1=ID l1=LPAREN r1=RPAREN b1=block
+    |t1=type n1=(ID | MAIN) l1=LPAREN r1=RPAREN LBRACE vd=varDeclarations stmts=statements RBRACE
     {
-        $ast = new FunctionDeclaration($t1.start.getLine(), $t1.start.getCharPositionInLine()+1, $t1.ast, $n1.text, Collections.emptyList(), $b1.ast);
+        $ast = new FunctionDeclaration($t1.start.getLine(), $t1.start.getCharPositionInLine()+1, $t1.ast, $n1.text, Collections.emptyList(), $vd.ast, $stmts.ast);
     }
     ;
 
 statement returns [Statement ast]
           : f=functionCallStatement                { $ast = $f.ast; }
-          | vd=varDeclaration                      { $ast = $vd.ast; }
+          //| vd=varDeclaration                      { $ast = $vd.ast; }
           | assign=assignment                      { $ast = $assign.ast; }
           | ifstmnt=ifStatement                    { $ast = $ifstmnt.ast; }
           | whilestmnt=whileStatement              { $ast = $whilestmnt.ast; }
@@ -103,8 +100,22 @@ statements returns [List<Statement> ast]
         }
     ;
 
+varDeclarations returns [List<VarDeclaration> ast]
+    : vd=varDeclaration vds=varDeclarations
+        {
+            $ast = new ArrayList<>();
+            $ast.addAll($vd.ast);
+            $ast.addAll($vds.ast);
+        }
+    |
+        {
+            $ast = new ArrayList<>();
+        }
+    ;
+          //| vd=varDeclaration                      { $ast = $vd.ast; }
+
 block returns [Block ast]
-    : LBRACE stmts=statements RBRACE
+    : LBRACE vd=varDeclaration* stmts=statements RBRACE
         {
             $ast = new Block($stmts.start.getLine(), $stmts.start.getCharPositionInLine()+1, $stmts.ast);
         }
@@ -160,7 +171,23 @@ structType returns [StructType ast]
     : STRUCT  LBRACE fds=fieldDeclaration+ RBRACE id=ID? { $ast = new StructType($start.getLine(), $start.getCharPositionInLine()+1, $fds.ast); }
     ;
 
+arrayType returns [Type ast]
+    : baseType dims=arrayDimensions         { $ast = new ArrayType($start.getLine(), $start.getCharPositionInLine()+1, $baseType.ast, $dims.sizes); }
+    ;
+
+
 type returns [Type ast]
+    : a=arrayType                           { $ast = $a.ast; }
+    | INT                                   { $ast = IntType.getInstance(); }
+    | DOUBLE                                { $ast = DoubleType.getInstance(); }
+    | CHAR                                  { $ast = CharType.getInstance(); }
+    | VOID                                  { $ast = VoidType.getInstance(); }
+    | t=structType                          { $ast = $t.ast; }
+    ;
+
+
+
+baseType returns [Type ast]
     : INT                                   { $ast = IntType.getInstance(); }
     | DOUBLE                                { $ast = DoubleType.getInstance(); }
     | CHAR                                  { $ast = CharType.getInstance(); }
@@ -173,8 +200,8 @@ idList returns [List<String> ast = new ArrayList<String>()]
       (COMMA b=ID arrayDimensions?          { $ast.add($b.text); })*
     ;
 
-arrayDimensions returns [int size = 0 ]
-    : (LBRACKET ic=INT_CONSTANT RBRACKET)+  { $size = Integer.parseInt($ic.text); }
+arrayDimensions returns [List<Integer> sizes = new ArrayList<>();]
+    : (LBRACKET ic=INT_CONSTANT RBRACKET { $sizes.add(Integer.parseInt($ic.text)); } )+
     ;
 
 functionCallExpression returns [FunctionCallExpression ast]

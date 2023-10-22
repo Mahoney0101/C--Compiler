@@ -33,36 +33,20 @@ void initialize() {
   }
 }
 
-struct {
-int day, month;
-int year;
-} date;
 
 void main(){
-  struct {
-  int age;
-  struct { int day; int month; int year; } dateOfBirth;
-  char[256] name, surname;
-  } [20] students;
-
-  students[0].dateOfBirth.day = 10;
-  int i,j;
+  int i;
+  int j;
   char ch;
   p();
   i=0;
   ch = '0';
-  struct { char first; int second; } pair;
-  date.year = 2018;
-  date.month = 8;
-  date.day = w[1][date.month];
-  pair.second = date.day;
+
   // * Shows 48 (decimal value of '0')
   write f((double)i, (int)ch);
   write '\n';
-  write a+b, v[45+c];
-  read realNumber, w[6][t];
-  f(1.3, 2);
 
+  f(1.3, 2);
 
   initialize();
   i = 0;
@@ -79,4 +63,6 @@ void main(){
     write '\n';
     i = i + 1;
   }
+
 }
+

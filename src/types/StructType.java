@@ -2,7 +2,7 @@ package types;
 
 import ast.ASTNode;
 import ast.FieldDeclaration;
-import ast.statements.VarDeclaration;
+import ast.VarDeclaration;
 import visitor.Visitor;
 
 import java.util.List;

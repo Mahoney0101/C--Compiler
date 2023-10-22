@@ -2,24 +2,26 @@ package types;
 
 import ast.ASTNode;
 import visitor.Visitor;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ArrayType extends AbstractType {
 
     private Type baseType;
-    private int size;
+    private List<Integer> dimensions;
 
-    public ArrayType(int line, int column, Type baseType, int size) {
+    public ArrayType(int line, int column, Type baseType, List<Integer> dimensions) {
         super(line, column);
         this.baseType = baseType;
-        this.size = size;
+        this.dimensions = dimensions;
     }
 
     public Type getBaseType() {
         return baseType;
     }
 
-    public int getSize() {
-        return size;
+    public List<Integer> getDimensions() {
+        return dimensions;
     }
 
     @Override
@@ -34,12 +36,19 @@ public class ArrayType extends AbstractType {
 
     @Override
     public int numberOfBytes() {
-        return baseType.numberOfBytes() * size;
+        int totalSize = baseType.numberOfBytes();
+        for(int dim : dimensions) {
+            totalSize *= dim;
+        }
+        return totalSize;
     }
 
     @Override
     public String toString() {
-        return baseType.toString() + "[" + size + "]";
+        String dimsString = dimensions.stream()
+                .map(dim -> "[" + dim + "]")
+                .collect(Collectors.joining());
+        return baseType.toString() + dimsString;
     }
 
     @Override
@@ -47,3 +56,4 @@ public class ArrayType extends AbstractType {
         return visitor.visit(this, param);
     }
 }
+

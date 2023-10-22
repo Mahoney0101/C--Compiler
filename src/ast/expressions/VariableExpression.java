@@ -1,6 +1,6 @@
 package ast.expressions;
 
-import ast.statements.VarDeclaration;
+import ast.VarDeclaration;
 import visitor.Visitor;
 
 public class VariableExpression extends AbstractExpression {
