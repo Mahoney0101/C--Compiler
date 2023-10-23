@@ -62,14 +62,14 @@ functionDeclaration returns [FunctionDeclaration ast]
     }
     ;
 
-statement returns [Statement ast]
-          : f=functionCallStatement                { $ast = $f.ast; }
-          | assign=assignment                      { $ast = $assign.ast; }
-          | ifstmnt=ifStatement                    { $ast = $ifstmnt.ast; }
-          | whilestmnt=whileStatement              { $ast = $whilestmnt.ast; }
-          | ret=returnStatement                    { $ast = $ret.ast; }
-          | write=writeStatement                   { $ast = $write.ast; }
-          | read=readStatement                     { $ast = $read.ast; }
+statement returns [List<Statement> ast = new ArrayList<Statement>()]
+          : f=functionCallStatement                { $ast.add($f.ast); }
+          | assign=assignment                      { $ast.add($assign.ast); }
+          | ifstmnt=ifStatement                    { $ast.add($ifstmnt.ast); }
+          | whilestmnt=whileStatement              { $ast.add($whilestmnt.ast); }
+          | ret=returnStatement                    { $ast.add($ret.ast); }
+          | write=writeStatement                   { $ast.addAll($write.ast); }
+          | read=readStatement                     { $ast.addAll($read.ast); }
           ;
 
 functionCallStatement returns [FunctionCallStatement ast]
@@ -80,7 +80,7 @@ statements returns [List<Statement> ast]
     : stmt=statement stmts=statements
         {
             $ast = new ArrayList<>();
-            $ast.add($stmt.ast);
+            $ast.addAll($stmt.ast);
             $ast.addAll($stmts.ast);
         }
     |
@@ -106,27 +106,44 @@ varDeclarations returns [List<VarDeclaration> ast]
 // ** Specific Statement Types **
 
 ifStatement returns [IfStatement ast]
-    : IF LPAREN expr1=expr RPAREN LBRACE? vd=varDeclarations stmts=statements RBRACE?
+    : IF LPAREN expr1=expr RPAREN LBRACE? stmts=statements RBRACE?
       {
-          $ast = new IfStatement($IF.getLine(), $IF.getCharPositionInLine() + 1, $expr1.ast, $vd.ast, $stmts.ast, null, null);
+          $ast = new IfStatement($IF.getLine(), $IF.getCharPositionInLine() + 1, $expr1.ast, $stmts.ast, null);
       }
-      (ELSE LBRACE? vd2=varDeclarations stmts2=statements RBRACE?
+      (ELSE LBRACE? stmts2=statements RBRACE?
       {
-          $ast.setElseBlockVarDeclarations($vd2.ast);
           $ast.setElseBlockStatements($stmts2.ast);
       })?
     ;
 
 whileStatement returns [Statement ast]
-    : WHILE LPAREN condition=expr RPAREN LBRACE? vd=varDeclarations stmts=statements RBRACE?
+    : WHILE LPAREN condition=expr RPAREN LBRACE? stmts=statements RBRACE?
     {
-        $ast = new WhileStatement($WHILE.getLine(), $WHILE.getCharPositionInLine()+1, $condition.ast, $vd.ast, $stmts.ast);
+        $ast = new WhileStatement($WHILE.getLine(), $WHILE.getCharPositionInLine()+1, $condition.ast, $stmts.ast);
     }
     ;
 
 returnStatement returns [Statement ast] : RETURN exp=expr SEMI { $ast = new ReturnStatement($RETURN.getLine(), $RETURN.getCharPositionInLine()+1, $exp.ast); };
-writeStatement returns [Statement ast]: WRITE exprs=exprList SEMI { $ast = new WriteStatement($WRITE.getLine(), $WRITE.getCharPositionInLine()+1, $exprs.expressions); };
-readStatement returns [Statement ast]: READ exprs=exprList SEMI { $ast = new ReadStatement($READ.getLine(), $READ.getCharPositionInLine()+1, $exprs.expressions); };
+
+writeStatement returns [List<Statement> ast = new ArrayList<Statement>()]
+    : WRITE exprs=exprList SEMI
+    {
+        for(Expression expr : $exprs.expressions) {
+            $ast.add(new WriteStatement($WRITE.getLine(), $WRITE.getCharPositionInLine()+1, expr));
+        }
+    }
+    ;
+
+//writeStatement returns [Statement ast]: WRITE exprs=exprList SEMI { $ast = new WriteStatement($WRITE.getLine(), $WRITE.getCharPositionInLine()+1, $exprs.expressions); };
+readStatement returns [List<Statement> ast = new ArrayList<>()]
+    : READ exprs=exprList SEMI
+    {
+        for(Expression expr : $exprs.expressions) {
+            $ast.add(new ReadStatement($READ.getLine(), $READ.getCharPositionInLine()+1, expr));
+        }
+    }
+    ;
+
 assignment returns [Statement ast] : lhs=expr ASSIGN rhs=expr SEMI{$ast = new AssignmentStatement($start.getLine(),$start.getCharPositionInLine()+1,$lhs.ast,$rhs.ast);};
 
 // ** Expressions and Types **

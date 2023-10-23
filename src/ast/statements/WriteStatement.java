@@ -9,23 +9,20 @@ import java.util.stream.Collectors;
 
 public class WriteStatement extends AbstractASTNode implements Statement {
 
-    private List<Expression> expressions;
+    private Expression expression;
 
-    public List<Expression> getExpressions() {
-        return expressions;
+    public Expression getExpression() {
+        return expression;
     }
 
     @Override
     public String toString() {
-        String allExpressions = expressions.stream()
-                .map(Expression::toString)
-                .collect(Collectors.joining(", "));
-        return "write " + allExpressions;
+        return "write " + expression.toString();
     }
 
-    public WriteStatement(int line, int column, List<Expression> expressions) {
+    public WriteStatement(int line, int column, Expression expression) {
         super(line, column);
-        this.expressions = expressions;
+        this.expression = expression;
     }
 
     @Override
