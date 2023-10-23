@@ -89,4 +89,6 @@ public interface Visitor<TP, TR> {
     TR visit(LogicalExpression logicalExpression, TP param);
 
     TR visit(VarDeclaration varDeclaration, TP param);
+
+    TR visit(FunctionType functionType, TP param);
 }

@@ -54,11 +54,11 @@ fieldDeclaration returns [List<FieldDeclaration> ast = new ArrayList<FieldDeclar
 functionDeclaration returns [FunctionDeclaration ast]
     : t=type n=(ID|MAIN) LPAREN p=paramList RPAREN LBRACE vd=varDeclarations stmts=statements RBRACE
     {
-        $ast = new FunctionDeclaration($t.start.getLine(), $t.start.getCharPositionInLine()+1, $t.ast, $n.text, $p.ast != null ? $p.ast : Collections.emptyList(), $vd.ast, $stmts.ast);
+        $ast = new FunctionDeclaration($t.start.getLine(), $t.start.getCharPositionInLine()+1, new FunctionType($t.start.getLine(), $t.start.getCharPositionInLine()+1, $t.ast, $p.ast != null ? $p.ast : Collections.emptyList()), $n.text, $vd.ast, $stmts.ast);
     }
     |t1=type n1=(ID | MAIN) l1=LPAREN r1=RPAREN LBRACE vd=varDeclarations stmts=statements RBRACE
     {
-        $ast = new FunctionDeclaration($t1.start.getLine(), $t1.start.getCharPositionInLine()+1, $t1.ast, $n1.text, Collections.emptyList(), $vd.ast, $stmts.ast);
+        $ast = new FunctionDeclaration($t1.start.getLine(), $t1.start.getCharPositionInLine()+1, new FunctionType($t1.start.getLine(), $t1.start.getCharPositionInLine()+1, $t1.ast, Collections.emptyList()), $n1.text, $vd.ast, $stmts.ast);
     }
     ;
 
@@ -187,6 +187,9 @@ arrayType returns [Type ast]
     : baseType dims=arrayDimensions         { $ast = new ArrayType($start.getLine(), $start.getCharPositionInLine()+1, $baseType.ast, $dims.sizes); }
     ;
 
+functionType returns [FunctionType ast]
+    : returnType=baseType LPAREN params=paramList? RPAREN { $ast = new FunctionType($start.getLine(), $start.getCharPositionInLine()+1, $returnType.ast, $params.ast); }
+    ;
 
 type returns [Type ast]
     : a=arrayType                           { $ast = $a.ast; }
@@ -195,9 +198,8 @@ type returns [Type ast]
     | CHAR                                  { $ast = CharType.getInstance(); }
     | VOID                                  { $ast = VoidType.getInstance(); }
     | t=structType                          { $ast = $t.ast; }
+    | f=functionType                        { $ast = $f.ast; }
     ;
-
-
 
 baseType returns [Type ast]
     : INT                                   { $ast = IntType.getInstance(); }

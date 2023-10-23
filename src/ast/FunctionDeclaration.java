@@ -1,42 +1,42 @@
 package ast;
 
-import java.net.http.WebSocket;
-import java.util.List;
 import visitor.Visitor;
 import types.*;
 import ast.statements.*;
 
+import java.util.List;
+
 public class FunctionDeclaration extends AbstractASTNode {
-    private Type returnType;
+    private FunctionType functionType;
     private String functionName;
-    private List<Parameter> parameters;
     private List<VarDeclaration> vars;
     private List<Statement> statements;
 
-    public FunctionDeclaration(int line, int column, Type returnType, String functionName, List<Parameter> parameters, List<VarDeclaration> vars, List<Statement> statemets) {
+    public FunctionDeclaration(int line,
+                               int column,
+                               FunctionType functionType,
+                               String functionName,
+                               List<VarDeclaration> vars,
+                               List<Statement> statements) {
         super(line, column);
-        this.returnType = returnType;
+        this.functionType = functionType;
         this.functionName = functionName;
-        this.parameters = parameters;
         this.vars = vars;
-        this.statements = statemets;
+        this.statements = statements;
     }
 
-    public Type getReturnType() {
-        return returnType;
+    public FunctionType getFunctionType() {
+        return functionType;
     }
 
     public String getFunctionName() {
         return functionName;
     }
 
-    public List<Parameter> getParameters() {
-        return parameters;
-    }
-
     public List<VarDeclaration> getVars() {
         return vars;
     }
+
     public List<Statement> getStatements() {
         return statements;
     }
@@ -44,25 +44,12 @@ public class FunctionDeclaration extends AbstractASTNode {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(returnType).append(" ").append(functionName).append("(");
+        sb.append(functionType).append(" ").append(functionName).append("(").append(functionType.getParametersAsString()).append(") {\n");
 
-        // Append parameters
-        for(int i = 0; i < parameters.size(); i++) {
-            sb.append(parameters.get(i));
-            if(i < parameters.size() - 1) {
-                sb.append(", ");
-            }
-        }
-
-        sb.append(") {\n");
-
-        // Append variable declarations
-        for(VarDeclaration varDecl : vars) {
+        for (VarDeclaration varDecl : vars) {
             sb.append("    ").append(varDecl).append("\n");
         }
-
-        // Append statements
-        for(Statement stmt : statements) {
+        for (Statement stmt : statements) {
             sb.append("    ").append(stmt).append("\n");
         }
 
