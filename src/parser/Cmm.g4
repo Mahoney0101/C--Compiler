@@ -18,16 +18,8 @@ program returns [Program ast]
     }
     ( v=varDeclaration      { varDecls.addAll($v.ast); }
     | f=functionDeclaration { funcDefs.add($f.ast); } )*
-    //m=mainFunction { mainFnc = $m.ast; }
     EOF { $ast = new Program($start.getLine(), $start.getCharPositionInLine()+1, varDecls, funcDefs); }
     ;
-
-//mainFunction returns [MainFunctionDeclaration ast]:
-//    v=VOID m=MAIN lp=LPAREN lp=RPAREN b=block
-//    {
-//            $ast = new MainFunctionDeclaration($v.getLine(), $v.getCharPositionInLine()+1, $v.text, $m.text, $b.ast);
-//    }
-//    ;
 
 varDeclaration returns [List<VarDeclaration> ast = new ArrayList<VarDeclaration>();]
     : t1=type ids1=idList SEMI
@@ -37,8 +29,6 @@ varDeclaration returns [List<VarDeclaration> ast = new ArrayList<VarDeclaration>
                 $ast.add(new VarDeclaration($t1.start.getLine(), $t1.start.getCharPositionInLine() + 1, id, finalType));
             }
         }
-//    | // Empty match (epsilon)
-//        { $ast = Collections.emptyList(); }
     ;
 
 
@@ -74,7 +64,6 @@ functionDeclaration returns [FunctionDeclaration ast]
 
 statement returns [Statement ast]
           : f=functionCallStatement                { $ast = $f.ast; }
-          //| vd=varDeclaration                      { $ast = $vd.ast; }
           | assign=assignment                      { $ast = $assign.ast; }
           | ifstmnt=ifStatement                    { $ast = $ifstmnt.ast; }
           | whilestmnt=whileStatement              { $ast = $whilestmnt.ast; }
@@ -112,22 +101,29 @@ varDeclarations returns [List<VarDeclaration> ast]
             $ast = new ArrayList<>();
         }
     ;
-          //| vd=varDeclaration                      { $ast = $vd.ast; }
 
-block returns [Block ast]
-    : LBRACE vd=varDeclaration* stmts=statements RBRACE
-        {
-            $ast = new Block($stmts.start.getLine(), $stmts.start.getCharPositionInLine()+1, $stmts.ast);
-        }
-    | stmt=statement
-        {
-            $ast = new Block($stmt.start.getLine(), $stmt.start.getCharPositionInLine()+1, Arrays.asList($stmt.ast));
-        }
-    ;
 
 // ** Specific Statement Types **
-ifStatement returns [IfStatement ast]: IF LPAREN expr1=expr RPAREN block1=block (ELSE block2=block)? {$ast = new IfStatement($IF.getLine(),$IF.getCharPositionInLine() + 1,$expr1.ast,$block1.ast,($block2.ast != null) ? $block2.ast : null);};
-whileStatement returns [Statement ast] : WHILE LPAREN condition=expr RPAREN blk=block { $ast = new WhileStatement($WHILE.getLine(), $WHILE.getCharPositionInLine()+1, $condition.ast, $blk.ast); };
+
+ifStatement returns [IfStatement ast]
+    : IF LPAREN expr1=expr RPAREN LBRACE? vd=varDeclarations stmts=statements RBRACE?
+      {
+          $ast = new IfStatement($IF.getLine(), $IF.getCharPositionInLine() + 1, $expr1.ast, $vd.ast, $stmts.ast, null, null);
+      }
+      (ELSE LBRACE? vd2=varDeclarations stmts2=statements RBRACE?
+      {
+          $ast.setElseBlockVarDeclarations($vd2.ast);
+          $ast.setElseBlockStatements($stmts2.ast);
+      })?
+    ;
+
+whileStatement returns [Statement ast]
+    : WHILE LPAREN condition=expr RPAREN LBRACE? vd=varDeclarations stmts=statements RBRACE?
+    {
+        $ast = new WhileStatement($WHILE.getLine(), $WHILE.getCharPositionInLine()+1, $condition.ast, $vd.ast, $stmts.ast);
+    }
+    ;
+
 returnStatement returns [Statement ast] : RETURN exp=expr SEMI { $ast = new ReturnStatement($RETURN.getLine(), $RETURN.getCharPositionInLine()+1, $exp.ast); };
 writeStatement returns [Statement ast]: WRITE exprs=exprList SEMI { $ast = new WriteStatement($WRITE.getLine(), $WRITE.getCharPositionInLine()+1, $exprs.expressions); };
 readStatement returns [Statement ast]: READ exprs=exprList SEMI { $ast = new ReadStatement($READ.getLine(), $READ.getCharPositionInLine()+1, $exprs.expressions); };

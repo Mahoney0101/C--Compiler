@@ -52,8 +52,6 @@ public interface Visitor<TP, TR> {
 
     TR visit(CastExpression castExpression, TP param);
 
-    TR visit(Block block, TP param);
-
     TR visit(ReturnStatement returnStatement, TP param);
 
     TR visit(WhileStatement whileStatement, TP param);
@@ -87,9 +85,6 @@ public interface Visitor<TP, TR> {
     TR visit(Parameter parameter, TP param);
 
     TR visit(FunctionDeclaration functionDeclaration, TP param);
-
-
-    TR visit(MainFunctionDeclaration mainFunctionDeclaration, TP param);
 
     TR visit(LogicalExpression logicalExpression, TP param);
 
