@@ -6,7 +6,7 @@ import ast.statements.*;
 
 import java.util.List;
 
-public class FunctionDeclaration extends AbstractASTNode {
+public class FunctionDeclaration extends AbstractASTNode implements Definition{
     private FunctionType functionType;
     private String functionName;
     private List<VarDeclaration> vars;
@@ -60,5 +60,10 @@ public class FunctionDeclaration extends AbstractASTNode {
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this, param);
+    }
+
+    @Override
+    public String getName() {
+        return functionName;
     }
 }

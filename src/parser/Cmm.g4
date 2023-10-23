@@ -13,12 +13,11 @@ grammar Cmm;
 program returns [Program ast]
     :
     {
-        List<VarDeclaration> varDecls = new ArrayList<>();
-        List<FunctionDeclaration> funcDefs = new ArrayList<>();
+        List<Definition> definitions = new ArrayList<>();
     }
-    ( v=varDeclaration      { varDecls.addAll($v.ast); }
-    | f=functionDeclaration { funcDefs.add($f.ast); } )*
-    EOF { $ast = new Program($start.getLine(), $start.getCharPositionInLine()+1, varDecls, funcDefs); }
+    ( v=varDeclaration      { definitions.addAll($v.ast); }
+    | f=functionDeclaration { definitions.add($f.ast); } )*
+    EOF { $ast = new Program($start.getLine(), $start.getCharPositionInLine()+1, definitions); }
     ;
 
 varDeclaration returns [List<VarDeclaration> ast = new ArrayList<VarDeclaration>();]

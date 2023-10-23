@@ -6,24 +6,18 @@ import java.util.List;
 
 public class Program extends AbstractASTNode {
 
-    private List<VarDeclaration> varDeclarations;
-    private List<FunctionDeclaration> functionDefinitions;
+    private List<Definition> definitions;
 
     public Program(int line, int column,
-                   List<VarDeclaration> varDeclarations,
-                   List<FunctionDeclaration> functionDefinitions) {
+                   List<Definition> definitions) {
         super(line, column);
-        this.varDeclarations = varDeclarations;
-        this.functionDefinitions = functionDefinitions;
+        this.definitions = definitions;
     }
 
-    public List<VarDeclaration> getVarDeclarations() {
-        return this.varDeclarations;
+    public List<Definition> getdefinitions() {
+        return this.definitions;
     }
 
-    public List<FunctionDeclaration> getFunctionDefinitions() {
-        return this.functionDefinitions;
-    }
 
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
@@ -32,8 +26,7 @@ public class Program extends AbstractASTNode {
 
     @Override
     public String toString() {
-        return String.format("Program with %d variable declarations and %d function definitions.",
-                this.varDeclarations.size(),
-                this.functionDefinitions.size());
+        return String.format("Program with %d definitions.",
+                this.definitions.size());
     }
 }

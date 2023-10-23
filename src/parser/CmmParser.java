@@ -155,8 +155,7 @@ public class CmmParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 
-			        List<VarDeclaration> varDecls = new ArrayList<>();
-			        List<FunctionDeclaration> funcDefs = new ArrayList<>();
+			        List<Definition> definitions = new ArrayList<>();
 			    
 			setState(61);
 			_errHandler.sync(this);
@@ -170,14 +169,14 @@ public class CmmParser extends Parser {
 					{
 					setState(53);
 					((ProgramContext)_localctx).v = varDeclaration();
-					 varDecls.addAll(((ProgramContext)_localctx).v.ast); 
+					 definitions.addAll(((ProgramContext)_localctx).v.ast); 
 					}
 					break;
 				case 2:
 					{
 					setState(56);
 					((ProgramContext)_localctx).f = functionDeclaration();
-					 funcDefs.add(((ProgramContext)_localctx).f.ast); 
+					 definitions.add(((ProgramContext)_localctx).f.ast); 
 					}
 					break;
 				}
@@ -188,7 +187,7 @@ public class CmmParser extends Parser {
 			}
 			setState(64);
 			match(EOF);
-			 ((ProgramContext)_localctx).ast =  new Program(_localctx.start.getLine(), _localctx.start.getCharPositionInLine()+1, varDecls, funcDefs); 
+			 ((ProgramContext)_localctx).ast =  new Program(_localctx.start.getLine(), _localctx.start.getCharPositionInLine()+1, definitions); 
 			}
 		}
 		catch (RecognitionException re) {
