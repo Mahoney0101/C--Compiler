@@ -1,22 +1,21 @@
 package types;
 
 import ast.ASTNode;
-import ast.FieldDeclaration;
 import ast.VarDeclaration;
 import visitor.Visitor;
 
 import java.util.List;
 
-public class StructType extends AbstractType implements Type{
+public class StructType extends AbstractType{
 
-    private List<FieldDeclaration> fields;
+    private List<VarDeclaration> fields;
 
-    public StructType(int line, int column, List<FieldDeclaration> fields) {
+    public StructType(int line, int column, List<VarDeclaration> fields) {
         super(line, column);
         this.fields = fields;
     }
 
-    public List<FieldDeclaration> getFields() {
+    public List<VarDeclaration> getFields() {
         return fields;
     }
 
@@ -33,7 +32,7 @@ public class StructType extends AbstractType implements Type{
     @Override
     public int numberOfBytes() {
         int bytes = 0;
-        for(FieldDeclaration field : fields) {
+        for(VarDeclaration field : fields) {
             bytes += field.getType().numberOfBytes();
         }
         return bytes;

@@ -2,6 +2,15 @@ int[8][3] fibonacci;
 
 void p() {}
 
+void test() {
+struct {
+int age;
+struct { int day, month, int year; } dateOfBirth;
+char[256] name, surname;
+} [20] students; // 'students' is an array of 20 structs
+students[0].dateOfBirth.day = 10;
+}
+
 char global;
 
 int f(double r, int e) {

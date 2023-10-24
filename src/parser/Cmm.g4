@@ -29,24 +29,34 @@ varDeclaration returns [List<VarDeclaration> ast = new ArrayList<VarDeclaration>
         }
     ;
 
+varDeclarations returns [List<VarDeclaration> ast]
+    : vd=varDeclaration vds=varDeclarations
+        {
+            $ast = new ArrayList<>();
+            $ast.addAll($vd.ast);
+            $ast.addAll($vds.ast);
+        }
+    |
+        {
+            $ast = new ArrayList<>();
+        }
+    ;
 
-fieldDeclaration returns [List<FieldDeclaration> ast = new ArrayList<FieldDeclaration>()]
-    : t=type ids=idList SEMI
-        {
+
+fieldDeclaration returns [List<VarDeclaration> ast = new ArrayList<VarDeclaration>()]
+    : t=type ids=idList {
             Type finalType = $t.ast;
             for(String id : $ids.ast) {
-                FieldDeclaration field = new FieldDeclaration($t.start.getLine(), $t.start.getCharPositionInLine() + 1, $t.ast, id);
-                $ast.add(field);
+                $ast.add(new VarDeclaration($t.start.getLine(), $t.start.getCharPositionInLine() + 1, id, finalType));
             }
-        }
-        | t=type ids=idList SEMI
-        {
-            Type finalType = $t.ast;
-            for(String id : $ids.ast) {
-                FieldDeclaration field = new FieldDeclaration($t.start.getLine(), $t.start.getCharPositionInLine() + 1, finalType, id);
-                $ast.add(field);
+      }
+      (COMMA t1=type ids1=idList {
+            finalType = $t1.ast;
+            for(String id : $ids1.ast) {
+                $ast.add(new VarDeclaration($t1.start.getLine(), $t1.start.getCharPositionInLine() + 1, id, finalType));
             }
-        }
+      })*
+      SEMI
     ;
 
 functionDeclaration returns [FunctionDeclaration ast]
@@ -87,20 +97,6 @@ statements returns [List<Statement> ast]
         }
     ;
 
-varDeclarations returns [List<VarDeclaration> ast]
-    : vd=varDeclaration vds=varDeclarations
-        {
-            $ast = new ArrayList<>();
-            $ast.addAll($vd.ast);
-            $ast.addAll($vds.ast);
-        }
-    |
-        {
-            $ast = new ArrayList<>();
-        }
-    ;
-
-
 // ** Specific Statement Types **
 
 ifStatement returns [IfStatement ast]
@@ -132,7 +128,6 @@ writeStatement returns [List<Statement> ast = new ArrayList<Statement>()]
     }
     ;
 
-//writeStatement returns [Statement ast]: WRITE exprs=exprList SEMI { $ast = new WriteStatement($WRITE.getLine(), $WRITE.getCharPositionInLine()+1, $exprs.expressions); };
 readStatement returns [List<Statement> ast = new ArrayList<>()]
     : READ exprs=exprList SEMI
     {
@@ -178,7 +173,11 @@ param returns [Parameter ast]
     ;
 
 structType returns [StructType ast]
-    : STRUCT  LBRACE fds=fieldDeclaration+ RBRACE id=ID? { $ast = new StructType($start.getLine(), $start.getCharPositionInLine()+1, $fds.ast); }
+    : STRUCT LBRACE fds=fieldDeclarations RBRACE { $ast = new StructType($start.getLine(), $start.getCharPositionInLine()+1, $fds.ast); }
+    ;
+
+fieldDeclarations returns [List<VarDeclaration> ast = new ArrayList<VarDeclaration>()]
+    : (fd=fieldDeclaration { $ast.addAll($fd.ast); } )+
     ;
 
 arrayType returns [Type ast]
