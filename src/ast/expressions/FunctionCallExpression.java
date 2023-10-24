@@ -6,16 +6,16 @@ import java.util.List;
 
 public class FunctionCallExpression extends AbstractExpression {
 
-    private String functionName;
+    private VariableExpression functionName;
     private List<Expression> arguments;
 
-    public FunctionCallExpression(int line, int column, String functionName, List<Expression> arguments) {
+    public FunctionCallExpression(int line, int column, VariableExpression functionName, List<Expression> arguments) {
         super(line, column);
         this.functionName = functionName;
         this.arguments = arguments;
     }
 
-    public String getFunctionName() {
+    public VariableExpression getFunctionName() {
         return this.functionName;
     }
 
@@ -25,7 +25,7 @@ public class FunctionCallExpression extends AbstractExpression {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(functionName);
+        StringBuilder sb = new StringBuilder(functionName.getName());
         sb.append("(");
         for (int i = 0; i < arguments.size(); i++) {
             sb.append(arguments.get(i));

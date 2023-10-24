@@ -8,7 +8,6 @@ grammar Cmm;
 	import java.util.ArrayList;
 	import java.util.*;
 }
-
 // ** PARSER RULES **
 program returns [Program ast]
     :
@@ -223,7 +222,10 @@ functionCallExpression returns [FunctionCallExpression ast]
         $ast = new FunctionCallExpression(
             $ID.getLine(),
             $ID.getCharPositionInLine() + 1,
-            $ID.getText(),
+            new VariableExpression(
+                        $ID.getLine(),
+                        $ID.getCharPositionInLine() + 1,
+                        $ID.getText()),
             $el.expressions
         );
     }
@@ -232,7 +234,10 @@ functionCallExpression returns [FunctionCallExpression ast]
             $ast = new FunctionCallExpression(
                 $i1.getLine(),
                 $i1.getCharPositionInLine() + 1,
-                $i1.getText(),
+            new VariableExpression(
+                        $i1.getLine(),
+                        $i1.getCharPositionInLine() + 1,
+                        $i1.getText()),
                 Collections.emptyList()
             );
     }

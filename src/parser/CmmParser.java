@@ -2121,7 +2121,10 @@ public class CmmParser extends Parser {
 				        ((FunctionCallExpressionContext)_localctx).ast =  new FunctionCallExpression(
 				            ((FunctionCallExpressionContext)_localctx).ID.getLine(),
 				            ((FunctionCallExpressionContext)_localctx).ID.getCharPositionInLine() + 1,
-				            ((FunctionCallExpressionContext)_localctx).ID.getText(),
+				            new VariableExpression(
+				                        ((FunctionCallExpressionContext)_localctx).ID.getLine(),
+				                        ((FunctionCallExpressionContext)_localctx).ID.getCharPositionInLine() + 1,
+				                        ((FunctionCallExpressionContext)_localctx).ID.getText()),
 				            ((FunctionCallExpressionContext)_localctx).el.expressions
 				        );
 				    
@@ -2140,7 +2143,10 @@ public class CmmParser extends Parser {
 				            ((FunctionCallExpressionContext)_localctx).ast =  new FunctionCallExpression(
 				                ((FunctionCallExpressionContext)_localctx).i1.getLine(),
 				                ((FunctionCallExpressionContext)_localctx).i1.getCharPositionInLine() + 1,
-				                ((FunctionCallExpressionContext)_localctx).i1.getText(),
+				            new VariableExpression(
+				                        ((FunctionCallExpressionContext)_localctx).i1.getLine(),
+				                        ((FunctionCallExpressionContext)_localctx).i1.getCharPositionInLine() + 1,
+				                        ((FunctionCallExpressionContext)_localctx).i1.getText()),
 				                Collections.emptyList()
 				            );
 				    

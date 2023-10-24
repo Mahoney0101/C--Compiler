@@ -18,7 +18,6 @@ public class VarDeclaration extends AbstractASTNode implements Statement, Defini
 
     private String name;
 
-
     private Type type;
 
     public Type getType() {
