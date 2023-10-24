@@ -2,12 +2,12 @@ package ast.expressions;
 
 import visitor.Visitor;
 
-public class NestedStructFieldAccessExpression extends AbstractExpression {
+public class StructFieldAccessExpression extends AbstractExpression {
 
     private Expression structure;
     private String nestedField;
 
-    public NestedStructFieldAccessExpression(int line, int column, Expression structure, String nestedField) {
+    public StructFieldAccessExpression(int line, int column, Expression structure, String nestedField) {
         super(line, column);
         this.structure = structure;
         this.nestedField = nestedField;

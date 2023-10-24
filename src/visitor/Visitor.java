@@ -76,7 +76,7 @@ public interface Visitor<TP, TR> {
     TR visit(StructType structType, TP param);
 
 
-    TR visit(NestedStructFieldAccessExpression nestedStructFieldExpression, TP param);
+    TR visit(StructFieldAccessExpression nestedStructFieldExpression, TP param);
 
     TR visit(FieldDeclaration fieldDeclaration, TP param);
 

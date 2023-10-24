@@ -373,7 +373,7 @@ public class CmmParser extends Parser {
 			            for(String id : ((FieldDeclarationContext)_localctx).ids.ast) {
 			                _localctx.ast.add(new VarDeclaration((((FieldDeclarationContext)_localctx).t!=null?(((FieldDeclarationContext)_localctx).t.start):null).getLine(), (((FieldDeclarationContext)_localctx).t!=null?(((FieldDeclarationContext)_localctx).t.start):null).getCharPositionInLine() + 1, id, finalType));
 			            }
-			        
+			      
 			setState(91);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -391,7 +391,7 @@ public class CmmParser extends Parser {
 				            for(String id : ((FieldDeclarationContext)_localctx).ids1.ast) {
 				                _localctx.ast.add(new VarDeclaration((((FieldDeclarationContext)_localctx).t1!=null?(((FieldDeclarationContext)_localctx).t1.start):null).getLine(), (((FieldDeclarationContext)_localctx).t1!=null?(((FieldDeclarationContext)_localctx).t1.start):null).getCharPositionInLine() + 1, id, finalType));
 				            }
-				        
+				      
 				}
 				}
 				setState(93);
@@ -1396,7 +1396,7 @@ public class CmmParser extends Parser {
 						match(DOT);
 						setState(266);
 						((ExprContext)_localctx).ID = match(ID);
-						 ((ExprContext)_localctx).ast =  new NestedStructFieldAccessExpression((((ExprContext)_localctx).e1!=null?(((ExprContext)_localctx).e1.start):null).getLine(), (((ExprContext)_localctx).e1!=null?(((ExprContext)_localctx).e1.start):null).getCharPositionInLine()+1, ((ExprContext)_localctx).e1.ast, (((ExprContext)_localctx).ID!=null?((ExprContext)_localctx).ID.getText():null)); 
+						 ((ExprContext)_localctx).ast =  new StructFieldAccessExpression((((ExprContext)_localctx).e1!=null?(((ExprContext)_localctx).e1.start):null).getLine(), (((ExprContext)_localctx).e1!=null?(((ExprContext)_localctx).e1.start):null).getCharPositionInLine()+1, ((ExprContext)_localctx).e1.ast, (((ExprContext)_localctx).ID!=null?((ExprContext)_localctx).ID.getText():null)); 
 						}
 						break;
 					case 6:
