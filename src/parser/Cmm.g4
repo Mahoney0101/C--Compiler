@@ -282,15 +282,15 @@ DOT : '.';
 
 // ** Identifiers and Literals **
 ID : [a-zA-Z_] [a-zA-Z_0-9]* ;
-CHAR_CONSTANT : '\'' ( ESCAPE_SEQUENCE | ~('\'' | '\\') ) '\'';
-DOUBLE_CONSTANT : [0-9]+ '.' [0-9]* EXPONENT? | '.' [0-9]+ EXPONENT? | [0-9]+ EXPONENT;
+CHAR_CONSTANT : '\'' ( ESCAPE_SEQUENCE | '\\' INT_CONSTANT | ~('\'' | '\\') ) '\'';
+DOUBLE_CONSTANT : INT_CONSTANT '.' [0-9]* EXPONENT? | '.' [0-9]+ EXPONENT? | [0-9]+ EXPONENT;
 INT_CONSTANT : '0' | [1-9][0-9]* ;
 
-fragment ESCAPE_SEQUENCE : '\\' ('n' | 't' | 'b' | 'r' | '\'' | '\\') | '\\' [0-7] [0-7]? [0-7]?;
-fragment EXPONENT : [eE] [+-]? [0-9]+;
+fragment ESCAPE_SEQUENCE : '\\' ('n' | 't' | 'b' | 'r' | '\'' | '\\');
+fragment EXPONENT : [eE] [+-]? INT_CONSTANT;
 
 // ** Comments and Whitespace **
-ONE_LINE_COMMENT : '//' ~('\n')* -> skip ;
+ONE_LINE_COMMENT : '//' ~('\n')* '\n'? -> skip ;
 MULTI_LINE_COMMENT : '/*' .*? '*/' -> skip ;
 WS : [ \t\r\n]+ -> skip ;
 
