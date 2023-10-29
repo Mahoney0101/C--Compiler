@@ -1,5 +1,6 @@
 package ast.expressions;
 
+import types.Type;
 import visitor.Visitor;
 
 public class ArrayAccessExpression extends AbstractBinaryExpression {
@@ -17,4 +18,5 @@ public class ArrayAccessExpression extends AbstractBinaryExpression {
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this, param);
     }
+
 }

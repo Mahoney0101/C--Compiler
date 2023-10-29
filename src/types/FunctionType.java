@@ -2,15 +2,16 @@ package types;
 
 import ast.ASTNode;
 import ast.Parameter;
+import ast.VarDeclaration;
 import visitor.Visitor;
 
 import java.util.List;
 
 public class FunctionType extends AbstractType{
     private Type returnType;
-    private List<Parameter> parameters;
+    private List<VarDeclaration> parameters;
 
-    public FunctionType(int line, int column, Type returnType, List<Parameter> parameters) {
+    public FunctionType(int line, int column, Type returnType, List<VarDeclaration> parameters) {
         super(line, column);
         this.returnType = returnType;
         this.parameters = parameters;
@@ -20,7 +21,7 @@ public class FunctionType extends AbstractType{
         return returnType;
     }
 
-    public List<Parameter> getParameters() {
+    public List<VarDeclaration> getParameters() {
         return parameters;
     }
 
@@ -57,6 +58,7 @@ public class FunctionType extends AbstractType{
 
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
-        return visitor.visit(this, param);
+        return null;
     }
+
 }

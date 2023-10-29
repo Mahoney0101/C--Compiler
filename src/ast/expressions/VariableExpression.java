@@ -1,6 +1,6 @@
 package ast.expressions;
 
-import ast.VarDeclaration;
+import ast.Definition;
 import visitor.Visitor;
 
 public class VariableExpression extends AbstractExpression {
@@ -10,11 +10,11 @@ public class VariableExpression extends AbstractExpression {
         return name;
     }
 
-    private VarDeclaration definition;
-    public VarDeclaration getDefinition() {
+    private Definition definition;
+    public Definition getDefinition() {
         return definition;
     }
-    public void setDefinition(VarDeclaration definition) {
+    public void setDefinition(Definition definition) {
         this.definition = definition;
     }
 
@@ -30,6 +30,7 @@ public class VariableExpression extends AbstractExpression {
 
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        System.out.println("varexp");
         return visitor.visit(this,param);
     }
 }

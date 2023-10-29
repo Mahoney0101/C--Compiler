@@ -1,5 +1,7 @@
 package ast;
 
+import types.Type;
+
 public abstract class AbstractASTNode implements ASTNode {
 
     private int line, column;
@@ -18,6 +20,5 @@ public abstract class AbstractASTNode implements ASTNode {
         this.line = line;
         this.column = column;
     }
-
 }
 

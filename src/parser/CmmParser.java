@@ -1498,7 +1498,7 @@ public class CmmParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ParamListContext extends ParserRuleContext {
-		public List<Parameter> ast = new ArrayList<Parameter>();
+		public List<VarDeclaration> ast = new ArrayList<VarDeclaration>();
 		public ParamContext p;
 		public ParamContext p1;
 		public List<ParamContext> param() {
@@ -1559,7 +1559,7 @@ public class CmmParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ParamContext extends ParserRuleContext {
-		public Parameter ast;
+		public VarDeclaration ast;
 		public TypeContext t;
 		public Token n;
 		public TypeContext type() {
@@ -1582,7 +1582,9 @@ public class CmmParser extends Parser {
 			((ParamContext)_localctx).t = type();
 			setState(302);
 			((ParamContext)_localctx).n = match(ID);
-			 ((ParamContext)_localctx).ast =  new Parameter((((ParamContext)_localctx).t!=null?(((ParamContext)_localctx).t.start):null).getLine(), (((ParamContext)_localctx).t!=null?(((ParamContext)_localctx).t.start):null).getCharPositionInLine()+1, (((ParamContext)_localctx).n!=null?((ParamContext)_localctx).n.getText():null), ((ParamContext)_localctx).t.ast); 
+
+			        ((ParamContext)_localctx).ast =  new VarDeclaration((((ParamContext)_localctx).t!=null?(((ParamContext)_localctx).t.start):null).getLine(), (((ParamContext)_localctx).t!=null?(((ParamContext)_localctx).t.start):null).getCharPositionInLine()+1, (((ParamContext)_localctx).n!=null?((ParamContext)_localctx).n.getText():null), ((ParamContext)_localctx).t.ast);
+			    
 			}
 		}
 		catch (RecognitionException re) {

@@ -1,5 +1,6 @@
 package ast.expressions;
 
+import types.Type;
 import visitor.Visitor;
 
 public class ArithmeticExpression extends AbstractBinaryExpression {
@@ -16,5 +17,10 @@ public class ArithmeticExpression extends AbstractBinaryExpression {
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this,param);
+    }
+
+    @Override
+    public Type accept(Visitor typeCheckingVisitor, Void param) {
+        return null;
     }
 }

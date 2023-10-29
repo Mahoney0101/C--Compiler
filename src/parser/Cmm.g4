@@ -163,13 +163,16 @@ exprList returns [List<Expression> expressions = new ArrayList<Expression>()]
     (COMMA exp=expr     {$expressions.add($exp.ast);})*
     ;
 
-paramList returns [List<Parameter> ast = new ArrayList<Parameter>()]
+paramList returns [List<VarDeclaration> ast = new ArrayList<VarDeclaration>()]
     : p=param           { $ast.add($p.ast); }
     (COMMA p1=param     { $ast.add($p1.ast); })*
     ;
 
-param returns [Parameter ast]
-    : t=type n=ID       { $ast = new Parameter($t.start.getLine(), $t.start.getCharPositionInLine()+1, $n.text, $t.ast); }
+param returns [VarDeclaration ast]
+    : t=type n=ID
+    {
+        $ast = new VarDeclaration($t.start.getLine(), $t.start.getCharPositionInLine()+1, $n.text, $t.ast);
+    }
     ;
 
 structType returns [StructType ast]

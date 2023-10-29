@@ -35,13 +35,16 @@ public class VarDeclaration extends AbstractASTNode implements Statement, Defini
         return String.format("%s %s; // offset: %d.", this.getType(), name, this.getOffset());
     }
 
-    @Override
-    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
-        return visitor.visit(this,param);
-    }
+
 
     @Override
     public String getName() {
         return this.name;
     }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
+    }
+
 }

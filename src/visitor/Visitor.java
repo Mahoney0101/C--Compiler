@@ -9,9 +9,9 @@ import types.ErrorType;
 
 public interface Visitor<TP, TR> {
 
-    TR visit(ArithmeticExpression arithmeticExpression, TP param);
+    <TP, TR> TR visit(ArithmeticExpression arithmeticExpression, TP param);
 
-    TR visit(VariableExpression variable, TP param);
+    <TP, TR> TR visit(VariableExpression variable, TP param);
 
     TR visit(IntLiteralExpression intLiteral, TP param);
 
@@ -19,14 +19,11 @@ public interface Visitor<TP, TR> {
 
     // ************ Statements ***************
 
-    TR visit(WriteStatement write, TP param);
 
-    TR visit(AssignmentStatement assignment, TP param);
+    <TP, TR> TR visit(AssignmentStatement assignment, TP param);
 
 
     // ************ Program ****************
-
-    TR visit(Program program, TP param);
 
     // ************ Types ****************
 
@@ -38,13 +35,11 @@ public interface Visitor<TP, TR> {
 
     TR visit(LogicalNegationExpression logicalNegation, TP param);
 
-    TR visit(RelationalExpression relational, TP param);
-
     TR visit(UnaryMinusExpression unaryMinus, TP param);
 
     TR visit(DoubleLiteralExpression doubleLiteral, TP param);
 
-    TR visit(ArrayAccessExpression arrayAccess, TP param);
+    <TP, TR> TR visit(ArrayAccessExpression arrayAccess, TP param);
 
     TR visit(CharLiteralExpression charLiteral, TP param);
 
@@ -52,7 +47,7 @@ public interface Visitor<TP, TR> {
 
     TR visit(CastExpression castExpression, TP param);
 
-    TR visit(ReturnStatement returnStatement, TP param);
+    <TP, TR> TR   visit(ReturnStatement returnStatement, TP param);
 
     TR visit(WhileStatement whileStatement, TP param);
 
@@ -60,8 +55,7 @@ public interface Visitor<TP, TR> {
 
     TR visit(IfStatement ifStatement, TP param);
 
-
-    TR visit(FunctionCallExpression functionCallExpression, TP param);
+    <TP, TR> TR visit(FunctionCallExpression functionCallExpression, TP param);
 
     TR visit(FunctionCallStatement functionCallStatement, TP param);
 
@@ -71,10 +65,7 @@ public interface Visitor<TP, TR> {
 
     TR visit(DoubleType doubleType, TP param);
 
-    TR visit(FieldAccessExpression fieldAccessExpression, TP param);
-
     TR visit(StructType structType, TP param);
-
 
     TR visit(StructFieldAccessExpression nestedStructFieldExpression, TP param);
 
@@ -84,11 +75,13 @@ public interface Visitor<TP, TR> {
 
     TR visit(Parameter parameter, TP param);
 
-    TR visit(FunctionDeclaration functionDeclaration, TP param);
-
     TR visit(LogicalExpression logicalExpression, TP param);
 
-    TR visit(VarDeclaration varDeclaration, TP param);
+    <TP, TR> TR visit(Program program, TP param);
 
-    TR visit(FunctionType functionType, TP param);
+    <TP, TR> TR visit(FunctionDeclaration functionDeclaration, TP param);
+
+    <TP, TR> TR visit(VarDeclaration varDeclaration, TP param);
+
+    <TP, TR> TR  visit(WriteStatement writeStatement, TP param);
 }

@@ -1,4 +1,4 @@
-package visitor;
+package semantic;
 import ast.Definition;
 
 import java.util.ArrayList;
@@ -48,5 +48,21 @@ public class SymbolTable {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < st.size(); i++) {
+            Map<String, Definition> currentScope = st.get(i);
+            sb.append("Scope ").append(i).append(":\n");
+
+            for (Map.Entry<String, Definition> entry : currentScope.entrySet()) {
+                sb.append("\t").append(entry.getKey()).append(" -> ").append(entry.getValue().toString()).append("\n");
+            }
+        }
+
+        return sb.toString();
     }
 }

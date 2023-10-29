@@ -1,6 +1,12 @@
 package ast;
 
+import semantic.LValueVisitor;
+import types.Type;
+import visitor.Visitor;
+
 public interface Definition {
+   // <TP, TR> TR accept(Visitor<TP, TR> visitor, Void param);
+
     /**
      * Returns the name of the definition.
      *
@@ -10,4 +16,7 @@ public interface Definition {
      * @return the name of the definition.
      */
     String getName();
+
+
+    <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param);
 }

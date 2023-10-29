@@ -1,12 +1,15 @@
+import errorlistener.ErrorHandler;
 import errorlistener.Listener;
 import ast.Program;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
+import org.antlr.v4.gui.Trees;
 import org.antlr.v4.runtime.*;
 import parser.CmmLexer;
 import parser.CmmParser;
 
-import org.antlr.v4.gui.Trees;
+import semantic.IdentityVisitor;
+import semantic.LValueVisitor;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
@@ -24,8 +27,14 @@ public class Main {
 			CmmParser.ProgramContext tree = parser.program();
 			Program ast = tree.ast;
 
-			Trees.inspect(tree, parser);
 
+			ast.accept(new LValueVisitor(), null);
+			ast.accept(new IdentityVisitor(), null);
+			
+			if (ErrorHandler.getErrorHandler().anyError()) {
+				ErrorHandler.getErrorHandler().showErrors(System.err);
+				System.err.println("Program with semantic errors");
+			}
 			IntrospectorModel model=new IntrospectorModel("Program", ast);
 			new IntrospectorTree("Introspector", model);
 		} catch (Exception e) {
