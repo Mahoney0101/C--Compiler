@@ -25,11 +25,6 @@ public class ArrayType extends AbstractType {
     }
 
     @Override
-    public Type arithmetic(Type type, ASTNode node) {
-        return new ErrorType("Arithmetic operations on array type is not supported.", node);
-    }
-
-    @Override
     public char suffix() {
         return 'a'; // This is arbitrary; you can choose any other character for array.
     }

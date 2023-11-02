@@ -3,6 +3,7 @@ package semantic;
 import ast.*;
 import ast.expressions.*;
 import ast.statements.*;
+import errorlistener.ErrorHandler;
 import types.*;
 import visitor.*;
 
@@ -13,8 +14,18 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public <TP, TR> TR visit(VarDeclaration varDecl, TP param) {
         if(!symbolTable.insert(varDecl)) {
-            System.out.println("Symbol already exists: " + varDecl.getName());
+            String errorMsg = "\"VarDeclaration symbol already exists: " + varDecl.getName() +
+                    ": Line: " + varDecl.getLine() + " and column: "
+                    + varDecl.getColumn() + ".";
+            ErrorType error = new ErrorType(errorMsg, varDecl);
+            ErrorHandler.getErrorHandler().addError(error);
         }
+
+        if(varDecl.getType() instanceof  ArrayType){
+            ((ArrayType) varDecl.getType()).getBaseType().accept(this, null);
+        }
+        varDecl.getType().accept(this, null);
+
         return null;
     }
 
@@ -35,12 +46,15 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public <TP, TR> TR visit(FunctionDeclaration funcDecl, TP param) {
         if(!symbolTable.insert(funcDecl)) {
-            System.out.println("Function symbol already exists: " + funcDecl.getFunctionName());
+            String errorMsg = "\"Function symbol already exists: " + funcDecl.getFunctionName() +
+                    ": Line: " + funcDecl.getLine() + " and column: "
+                    + funcDecl.getColumn() + ".";
+            ErrorType error = new ErrorType(errorMsg, funcDecl);
+            ErrorHandler.getErrorHandler().addError(error);
         }
-        symbolTable.set(); // Enter a new scope
+        symbolTable.set();
 
         for (VarDeclaration var : funcDecl.getFunctionType().getParameters()) {
-            System.out.println("Adding param variables: " + funcDecl.getFunctionType().getParameters());
             var.accept(this, null);
         }
 
@@ -60,25 +74,25 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     public <TP, TR> TR  visit(VariableExpression variable, TP param) {
         Definition definition = symbolTable.find(variable.getName());
         if (definition != null) {
-            System.out.println("Setting definition for: "+ variable.getName());
             variable.setDefinition(definition);
         } else {
-            System.err.println("Variable not declared: " + variable.getName());
+            String errorMsg = "Variable not declared: " + variable.getName() +
+                    ": Line: " + variable.getLine() + " and column: "
+                    + variable.getColumn() + ".";
+            ErrorType error = new ErrorType(errorMsg, variable);
+            ErrorHandler.getErrorHandler().addError(error);
         }
         return null;
     }
 
     @Override
     public <TP, TR> TR visit(WriteStatement write, TP param) {
-        System.out.println("Here: "+write.getExpression());
-
         write.getExpression().accept(this, null);
         return null;
     }
 
     @Override
     public <TP, TR> TR visit(ReturnStatement returnStatement, TP param) {
-        System.out.println("Here: "+returnStatement.getExpression());
         returnStatement.getExpression().accept(this, null);
         return null;
     }
@@ -94,10 +108,13 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     public <TP, TR> TR visit(FunctionCallExpression functionCallExpression, TP param) {
         Definition definition = symbolTable.find(functionCallExpression.getFunctionName().getName());
         if (definition != null) {
-            System.out.println("Setting definition for: "+ functionCallExpression.getFunctionName());
             functionCallExpression.getFunctionName().setDefinition(definition);
         } else {
-            System.err.println("Variable not declared: " + functionCallExpression.getFunctionName());
+            String errorMsg = "Variable not declared: " + functionCallExpression.getFunctionName() +
+                    ": Line: " + functionCallExpression.getLine() + " and column: "
+                    + functionCallExpression.getColumn() + ".";
+            ErrorType error = new ErrorType(errorMsg, functionCallExpression);
+            ErrorHandler.getErrorHandler().addError(error);
         }
 
         return null;
@@ -105,12 +122,78 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
 
 
     @Override
-    public <TP2, TR2> TR2 visit(Definition defintion, TP2 param) {
+    public <TP2, TR2> TR2 visit(AssignmentStatement assignment, TP2 param) {
+        assignment.getLeftHandSide().accept(this, null);
+        assignment.getRightHandSide().accept(this, null);
         return null;
     }
 
     @Override
-    public <TP2, TR2> TR2 visit(AssignmentStatement assignment, TP2 param) {
+    public <TP, TR> TR visit(EqualityExpression logical, TP param) {
+        logical.getOperand1().accept(this, null);
+        logical.getOperand2().accept(this, null);
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(IfStatement ifStatement, TP param) {
+
+        ifStatement.getCondition().accept(this,null);
+
+        for (Statement stmt : ifStatement.getIfBlockStatements()) {
+            stmt.accept(this, null);
+        }
+
+        for (Statement stmt : ifStatement.getElseBlockStatements()) {
+            stmt.accept(this, null);
+        }
+
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(WhileStatement whileStatement, TP param) {
+
+        whileStatement.getCondition().accept(this,null);
+
+        for (Statement stmt : whileStatement.getStatements()) {
+            stmt.accept(this, null);
+        }
+
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(ArrayAccessExpression arrayAccessExpression, TP param) {
+
+        arrayAccessExpression.getOperand1().accept(this, null);
+        return null;
+    }
+
+
+    @Override
+    public <TP, TR> TR visit(StructType struct, TP param) {
+
+        for (VarDeclaration field: struct.getFields()) {
+            field.accept(this,null);
+        }
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(StructFieldAccessExpression structFieldAccessExpression, TP param) {
+
+        Definition definition = symbolTable.find(structFieldAccessExpression.getNestedField());
+        if (definition != null) {
+            structFieldAccessExpression.setDefinition(definition);
+        } else {
+            String errorMsg = "StructField not declared: " + structFieldAccessExpression.getNestedField() +
+                    ": Line: " + structFieldAccessExpression.getLine() + " and column: "
+                    + structFieldAccessExpression.getColumn() + ".";
+            ErrorType error = new ErrorType(errorMsg, structFieldAccessExpression);
+            ErrorHandler.getErrorHandler().addError(error);
+        }
+
         return null;
     }
 
@@ -130,17 +213,7 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     }
 
     @Override
-    public <TP, TR> TR visit(ArrayAccessExpression arrayAccess, TP param) {
-        return null;
-    }
-
-    @Override
     public Void visit(CharLiteralExpression charLiteral, Void param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(EqualityExpression logical, Void param) {
         return null;
     }
 
@@ -149,18 +222,9 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
         return null;
     }
 
-    @Override
-    public Void visit(WhileStatement whileStatement, Void param) {
-        return null;
-    }
 
     @Override
     public Void visit(ReadStatement readExpression, Void param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(IfStatement ifStatement, Void param) {
         return null;
     }
 
@@ -181,21 +245,6 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public Void visit(DoubleType doubleType, Void param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(StructType structType, Void param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(StructFieldAccessExpression structFieldAccessExpression, Void param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(FieldDeclaration fieldDeclaration, Void param) {
         return null;
     }
 

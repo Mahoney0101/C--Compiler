@@ -15,11 +15,6 @@ public class VoidType extends AbstractType {
     public static VoidType getInstance() { return instance; }
 
     @Override
-    public Type arithmetic(Type type, ASTNode node) {
-        return new ErrorType("Arithmetic operations are not allowed for void type", node);
-    }
-
-    @Override
     public char suffix() {
         // Void type typically does not need a suffix when used in generated code, considering its non-instantiable nature.
         // If your language requires it for some reason, you might add a suffix here.

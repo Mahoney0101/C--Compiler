@@ -30,7 +30,6 @@ public class VariableExpression extends AbstractExpression {
 
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
-        System.out.println("varexp");
         return visitor.visit(this,param);
     }
 }

@@ -20,11 +20,6 @@ public class StructType extends AbstractType{
     }
 
     @Override
-    public Type arithmetic(Type type, ASTNode node) {
-        return new ErrorType("Arithmetic operations are not allowed on structs", node);
-    }
-
-    @Override
     public char suffix() {
         return 's';
     }

@@ -18,11 +18,17 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
     }
     @Override
     public <TP, TR> TR  visit(VarDeclaration var, TP param) {
+
         return null;
     }
 
     @Override
     public <TP2, TR2> TR2 visit(ReturnStatement returnStatement, TP2 param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(WhileStatement whileStatement, TP param) {
         return null;
     }
 
@@ -58,7 +64,7 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
     }
 
     @Override
-    public Void visit(StructFieldAccessExpression structFieldAccessExpression, Type param) {
+    public <TP, TR> TR visit(StructFieldAccessExpression structFieldAccessExpression, TP param) {
         structFieldAccessExpression.setLValue(true);
         return null;
     }
@@ -100,7 +106,6 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
 
     @Override
     public <TP, TR> TR visit(Definition defintion, TP param){
-        System.out.println("in definition lvalue");
         return null;
     }
 
@@ -111,11 +116,6 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
 
     @Override
     public Void visit(ErrorType errorType, Type param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(RealType realType, Type param) {
         return null;
     }
 
@@ -140,7 +140,7 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
     }
 
     @Override
-    public Void visit(EqualityExpression logical, Type param) {
+    public <TP, TR> TR visit(EqualityExpression logical, TP param) {
         return null;
     }
 
@@ -150,17 +150,12 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
     }
 
     @Override
-    public Void visit(WhileStatement whileStatement, Type param) {
-        return null;
-    }
-
-    @Override
     public Void visit(ReadStatement readExpression, Type param) {
         return null;
     }
 
     @Override
-    public Void visit(IfStatement ifStatement, Type param) {
+    public <TP, TR> TR visit(IfStatement ifStatement, TP param) {
         return null;
     }
 
@@ -181,18 +176,6 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
 
     @Override
     public Void visit(DoubleType doubleType, Type param) {
-        return null;
-    }
-
-
-    @Override
-    public Void visit(StructType structType, Type param) {
-        return null;
-    }
-
-
-    @Override
-    public Void visit(FieldDeclaration fieldDeclaration, Type param) {
         return null;
     }
 

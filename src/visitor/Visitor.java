@@ -31,8 +31,6 @@ public interface Visitor<TP, TR> {
 
     TR visit(ErrorType errorType, TP param);
 
-    TR visit(RealType realType, TP param);
-
     TR visit(LogicalNegationExpression logicalNegation, TP param);
 
     TR visit(UnaryMinusExpression unaryMinus, TP param);
@@ -43,17 +41,17 @@ public interface Visitor<TP, TR> {
 
     TR visit(CharLiteralExpression charLiteral, TP param);
 
-    TR visit(EqualityExpression logical, TP param);
+    <TP, TR> TR visit(EqualityExpression logical, TP param);
 
     TR visit(CastExpression castExpression, TP param);
 
     <TP, TR> TR   visit(ReturnStatement returnStatement, TP param);
 
-    TR visit(WhileStatement whileStatement, TP param);
+    <TP, TR> TR visit(WhileStatement whileStatement, TP param);
 
     TR visit(ReadStatement readExpression, TP param);
 
-    TR visit(IfStatement ifStatement, TP param);
+    <TP, TR> TR visit(IfStatement ifStatement, TP param);
 
     <TP, TR> TR visit(FunctionCallExpression functionCallExpression, TP param);
 
@@ -65,11 +63,9 @@ public interface Visitor<TP, TR> {
 
     TR visit(DoubleType doubleType, TP param);
 
-    TR visit(StructType structType, TP param);
+    <TP, TR>TR visit(StructType structType, TP param);
 
-    TR visit(StructFieldAccessExpression nestedStructFieldExpression, TP param);
-
-    TR visit(FieldDeclaration fieldDeclaration, TP param);
+    <TP, TR>TR visit(StructFieldAccessExpression nestedStructFieldExpression, TP param);
 
     TR visit(VoidType voidType, TP param);
 

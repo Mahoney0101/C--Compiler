@@ -17,11 +17,6 @@ public class ErrorType extends AbstractType {
     }
 
     @Override
-    public Type arithmetic(Type type, ASTNode node) {
-        return this;
-    }
-
-    @Override
     public Type assignment(Type type, ASTNode node) {
         return this;
     }

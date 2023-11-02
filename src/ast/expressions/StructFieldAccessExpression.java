@@ -1,5 +1,6 @@
 package ast.expressions;
 
+import ast.Definition;
 import visitor.Visitor;
 
 public class StructFieldAccessExpression extends AbstractExpression {
@@ -7,10 +8,20 @@ public class StructFieldAccessExpression extends AbstractExpression {
     private Expression structure;
     private String nestedField;
 
+    private Definition fieldDefinition;
+
     public StructFieldAccessExpression(int line, int column, Expression structure, String nestedField) {
         super(line, column);
         this.structure = structure;
         this.nestedField = nestedField;
+    }
+
+    public void setDefinition(Definition fieldDefinition) {
+        this.fieldDefinition = fieldDefinition;
+    }
+
+    public Definition getDefinition() {
+        return fieldDefinition;
     }
 
     public Expression getStructure() {
@@ -28,6 +39,7 @@ public class StructFieldAccessExpression extends AbstractExpression {
 
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+
         return visitor.visit(this, param);
     }
 }
