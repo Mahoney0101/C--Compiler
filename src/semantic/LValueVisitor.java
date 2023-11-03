@@ -145,11 +145,6 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
     }
 
     @Override
-    public Void visit(CastExpression castExpression, Type param) {
-        return null;
-    }
-
-    @Override
     public Void visit(ReadStatement readExpression, Type param) {
         return null;
     }

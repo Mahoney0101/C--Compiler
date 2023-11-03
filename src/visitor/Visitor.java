@@ -43,7 +43,7 @@ public interface Visitor<TP, TR> {
 
     <TP, TR> TR visit(EqualityExpression logical, TP param);
 
-    TR visit(CastExpression castExpression, TP param);
+    <TP, TR> TR visit(CastExpression castExpression, TP param);
 
     <TP, TR> TR   visit(ReturnStatement returnStatement, TP param);
 

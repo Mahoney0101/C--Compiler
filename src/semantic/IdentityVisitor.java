@@ -198,6 +198,14 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     }
 
     @Override
+    public <TP, TR> TR visit(CastExpression castExpression, TP param) {
+
+        castExpression.getExpression().accept(this,null);
+
+        return null;
+    }
+
+    @Override
     public Void visit(LogicalNegationExpression logicalNegation, Void param) {
         return null;
     }
@@ -216,12 +224,6 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     public Void visit(CharLiteralExpression charLiteral, Void param) {
         return null;
     }
-
-    @Override
-    public Void visit(CastExpression castExpression, Void param) {
-        return null;
-    }
-
 
     @Override
     public Void visit(ReadStatement readExpression, Void param) {

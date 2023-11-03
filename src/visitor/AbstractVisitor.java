@@ -52,10 +52,7 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     public <TP, TR> TR visit(StructFieldAccessExpression structFieldAccessExpression, TP param){return null;}
     public <TP, TR>TR visit(StructType structType, TP param){return null;}
-//    @Override
-//    public TR visit(ArithmeticExpression arithmeticExpression, TP param) {
-//        //arithmeticExpression.getOperand1().accept(this, param);
-//        //arithmeticExpression.getOperand2().accept(this, param);
-//        return null;
-//    }
+
+    public <TP, TR> TR visit(CastExpression castExpression, TP param){return null;}
+
 }
