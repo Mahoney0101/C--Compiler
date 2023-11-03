@@ -32,6 +32,11 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
     }
 
     @Override
+    public <TP, TR>TR visit(CharLiteralExpression charLiteralExpression, TP param) {
+        return null;
+    }
+
+    @Override
     public TR visit(RealLiteralExpression realLiteral, TP param) {
         return null;
     }

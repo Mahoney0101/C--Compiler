@@ -36,6 +36,12 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         return null;
     }
 
+    @Override
+    public <TP, TR> TR visit(CharLiteralExpression charLiteralExpression, TP param) {
+        charLiteralExpression.setType(CharType.getInstance());
+        return null;
+    }
+
 //    @Override
 //    public Void visit(Assignment assignment, Void param) {
 //        assignment.getLeftHandSide().accept(this,null);
@@ -153,11 +159,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(ArrayAccessExpression arrayAccess, TP param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(CharLiteralExpression charLiteral, Void param) {
         return null;
     }
 

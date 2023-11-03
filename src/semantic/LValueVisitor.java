@@ -135,11 +135,6 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
     }
 
     @Override
-    public Void visit(CharLiteralExpression charLiteral, Type param) {
-        return null;
-    }
-
-    @Override
     public <TP, TR> TR visit(EqualityExpression logical, TP param) {
         return null;
     }

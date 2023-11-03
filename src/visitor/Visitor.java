@@ -17,6 +17,8 @@ public interface Visitor<TP, TR> {
 
     <TP, TR> TR visit(DoubleLiteralExpression doubleLiteralExpression, TP param);
 
+    <TP, TR>TR visit(CharLiteralExpression charLiteralExpression, TP param);
+
     TR visit(RealLiteralExpression realLiteral, TP param);
 
     // ************ Statements ***************
@@ -38,8 +40,6 @@ public interface Visitor<TP, TR> {
     TR visit(UnaryMinusExpression unaryMinus, TP param);
 
     <TP, TR> TR visit(ArrayAccessExpression arrayAccess, TP param);
-
-    TR visit(CharLiteralExpression charLiteral, TP param);
 
     <TP, TR> TR visit(EqualityExpression logical, TP param);
 
