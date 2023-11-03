@@ -18,9 +18,4 @@ public class ArithmeticExpression extends AbstractBinaryExpression {
     public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
         return visitor.visit(this,param);
     }
-
-    @Override
-    public Type accept(Visitor typeCheckingVisitor, Void param) {
-        return null;
-    }
 }

@@ -55,4 +55,7 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     public <TP, TR> TR visit(CastExpression castExpression, TP param){return null;}
 
+    public <TP, TR> TR visit(ReadStatement readStatement, TP param){return null;}
+
+    public <TP, TR> TR visit(FunctionCallStatement functionCallStatement, TP param){return null;}
 }

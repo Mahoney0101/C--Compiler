@@ -145,17 +145,12 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
     }
 
     @Override
-    public Void visit(ReadStatement readExpression, Type param) {
+    public <TP, TR> TR visit(ReadStatement readExpression, TP param) {
         return null;
     }
 
     @Override
     public <TP, TR> TR visit(IfStatement ifStatement, TP param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(FunctionCallStatement functionCallStatement, Type param) {
         return null;
     }
 

@@ -49,13 +49,13 @@ public interface Visitor<TP, TR> {
 
     <TP, TR> TR visit(WhileStatement whileStatement, TP param);
 
-    TR visit(ReadStatement readExpression, TP param);
+    <TP, TR> TR visit(ReadStatement readExpression, TP param);
 
     <TP, TR> TR visit(IfStatement ifStatement, TP param);
 
     <TP, TR> TR visit(FunctionCallExpression functionCallExpression, TP param);
 
-    TR visit(FunctionCallStatement functionCallStatement, TP param);
+    <TP, TR> TR visit(FunctionCallStatement functionCallStatement, TP param);
 
     TR visit(CharType charType, TP param);
 

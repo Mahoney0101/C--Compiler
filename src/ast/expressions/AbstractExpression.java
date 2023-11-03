@@ -33,9 +33,4 @@ abstract class AbstractExpression extends AbstractASTNode implements Expression 
         this.type = type;
     }
 
-    public Type accept(Visitor typeCheckingVisitor, Void param){
-        return null;
-    }
-
-
 }
