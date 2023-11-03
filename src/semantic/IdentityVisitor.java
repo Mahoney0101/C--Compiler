@@ -231,11 +231,6 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(DoubleLiteralExpression doubleLiteral, Void param) {
-        return null;
-    }
-
-    @Override
     public Void visit(CharLiteralExpression charLiteral, Void param) {
         return null;
     }

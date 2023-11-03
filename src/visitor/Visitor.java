@@ -13,7 +13,9 @@ public interface Visitor<TP, TR> {
 
     <TP, TR> TR visit(VariableExpression variable, TP param);
 
-    TR visit(IntLiteralExpression intLiteral, TP param);
+    <TP, TR> TR visit(IntLiteralExpression intLiteral, TP param);
+
+    <TP, TR> TR visit(DoubleLiteralExpression doubleLiteralExpression, TP param);
 
     TR visit(RealLiteralExpression realLiteral, TP param);
 
@@ -34,8 +36,6 @@ public interface Visitor<TP, TR> {
     TR visit(LogicalNegationExpression logicalNegation, TP param);
 
     TR visit(UnaryMinusExpression unaryMinus, TP param);
-
-    TR visit(DoubleLiteralExpression doubleLiteral, TP param);
 
     <TP, TR> TR visit(ArrayAccessExpression arrayAccess, TP param);
 

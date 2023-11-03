@@ -22,6 +22,16 @@ public class ErrorType extends AbstractType {
     }
 
     @Override
+    public Type squareBrackets(Type t, ASTNode node) {
+        return this;
+    }
+
+    @Override
+    public Type arithmetic(Type type, ASTNode node) {
+        return this;
+    }
+
+    @Override
     public String toString() {
         return String.format("Type error in line %d and column %d: %s.",
                 this.getLine(), this.getColumn(), this.message);

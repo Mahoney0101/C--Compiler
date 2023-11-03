@@ -11,11 +11,9 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
         super(line, column);
     }
 
-    /******** Semantic Analysis ***************/
 
     @Override
     public Type arithmetic(Type type, ASTNode node) {
-        // * By default, not allowed (type error)
         return new ErrorType("An arithmetic expression cannot be performed with the types " + this.getClass().getSimpleName() + " and " + type.getClass().getSimpleName() + ".", node);
     }
 
@@ -30,6 +28,10 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
         return new ErrorType("Assignments require left- and right-hand sides to have the same type", node);
     }
 
+    @Override
+    public Type squareBrackets(Type t, ASTNode node){
+        return new ErrorType(String.format("The type %s cannot be used as an index", t), node);
+    }
 
     /******** Code Generation ***************/
 

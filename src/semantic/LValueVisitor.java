@@ -84,7 +84,7 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
     }
 
     @Override
-    public Void visit(IntLiteralExpression intLiteral, Type param) {
+    public <TP, TR> TR  visit(IntLiteralExpression intLiteral, TP param) {
         return null;
     }
 
@@ -130,7 +130,7 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
     }
 
     @Override
-    public Void visit(DoubleLiteralExpression doubleLiteral, Type param) {
+    public <TP, TR> TR  visit(DoubleLiteralExpression doubleLiteral, TP param) {
         return null;
     }
 

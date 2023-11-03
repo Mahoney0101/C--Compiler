@@ -25,6 +25,17 @@ public class ArrayType extends AbstractType {
     }
 
     @Override
+    public Type squareBrackets(Type t, ASTNode node) {
+        if(t instanceof IntType){
+            return this.baseType;
+        }
+        if(t instanceof ErrorType){
+            return t;
+        }
+        return new ErrorType(String.format("The type %s cannot be used as an index", t), node);
+    }
+
+    @Override
     public char suffix() {
         return 'a'; // This is arbitrary; you can choose any other character for array.
     }

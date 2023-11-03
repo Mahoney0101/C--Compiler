@@ -10,8 +10,24 @@ import types.*;
 
 public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
+
     @Override
-    public TR visit(IntLiteralExpression intLiteral, TP param) {
+    public <TP, TR> TR visit(Program program, TP param) {
+
+        for (Definition def : program.getdefinitions()) {
+            def.accept(this, null);
+        }
+
+        return null;
+    }
+
+    @Override
+    public <TP, TR>TR visit(IntLiteralExpression intLiteral, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR>TR visit(DoubleLiteralExpression doubleLiteralExpression, TP param) {
         return null;
     }
 
