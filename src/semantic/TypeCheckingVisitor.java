@@ -2,10 +2,8 @@ package semantic;
 
 import ast.*;
 import ast.expressions.*;
-import ast.statements.AssignmentStatement;
-import ast.statements.IfStatement;
-import ast.statements.ReturnStatement;
-import ast.statements.WhileStatement;
+import ast.statements.*;
+import errorlistener.ErrorHandler;
 import visitor.*;
 import types.*;
 
@@ -19,11 +17,12 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 //        return null;
 //    }
 //
-//    @Override
-//    public Void visit(VariableExpression variable, Void param) {
-//        variable.setType(variable.getDefinition().);
-//        return null;
-//    }
+    @Override
+    public <TP, TR> TR visit(VariableExpression variable, TP param) {
+        System.out.println("variable typechecking");
+        variable.setType(variable.getDefinition().getType());
+        return null;
+    }
 
     @Override
     public <TP, TR> TR visit(IntLiteralExpression intLiteral, TP param) {
@@ -84,21 +83,41 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(Program program, TP param) {
+        System.out.println("program typechecking");
+        for (Definition def : program.getdefinitions()) {
+            def.accept(this, null);
+        }
+
         return null;
     }
 
     @Override
-    public <TP, TR> TR visit(FunctionDeclaration functionDeclaration, TP param) {
+    public <TP, TR> TR visit(FunctionDeclaration funcDecl, TP param) {
+
+        System.out.println("function type checking");
+        for (VarDeclaration var : funcDecl.getFunctionType().getParameters()) {
+            var.accept(this, null);
+        }
+
+        for (VarDeclaration var : funcDecl.getVars()) {
+            var.accept(this, null);
+        }
+
+        for (Statement stmt : funcDecl.getStatements()) {
+            stmt.accept(this, null);
+        }
+
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(ReturnStatement returnStatement, TP param) {
+        returnStatement.getExpression().accept(this, null);
         return null;
     }
 
     @Override
     public <TP2, TR2> TR2 visit(VarDeclaration var, TP2 param) {
-        return null;
-    }
-
-    @Override
-    public <TP2, TR2> TR2 visit(ReturnStatement returnStatement, TP2 param) {
         return null;
     }
 
@@ -114,11 +133,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(ArithmeticExpression arithmeticExpression, TP param) {
-        return null;
-    }
-
-    @Override
-    public <TP, TR> TR visit(VariableExpression variable, TP param) {
         return null;
     }
 

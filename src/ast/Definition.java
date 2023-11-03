@@ -16,6 +16,8 @@ public interface Definition {
      * @return the name of the definition.
      */
     String getName();
+    Type getType();
+
 
 
     <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param);

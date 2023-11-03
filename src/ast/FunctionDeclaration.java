@@ -67,4 +67,9 @@ public class FunctionDeclaration extends AbstractASTNode implements Definition{
     public String getName() {
         return functionName;
     }
+
+    @Override
+    public Type getType() {
+        return this.functionType;
+    }
 }
