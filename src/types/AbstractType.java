@@ -20,8 +20,6 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     public Type assignment(Type type, ASTNode node) {
         if (type instanceof ErrorType)
             return type;
-        if (this.getClass().equals(type.getClass()))
-            return type;
         return new ErrorType("Assignments require left- and right-hand sides to have the same type", node);
     }
 
