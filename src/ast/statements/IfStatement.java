@@ -1,10 +1,10 @@
 package ast.statements;
 
 import ast.AbstractASTNode;
-import ast.VarDeclaration;
 import ast.expressions.Expression;
 import visitor.Visitor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IfStatement extends AbstractASTNode implements Statement {
@@ -35,7 +35,7 @@ public class IfStatement extends AbstractASTNode implements Statement {
 
 
     public List<Statement> getElseBlockStatements() {
-        return elseBlockStatements;
+        if (this.elseBlockStatements!= null){ return elseBlockStatements;} else return new ArrayList<>();
     }
 
     public void setCondition(Expression condition) {

@@ -25,6 +25,11 @@ public class ArrayType extends AbstractType {
     }
 
     @Override
+    public Type arithmetic(Type type, ASTNode node) {
+        return super.arithmetic(type, node);
+    }
+
+    @Override
     public Type squareBrackets(Type t, ASTNode node) {
         if(t instanceof IntType){
             return this.baseType;

@@ -9,6 +9,11 @@ public class LogicalExpression extends AbstractBinaryExpression {
     }
 
     @Override
+    public String getOperator() {
+        return super.getOperator();
+    }
+
+    @Override
     public String toString() {
         return ""+this.getOperand1()+this.getOperator()+this.getOperand2();
     }

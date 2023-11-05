@@ -1,6 +1,6 @@
 package ast.expressions;
 
-abstract class AbstractBinaryExpression extends AbstractExpression implements Expression {
+public abstract class AbstractBinaryExpression extends AbstractExpression implements Expression {
 
     private String operator;
 

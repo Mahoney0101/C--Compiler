@@ -136,6 +136,20 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     }
 
     @Override
+    public <TP, TR> TR visit(LogicalExpression logicalExpression, TP param) {
+        logicalExpression.getOperand1().accept(this, null);
+        logicalExpression.getOperand2().accept(this, null);
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(LogicalNegationExpression logicalNegation, TP param) {
+
+        logicalNegation.getOperand().accept(this, null);
+        return null;
+    }
+
+    @Override
     public <TP, TR> TR visit(IfStatement ifStatement, TP param) {
 
         ifStatement.getCondition().accept(this,null);
@@ -144,8 +158,10 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
             stmt.accept(this, null);
         }
 
-        for (Statement stmt : ifStatement.getElseBlockStatements()) {
-            stmt.accept(this, null);
+        if(!ifStatement.getElseBlockStatements().isEmpty()) {
+            for (Statement stmt : ifStatement.getElseBlockStatements()) {
+                stmt.accept(this, null);
+            }
         }
 
         return null;
@@ -221,11 +237,6 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(LogicalNegationExpression logicalNegation, Void param) {
-        return null;
-    }
-
-    @Override
     public Void visit(UnaryMinusExpression unaryMinus, Void param) {
         return null;
     }
@@ -255,8 +266,5 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
         return null;
     }
 
-    @Override
-    public Void visit(LogicalExpression logicalExpression, Void param) {
-        return null;
-    }
+
 }

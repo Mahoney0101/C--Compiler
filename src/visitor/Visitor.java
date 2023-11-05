@@ -35,7 +35,7 @@ public interface Visitor<TP, TR> {
 
     TR visit(ErrorType errorType, TP param);
 
-    TR visit(LogicalNegationExpression logicalNegation, TP param);
+    <TP, TR> TR visit(LogicalNegationExpression logicalNegation, TP param);
 
     TR visit(UnaryMinusExpression unaryMinus, TP param);
 
@@ -71,7 +71,7 @@ public interface Visitor<TP, TR> {
 
     TR visit(Parameter parameter, TP param);
 
-    TR visit(LogicalExpression logicalExpression, TP param);
+    <TP, TR> TR visit(LogicalExpression logicalExpression, TP param);
 
     <TP, TR> TR visit(Program program, TP param);
 

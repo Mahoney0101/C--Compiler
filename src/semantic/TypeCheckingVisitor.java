@@ -9,18 +9,68 @@ import types.*;
 
 public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
-//    @Override
-//    public Void visit(Arithmetic exp, Void param) {
-//        exp.getOperand1().accept(this,null);
-//        exp.getOperand2().accept(this,null);
-//        exp.setType(exp.getOperand1().getType().arithmetic(exp.getOperand2().getType(), exp));
-//        return null;
-//    }
-//
+    @Override
+    public <TP, TR> TR visit(WriteStatement writeStatement, TP param) {
+        writeStatement.getExpression().accept(this, null);
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(ReadStatement readStatement, TP param) {
+        readStatement.getExpression().accept(this, null);
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(AssignmentStatement assignment, TP param) {
+        assignment.getLeftHandSide().accept(this,null);
+        assignment.getRightHandSide().accept(this,null);
+        assignment.getLeftHandSide().getType()
+                .assignment(assignment.getRightHandSide().getType(), assignment);
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(ArithmeticExpression exp, TP param) {
+        exp.getOperand1().accept(this,null);
+        exp.getOperand2().accept(this,null);
+        exp.setType(exp.getOperand1().getType().arithmetic(exp.getOperand2().getType(), exp));
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(LogicalExpression exp, TP param) {
+        exp.getOperand1().accept(this,null);
+        exp.getOperand2().accept(this,null);
+        exp.setType(exp.getOperand1().getType().arithmetic(exp.getOperand2().getType(), exp));
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(LogicalNegationExpression exp, TP param) {
+        exp.getOperand().accept(this, null);
+        exp.setType(exp.getOperand().getType().arithmetic(exp.getOperand().getType(), exp));
+
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(EqualityExpression exp, TP param) {
+        exp.getOperand1().accept(this,null);
+        exp.getOperand2().accept(this,null);
+
+        if (exp.getOperand1().getType() != null && exp.getOperand2().getType() != null) {
+            exp.setType(exp.getOperand1().getType().comparison(exp.getOperand2().getType(), exp));
+        }
+        return null;
+    }
+
     @Override
     public <TP, TR> TR visit(VariableExpression variable, TP param) {
-        System.out.println("variable typechecking");
-        variable.setType(variable.getDefinition().getType());
+
+        if (variable.getDefinition() != null) {
+            variable.setType(variable.getDefinition().getType());
+        }
         return null;
     }
 
@@ -41,16 +91,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         charLiteralExpression.setType(CharType.getInstance());
         return null;
     }
-
-//    @Override
-//    public Void visit(Assignment assignment, Void param) {
-//        assignment.getLeftHandSide().accept(this,null);
-//        assignment.getRightHandSide().accept(this,null);
-//        assignment.getLeftHandSide().getType()
-//                .assignment(assignment.getRightHandSide().getType(), assignment);
-//        return null;
-//    }
-
 
     @Override
     public <TP, TR> TR visit(FunctionCallExpression functionCallExpression, TP param) {
@@ -82,14 +122,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         return null;
     }
 
-    @Override
-    public Void visit(LogicalExpression logicalExpression, Void param) {
-        return null;
-    }
 
     @Override
     public <TP, TR> TR visit(Program program, TP param) {
-        System.out.println("program typechecking");
         for (Definition def : program.getdefinitions()) {
             def.accept(this, null);
         }
@@ -100,7 +135,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public <TP, TR> TR visit(FunctionDeclaration funcDecl, TP param) {
 
-        System.out.println("function type checking");
         for (VarDeclaration var : funcDecl.getFunctionType().getParameters()) {
             var.accept(this, null);
         }
@@ -129,26 +163,23 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(WhileStatement whileStatement, TP param) {
+
+        for (Statement statement :whileStatement.getStatements()) {
+            statement.accept(this,null);
+        }
         return null;
     }
 
     @Override
     public <TP, TR> TR visit(IfStatement ifStatement, TP param) {
-        return null;
-    }
 
-    @Override
-    public <TP, TR> TR visit(ArithmeticExpression arithmeticExpression, TP param) {
-        return null;
-    }
+        for (Statement statement : ifStatement.getIfBlockStatements()) {
+            statement.accept(this,null);
+        }
 
-    @Override
-    public <TP2, TR2> TR2 visit(AssignmentStatement assignment, TP2 param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(LogicalNegationExpression logicalNegation, Void param) {
+        for (Statement statement : ifStatement.getElseBlockStatements()) {
+            statement.accept(this,null);
+        }
         return null;
     }
 
@@ -159,11 +190,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(ArrayAccessExpression arrayAccess, TP param) {
-        return null;
-    }
-
-    @Override
-    public <TP, TR> TR visit(EqualityExpression logical, TP param) {
         return null;
     }
 }

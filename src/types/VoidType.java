@@ -1,6 +1,5 @@
 package types;
 
-import ast.ASTNode;
 import visitor.Visitor;
 
 public class VoidType extends AbstractType {

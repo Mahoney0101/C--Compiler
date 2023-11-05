@@ -100,22 +100,18 @@ statements returns [List<Statement> ast]
 // ** Specific Statement Types **
 
 ifStatement returns [IfStatement ast]
-    : IF LPAREN expr1=expr RPAREN LBRACE? stmts=statements RBRACE?
-      {
-          $ast = new IfStatement($IF.getLine(), $IF.getCharPositionInLine() + 1, $expr1.ast, $stmts.ast, null);
-      }
-      (ELSE LBRACE? stmts2=statements RBRACE?
-      {
-          $ast.setElseBlockStatements($stmts2.ast);
-      })?
+    : IF LPAREN expr1=expr RPAREN (LBRACE stmts1=statements RBRACE { $ast = new IfStatement($IF.getLine(), $IF.getCharPositionInLine() + 1, $expr1.ast, $stmts1.ast, null);} | stmt2=statement{$ast = new IfStatement($IF.getLine(), $IF.getCharPositionInLine() + 1, $expr1.ast, $stmt2.ast, null);})
+
+      (ELSE (LBRACE stmts3=statements RBRACE {$ast.setElseBlockStatements($stmts3.ast);} | stmt4=statement{ $ast.setElseBlockStatements($stmt4.ast);}))?
     ;
 
-whileStatement returns [Statement ast]
-    : WHILE LPAREN condition=expr RPAREN LBRACE? stmts=statements RBRACE?
-    {
-        $ast = new WhileStatement($WHILE.getLine(), $WHILE.getCharPositionInLine()+1, $condition.ast, $stmts.ast);
-    }
+
+whileStatement returns [WhileStatement ast]
+    : WHILE LPAREN condition=expr RPAREN (LBRACE stmts1=statements RBRACE { $ast = new WhileStatement($WHILE.getLine(), $WHILE.getCharPositionInLine() + 1, $condition.ast, $stmts1.ast); }
+      | stmt2=statement { $ast = new WhileStatement($WHILE.getLine(), $WHILE.getCharPositionInLine() + 1, $condition.ast, $stmt2.ast); }
+      )
     ;
+
 
 returnStatement returns [Statement ast] : RETURN exp=expr SEMI { $ast = new ReturnStatement($RETURN.getLine(), $RETURN.getCharPositionInLine()+1, $exp.ast); };
 

@@ -69,6 +69,10 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
         return null;
     }
 
+    @Override
+    public <TP2, TR2> TR2 visit(LogicalExpression logicalExpression, TP2 param) {
+        return null;
+    }
 
     @Override
     public  <TP, TR> TR visit(AssignmentStatement assignment, TP param) {
@@ -116,11 +120,6 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
 
     @Override
     public Void visit(ErrorType errorType, Type param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(LogicalNegationExpression logicalNegation, Type param) {
         return null;
     }
 
@@ -174,10 +173,5 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
         return null;
     }
 
-
-    @Override
-    public Void visit(LogicalExpression logicalExpression, Type param) {
-        return null;
-    }
 }
 

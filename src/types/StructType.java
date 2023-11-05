@@ -15,6 +15,11 @@ public class StructType extends AbstractType{
         this.fields = fields;
     }
 
+    @Override
+    public Type arithmetic(Type type, ASTNode node) {
+        return super.arithmetic(type, node);
+    }
+
     public List<VarDeclaration> getFields() {
         return fields;
     }
