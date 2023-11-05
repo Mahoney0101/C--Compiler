@@ -164,6 +164,17 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public <TP, TR> TR visit(WhileStatement whileStatement, TP param) {
 
+        whileStatement.getCondition().accept(this,null);
+
+        var condition = whileStatement.getCondition();
+        if(condition.getType() != IntType.getInstance()){
+            String errorMsg = "\"Conditions for while statements most be integer values: " + condition +
+                    ": Line: " + condition.getLine() + " and column: "
+                    + condition.getColumn() + ".";
+            ErrorType error = new ErrorType(errorMsg, condition);
+            ErrorHandler.getErrorHandler().addError(error);
+        }
+
         for (Statement statement :whileStatement.getStatements()) {
             statement.accept(this,null);
         }
@@ -172,6 +183,17 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(IfStatement ifStatement, TP param) {
+
+        ifStatement.getCondition().accept(this, null);
+
+        var condition = ifStatement.getCondition();
+        if(condition.getType() != IntType.getInstance()){
+            String errorMsg = "\"Conditions for if statements most be integer values: " + condition +
+                    ": Line: " + condition.getLine() + " and column: "
+                    + condition.getColumn() + ".";
+            ErrorType error = new ErrorType(errorMsg, condition);
+            ErrorHandler.getErrorHandler().addError(error);
+        }
 
         for (Statement statement : ifStatement.getIfBlockStatements()) {
             statement.accept(this,null);
