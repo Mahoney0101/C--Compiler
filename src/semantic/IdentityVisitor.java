@@ -17,8 +17,7 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
             String errorMsg = "\"VarDeclaration symbol already exists: " + varDecl.getName() +
                     ": Line: " + varDecl.getLine() + " and column: "
                     + varDecl.getColumn() + ".";
-            ErrorType error = new ErrorType(errorMsg, varDecl);
-            ErrorHandler.getErrorHandler().addError(error);
+            new ErrorType(errorMsg, varDecl);
         }
 
         if(varDecl.getType() instanceof  ArrayType){
@@ -49,8 +48,7 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
             String errorMsg = "\"Function symbol already exists: " + funcDecl.getFunctionName() +
                     ": Line: " + funcDecl.getLine() + " and column: "
                     + funcDecl.getColumn() + ".";
-            ErrorType error = new ErrorType(errorMsg, funcDecl);
-            ErrorHandler.getErrorHandler().addError(error);
+            new ErrorType(errorMsg, funcDecl);
         }
         symbolTable.set();
 
@@ -79,8 +77,7 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
             String errorMsg = "Variable not declared: " + variable.getName() +
                     ": Line: " + variable.getLine() + " and column: "
                     + variable.getColumn() + ".";
-            ErrorType error = new ErrorType(errorMsg, variable);
-            ErrorHandler.getErrorHandler().addError(error);
+            new ErrorType(errorMsg, variable);
         }
         return null;
     }
@@ -113,8 +110,7 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
             String errorMsg = "Variable not declared: " + functionCallExpression.getFunctionName() +
                     ": Line: " + functionCallExpression.getLine() + " and column: "
                     + functionCallExpression.getColumn() + ".";
-            ErrorType error = new ErrorType(errorMsg, functionCallExpression);
-            ErrorHandler.getErrorHandler().addError(error);
+            new ErrorType(errorMsg, functionCallExpression);
         }
 
         return null;
@@ -206,8 +202,7 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
             String errorMsg = "StructField not declared: " + structFieldAccessExpression.getNestedField() +
                     ": Line: " + structFieldAccessExpression.getLine() + " and column: "
                     + structFieldAccessExpression.getColumn() + ".";
-            ErrorType error = new ErrorType(errorMsg, structFieldAccessExpression);
-            ErrorHandler.getErrorHandler().addError(error);
+            new ErrorType(errorMsg, structFieldAccessExpression);
         }
 
         return null;

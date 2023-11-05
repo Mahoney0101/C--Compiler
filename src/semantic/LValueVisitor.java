@@ -81,8 +81,7 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
             String errorMsg = "The expression on the left-hand side of the assignment at line: " +
                     assignment.getLine() + " and column: " +
                     assignment.getColumn() + " is not a valid l-value.";
-            ErrorType error = new ErrorType(errorMsg, assignment);
-            ErrorHandler.getErrorHandler().addError(error);
+            new ErrorType(errorMsg, assignment);
         }
         return null;
     }

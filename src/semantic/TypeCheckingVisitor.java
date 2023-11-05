@@ -171,8 +171,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
             String errorMsg = "\"Conditions for while statements most be integer values: " + condition +
                     ": Line: " + condition.getLine() + " and column: "
                     + condition.getColumn() + ".";
-            ErrorType error = new ErrorType(errorMsg, condition);
-            ErrorHandler.getErrorHandler().addError(error);
+            new ErrorType(errorMsg, condition);
         }
 
         for (Statement statement :whileStatement.getStatements()) {
@@ -191,8 +190,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
             String errorMsg = "\"Conditions for if statements most be integer values: " + condition +
                     ": Line: " + condition.getLine() + " and column: "
                     + condition.getColumn() + ".";
-            ErrorType error = new ErrorType(errorMsg, condition);
-            ErrorHandler.getErrorHandler().addError(error);
+            new ErrorType(errorMsg, condition);
         }
 
         for (Statement statement : ifStatement.getIfBlockStatements()) {
