@@ -103,6 +103,7 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(FunctionCallExpression functionCallExpression, TP param) {
+
         Definition definition = symbolTable.find(functionCallExpression.getFunctionName().getName());
         if (definition != null) {
             functionCallExpression.getFunctionName().setDefinition(definition);
@@ -179,6 +180,7 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     public <TP, TR> TR visit(ArrayAccessExpression arrayAccessExpression, TP param) {
 
         arrayAccessExpression.getOperand1().accept(this, null);
+        arrayAccessExpression.getOperand2().accept(this, null);
         return null;
     }
 

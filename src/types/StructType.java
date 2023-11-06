@@ -16,6 +16,11 @@ public class StructType extends AbstractType{
     }
 
     @Override
+    public Type assignment(Type type, ASTNode node) {
+        return super.assignment(type, node);
+    }
+
+    @Override
     public Type arithmetic(Type type, ASTNode node) {
         return super.arithmetic(type, node);
     }

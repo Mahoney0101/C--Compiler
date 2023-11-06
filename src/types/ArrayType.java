@@ -31,13 +31,23 @@ public class ArrayType extends AbstractType {
 
     @Override
     public Type squareBrackets(Type t, ASTNode node) {
-        if(t instanceof IntType){
-            return this.baseType;
-        }
         if(t instanceof ErrorType){
             return t;
         }
+        if(t instanceof IntType){
+            return IntType.getInstance();
+        }
+
         return new ErrorType(String.format("The type %s cannot be used as an index", t), node);
+    }
+
+    @Override
+    public Type assignment(Type type, ASTNode node) {
+        if (type instanceof ErrorType)
+            return type;
+        if (type instanceof ArrayType)
+            return type;
+        return new ErrorType(String.format("Cannot assign %s to array type", type), node);
     }
 
     @Override

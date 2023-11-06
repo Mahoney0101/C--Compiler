@@ -21,7 +21,26 @@ public class CharType extends AbstractType {
 
     @Override
     public Type assignment(Type type, ASTNode node) {
-        return super.assignment(type, node);
+        if (type instanceof ErrorType)
+            return type;
+        if (type instanceof CharType)
+            return type;
+        if (type instanceof ArrayType)
+            return new ErrorType("Arrays can not be assigned", node);
+        return new ErrorType(String.format("Cannot assign %s to Char type", type), node);
+    }
+
+    @Override
+    public Type cast(Type type, ASTNode node) {
+        if (type instanceof ErrorType)
+            return type;
+        if (type instanceof CharType)
+            return type;
+        if (type instanceof IntType)
+            return IntType.getInstance();
+        if (type instanceof DoubleType)
+            return DoubleType.getInstance();
+        return new ErrorType(String.format("Cannot cast %s to Char type", type), node);
     }
 
     public Type arithmetic(Type type, ASTNode node) {

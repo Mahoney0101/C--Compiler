@@ -18,6 +18,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public <TP, TR> TR visit(ReadStatement readStatement, TP param) {
         readStatement.getExpression().accept(this, null);
+
+        if (!readStatement.getExpression().isLValue())
+            new ErrorType("Read Statements must be provider valid l-value", readStatement.getExpression());
         return null;
     }
 
@@ -43,6 +46,13 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         exp.getOperand1().accept(this,null);
         exp.getOperand2().accept(this,null);
         exp.setType(exp.getOperand1().getType().arithmetic(exp.getOperand2().getType(), exp));
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(CastExpression exp, TP param) {
+        exp.getExpression().accept(this,null);
+        exp.setType(exp.getExpression().getType().cast(exp.getTargetType(), exp));
         return null;
     }
 
@@ -88,12 +98,29 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(CharLiteralExpression charLiteralExpression, TP param) {
+        System.out.println("setting charliteral");
         charLiteralExpression.setType(CharType.getInstance());
         return null;
     }
 
     @Override
     public <TP, TR> TR visit(FunctionCallExpression functionCallExpression, TP param) {
+        for (Expression ex: functionCallExpression.getArguments()) {
+            ex.accept(this,null);
+        }
+
+        functionCallExpression.setType(
+                functionCallExpression.getFunctionName().getDefinition().getType().comparison(
+                        functionCallExpression.getFunctionName().getDefinition().getType(), functionCallExpression));
+
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(FunctionCallStatement functionCallStatement, TP param) {
+
+        functionCallStatement.getFunctionCallExpression().accept(this, null);
+
         return null;
     }
 
@@ -146,6 +173,8 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         for (Statement stmt : funcDecl.getStatements()) {
             stmt.accept(this, null);
         }
+
+        funcDecl.getType().equivalent(funcDecl.getFunctionType().getReturnType(), funcDecl);
 
         return null;
     }
@@ -209,7 +238,14 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     }
 
     @Override
-    public <TP, TR> TR visit(ArrayAccessExpression arrayAccess, TP param) {
+    public <TP, TR> TR visit(ArrayAccessExpression exp, TP param) {
+
+        exp.getOperand1().accept(this, null);
+        exp.getOperand2().accept(this, null);
+
+        System.out.println(exp.getOperand1().getType());
+        exp.setType(exp.getOperand1().getType().squareBrackets(exp.getOperand2().getType(), exp));
+
         return null;
     }
 }

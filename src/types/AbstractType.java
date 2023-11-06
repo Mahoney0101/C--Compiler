@@ -20,12 +20,18 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     public Type assignment(Type type, ASTNode node) {
         if (type instanceof ErrorType)
             return type;
-        return new ErrorType("Assignments require left- and right-hand sides to have the same type", node);
+        return new ErrorType(String.format("Assignments not supported for type %s", type), node);
+    }
+
+    @Override
+    public Type cast(Type type, ASTNode node){
+        return new ErrorType(String.format("Cannot cast %s type", type), node);
     }
 
     @Override
     public Type squareBrackets(Type t, ASTNode node) {
-        return new ErrorType(String.format("The type %s cannot be used as an index", t), node);
+        System.out.println("Hereeeeeeeee");
+        return new ErrorType(String.format("The type %s is not an Array type", t), node);
     }
 
     public Type comparison(Type type, ASTNode node) {
@@ -33,9 +39,13 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
             return type;
         }
 
-        return new ErrorType(String.format(
-                "Comparison operations of integers do not allow comparisons with type %s", type),
+        return new ErrorType(
+                "Comparison operations require left- and right-hand sides to have the same type",
                 node);
+    }
+
+    public Type equivalent(Type type, ASTNode node){
+        return new ErrorType(String.format("Equivalent checks not allowed on type %s", type), node);
     }
 
     /******** Code Generation ***************/

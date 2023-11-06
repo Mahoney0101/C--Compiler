@@ -1,16 +1,19 @@
-int i;
+int integer;
+char character;
+double real;
 
-int f(int a) {
-  return a;
-}
-
-void g(int a, double b) {
+double f(int n) {
+  return n;        // * Error: no implicit conversion int->double
 }
 
 void main() {
-  f();       // * Error: wrong number of params
-  g(3.2);    // * Error: wrong number of params
-  g(3, 3);   // * Error: the type of the second parameter is wrong
-  i=g(3, 0.0);  // * Error: void cannot be assigned to int
-}
+  read integer;
+  f('a');           // * Error: no implict conversion char->int
+  f(8.3);           // * Error: double cannot be passed as int
 
+  real = 3;         // * Error: no implicit conversion int->double
+  character = 8.5;  // * Error: double cannot be assigned to char
+
+  3 = integer;      // * Error: lvalue required
+  read integer+2;   // * Error: lvalue required
+}

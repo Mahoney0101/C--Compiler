@@ -1,5 +1,6 @@
 package types;
 
+import ast.ASTNode;
 import visitor.Visitor;
 
 public class VoidType extends AbstractType {
@@ -12,6 +13,11 @@ public class VoidType extends AbstractType {
 
 
     public static VoidType getInstance() { return instance; }
+
+    @Override
+    public Type assignment(Type type, ASTNode node) {
+        return super.assignment(type, node);
+    }
 
     @Override
     public char suffix() {

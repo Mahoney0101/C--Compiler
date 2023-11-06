@@ -3,13 +3,15 @@ package types;
 import ast.ASTNode;
 public interface Type extends ASTNode {
     /************** Semantic Analysis ********************/
-    public Type squareBrackets(Type t, ASTNode node);
-    public Type arithmetic(Type type, ASTNode astNode);
-    public Type comparison(Type type, ASTNode astNode);
-    public Type assignment(Type type, ASTNode astNode);
+    Type squareBrackets(Type type, ASTNode node);
+    Type arithmetic(Type type, ASTNode astNode);
+    Type comparison(Type type, ASTNode astNode);
+    Type assignment(Type type, ASTNode astNode);
+    Type cast(Type type, ASTNode astNode);
+    Type equivalent(Type type, ASTNode node);
 
     /************** Code Generation ********************/
 
-    public char suffix();
-    public int numberOfBytes();
+    char suffix();
+    int numberOfBytes();
 }
