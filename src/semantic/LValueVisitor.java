@@ -77,7 +77,7 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
     public  <TP, TR> TR visit(AssignmentStatement assignment, TP param) {
         assignment.getLeftHandSide().accept(this, null);
         if (!assignment.getLeftHandSide().isLValue()) {
-            new ErrorType("The expression is not a valid l-value.", assignment.getLeftHandSide());
+            new ErrorType("The expression is not a valid l-value", assignment.getLeftHandSide());
         }
         return null;
     }

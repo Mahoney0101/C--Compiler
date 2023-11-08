@@ -45,10 +45,7 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public <TP, TR> TR visit(FunctionDeclaration funcDecl, TP param) {
         if(!symbolTable.insert(funcDecl)) {
-            String errorMsg = "\"Function symbol already exists: " + funcDecl.getFunctionName() +
-                    ": Line: " + funcDecl.getLine() + " and column: "
-                    + funcDecl.getColumn() + ".";
-            new ErrorType(errorMsg, funcDecl);
+            new ErrorType("Function already declared", funcDecl);
         }
         symbolTable.set();
 
@@ -74,10 +71,7 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
         if (definition != null) {
             variable.setDefinition(definition);
         } else {
-            String errorMsg = "Variable not declared: " + variable.getName() +
-                    ": Line: " + variable.getLine() + " and column: "
-                    + variable.getColumn() + ".";
-            new ErrorType(errorMsg, variable);
+            new ErrorType("Variable not declared", variable);
         }
         return null;
     }
@@ -153,10 +147,7 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
         if (definition != null) {
             functionCallExpression.getFunctionName().setDefinition(definition);
         } else {
-            String errorMsg = "Variable not declared: " + functionCallExpression.getFunctionName() +
-                    ": Line: " + functionCallExpression.getLine() + " and column: "
-                    + functionCallExpression.getColumn() + ".";
-            new ErrorType(errorMsg, functionCallExpression);
+            new ErrorType("Function not declared", functionCallExpression);
         }
 
         return null;
