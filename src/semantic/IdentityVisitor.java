@@ -223,7 +223,6 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(ArrayAccessExpression arrayAccessExpression, TP param) {
-
         arrayAccessExpression.getOperand1().accept(this, null);
         arrayAccessExpression.getOperand2().accept(this, null);
         return null;
@@ -243,13 +242,11 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     public <TP, TR> TR visit(StructFieldAccessExpression structFieldAccessExpression, TP param) {
 
         Definition definition = symbolTable.find(structFieldAccessExpression.getNestedField());
+        structFieldAccessExpression.getStructure().accept(this,null);
         if (definition != null) {
             structFieldAccessExpression.setDefinition(definition);
         } else {
-            String errorMsg = "StructField not declared: " + structFieldAccessExpression.getNestedField() +
-                    ": Line: " + structFieldAccessExpression.getLine() + " and column: "
-                    + structFieldAccessExpression.getColumn() + ".";
-            new ErrorType(errorMsg, structFieldAccessExpression);
+            new ErrorType("StructField not declared.", structFieldAccessExpression);
         }
 
         return null;

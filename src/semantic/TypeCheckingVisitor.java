@@ -253,4 +253,12 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
         return null;
     }
+
+    @Override
+    public <TP, TR> TR visit(StructFieldAccessExpression exp, TP param) {
+        exp.getStructure().accept(this, null);
+        exp.setType(exp.getDefinition().getType());
+
+        return null;
+    }
 }

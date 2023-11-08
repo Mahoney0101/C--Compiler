@@ -18,8 +18,13 @@ int g(int n) { return n; }
 
 
 void main() {
-  int i;
-      char ch;
+    int i;
+    char ch;
+    struct {
+      int age;
+      struct { int day, month, int year; } dateOfBirth;
+      char[256] name, surname;
+    } [20] students;
 
     read integer;
     f('a');           // * Error: no implict conversion char->int
@@ -46,11 +51,13 @@ void main() {
     g(3, 3);   // * Error: the type of the second parameter is wrong
     i=g(3, 0.0);  // * Error: void cannot be assigned to int
 
-  write i[0];    // * Error: i is not an array
-  v[3] = 3.4;    // * Error: double cannot be assigned to int
-  v[1] = 'a';    // * Error: char is not converted into int
-  write v[1][2]; // * Error: v[1] is not an array
-  w[10] = 3;     // * Error: an int cannot be assigned to int[]
-  w[10] = v;     // * Error: arrays cannot be assigned
-  write v['a'];  // * Error: index must be int
+    write i[0];    // * Error: i is not an array
+    v[3] = 3.4;    // * Error: double cannot be assigned to int
+    v[1] = 'a';    // * Error: char is not converted into int
+    write v[1][2]; // * Error: v[1] is not an array
+    w[10] = 3;     // * Error: an int cannot be assigned to int[]
+    w[10] = v;     // * Error: arrays cannot be assigned
+    write v['a'];  // * Error: index must be int
+
+    students[0].dateOfBirth.day = 10;
 }
