@@ -105,30 +105,6 @@ public class DoubleType extends AbstractType {
                 node);
     }
 
-
-//    public Type comparison(Type type, ASTNode node) {
-//        if (type instanceof ErrorType) {
-//            return type;
-//        }
-//
-//        if (node instanceof AbstractBinaryExpression) {
-//            AbstractBinaryExpression binaryNode = (AbstractBinaryExpression) node;
-//            String operator = binaryNode.getOperator();
-//
-//            if (">".equals(operator) || "<".equals(operator) ||
-//                    ">=".equals(operator) || "<=".equals(operator) ||
-//                    "==".equals(operator) || "!=".equals(operator)) {
-//
-//                if (type instanceof DoubleType) {
-//                    return IntType.getInstance();
-//                } else {
-//                    return new ErrorType(String.format("Comparison operator '%s' is not applicable between '%s' and '%s'", operator, this, type), node);
-//                }
-//            }
-//        }
-//        return new ErrorType(String.format("Operator '%s' is not a comparison operator", ((AbstractBinaryExpression) node).getOperator()), node);
-//    }
-
     @Override
     public char suffix() {
         return 'd';

@@ -19,8 +19,6 @@ public interface Visitor<TP, TR> {
 
     <TP, TR>TR visit(CharLiteralExpression charLiteralExpression, TP param);
 
-    TR visit(RealLiteralExpression realLiteral, TP param);
-
     // ************ Statements ***************
 
 
@@ -31,13 +29,7 @@ public interface Visitor<TP, TR> {
 
     // ************ Types ****************
 
-    TR visit(IntType intType, TP param);
-
-    TR visit(ErrorType errorType, TP param);
-
     <TP, TR> TR visit(LogicalNegationExpression logicalNegation, TP param);
-
-    TR visit(UnaryMinusExpression unaryMinus, TP param);
 
     <TP, TR> TR visit(ArrayAccessExpression arrayAccess, TP param);
 
@@ -57,19 +49,9 @@ public interface Visitor<TP, TR> {
 
     <TP, TR> TR visit(FunctionCallStatement functionCallStatement, TP param);
 
-    TR visit(CharType charType, TP param);
-
-    TR visit(ArrayType arrayType, TP param);
-
-    TR visit(DoubleType doubleType, TP param);
-
     <TP, TR>TR visit(StructType structType, TP param);
 
     <TP, TR>TR visit(StructFieldAccessExpression nestedStructFieldExpression, TP param);
-
-    TR visit(VoidType voidType, TP param);
-
-    TR visit(Parameter parameter, TP param);
 
     <TP, TR> TR visit(LogicalExpression logicalExpression, TP param);
 
@@ -80,4 +62,22 @@ public interface Visitor<TP, TR> {
     <TP, TR> TR visit(VarDeclaration varDeclaration, TP param);
 
     <TP, TR> TR  visit(WriteStatement writeStatement, TP param);
+
+    <TP, TR> TR visit(RealLiteralExpression realLiteralExpression, TP param);
+
+    <TP, TR> TR visit(ArrayType arrayType, TP param);
+
+    <TP, TR> TR visit(CharType charType, TP param);
+
+    <TP, TR> TR visit(DoubleType doubleType, TP param);
+
+    <TP, TR> TR visit(ErrorType errorType, TP param);
+
+    <TP, TR> TR visit(IntType intType, TP param);
+
+    <TP, TR> TR visit(VoidType voidType, TP param);
+
+    <TP, TR> TR visit(Parameter parameter, TP param);
+
+    <TP, TR> TR visit(UnaryMinusExpression unaryMinusExpression, TP param);
 }

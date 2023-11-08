@@ -3,7 +3,6 @@ package semantic;
 import ast.*;
 import ast.expressions.*;
 import ast.statements.*;
-import errorlistener.ErrorHandler;
 import types.*;
 import visitor.AbstractVisitor;
 
@@ -78,10 +77,7 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
     public  <TP, TR> TR visit(AssignmentStatement assignment, TP param) {
         assignment.getLeftHandSide().accept(this, null);
         if (!assignment.getLeftHandSide().isLValue()) {
-            String errorMsg = "The expression on the left-hand side of the assignment at line: " +
-                    assignment.getLine() + " and column: " +
-                    assignment.getColumn() + " is not a valid l-value.";
-            new ErrorType(errorMsg, assignment);
+            new ErrorType("The expression is not a valid l-value.", assignment.getLeftHandSide());
         }
         return null;
     }
@@ -92,38 +88,59 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
     }
 
     @Override
-    public Void visit(RealLiteralExpression realLiteral, Type param) {
-        return null;
-    }
-
-    @Override
     public <TP, TR> TR visit(FunctionCallExpression functionCallExpression, TP param) {
         return null;
     }
 
     @Override
     public <TP, TR> TR visit(WriteStatement write, TP param) {
-        return null;
-    }
 
-
-    @Override
-    public <TP, TR> TR visit(Definition defintion, TP param){
+        write.getExpression().accept(this, null);
         return null;
     }
 
     @Override
-    public Void visit(IntType intType, Type param) {
+    public <TP, TR> TR visit(RealLiteralExpression realLiteralExpression, TP param) {
         return null;
     }
 
     @Override
-    public Void visit(ErrorType errorType, Type param) {
+    public <TP, TR> TR visit(ArrayType arrayType, TP param) {
         return null;
     }
 
     @Override
-    public Void visit(UnaryMinusExpression unaryMinus, Type param) {
+    public <TP, TR> TR visit(CharType charType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(DoubleType doubleType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(ErrorType errorType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(IntType intType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(VoidType voidType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(Parameter parameter, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(UnaryMinusExpression unaryMinusExpression, TP param) {
         return null;
     }
 
@@ -139,6 +156,8 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
 
     @Override
     public <TP, TR> TR visit(ReadStatement readExpression, TP param) {
+
+        readExpression.getExpression().accept(this, null);
         return null;
     }
 
@@ -146,31 +165,5 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
     public <TP, TR> TR visit(IfStatement ifStatement, TP param) {
         return null;
     }
-
-    @Override
-    public Void visit(CharType charType, Type param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(ArrayType arrayType, Type param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(DoubleType doubleType, Type param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(VoidType voidType, Type param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(Parameter parameter, Type param) {
-        return null;
-    }
-
 }
 

@@ -1,6 +1,7 @@
 package types;
 
 import ast.ASTNode;
+import ast.expressions.ArrayAccessExpression;
 import visitor.Visitor;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,23 +31,29 @@ public class ArrayType extends AbstractType {
     }
 
     @Override
-    public Type squareBrackets(Type t, ASTNode node) {
-        if(t instanceof ErrorType){
-            return t;
-        }
-        if(t instanceof IntType){
-            return IntType.getInstance();
+    public Type squareBrackets(Type indexType, ASTNode node) {
+        if (indexType instanceof ErrorType) {
+            return indexType;
         }
 
-        return new ErrorType(String.format("The type %s cannot be used as an index", t), node);
+        if (!(indexType instanceof IntType)) {
+            return new ErrorType(String.format("The type %s cannot be used as an index", indexType), node);
+        }
+
+        if (dimensions.size() > 1) {
+            return ((ArrayAccessExpression) node).getOperand1().getType();
+        } else {
+            return baseType;
+        }
     }
+
 
     @Override
     public Type assignment(Type type, ASTNode node) {
         if (type instanceof ErrorType)
             return type;
         if (type instanceof ArrayType)
-            return type;
+            return new ErrorType(String.format("Cannot assign %s to array type", type), node);
         return new ErrorType(String.format("Cannot assign %s to array type", type), node);
     }
 

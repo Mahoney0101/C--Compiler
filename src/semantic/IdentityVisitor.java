@@ -89,6 +89,51 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     }
 
     @Override
+    public <TP, TR> TR visit(RealLiteralExpression realLiteralExpression, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(ArrayType arrayType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(CharType charType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(DoubleType doubleType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(ErrorType errorType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(IntType intType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(VoidType voidType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(Parameter parameter, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(UnaryMinusExpression unaryMinusExpression, TP param) {
+        return null;
+    }
+
+    @Override
     public <TP, TR> TR visit(ReturnStatement returnStatement, TP param) {
         returnStatement.getExpression().accept(this, null);
         return null;
@@ -232,36 +277,5 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
         functionCallStatement.getFunctionCallExpression().accept(this, null);
         return null;
     }
-
-    @Override
-    public Void visit(UnaryMinusExpression unaryMinus, Void param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(CharType charType, Void param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(ArrayType arrayType, Void param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(DoubleType doubleType, Void param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(VoidType voidType, Void param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(Parameter parameter, Void param) {
-        return null;
-    }
-
 
 }

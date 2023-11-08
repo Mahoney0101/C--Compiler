@@ -3,7 +3,6 @@ package semantic;
 import ast.*;
 import ast.expressions.*;
 import ast.statements.*;
-import errorlistener.ErrorHandler;
 import visitor.*;
 import types.*;
 
@@ -16,11 +15,56 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     }
 
     @Override
+    public <TP, TR> TR visit(RealLiteralExpression realLiteralExpression, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(ArrayType arrayType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(CharType charType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(DoubleType doubleType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(ErrorType errorType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(IntType intType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(VoidType voidType, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(Parameter parameter, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(UnaryMinusExpression unaryMinusExpression, TP param) {
+        return null;
+    }
+
+    @Override
     public <TP, TR> TR visit(ReadStatement readStatement, TP param) {
         readStatement.getExpression().accept(this, null);
 
         if (!readStatement.getExpression().isLValue())
-            new ErrorType("Read Statements must be provider valid l-value", readStatement.getExpression());
+            new ErrorType("Read Statements must be provided valid l-value", readStatement.getExpression());
         return null;
     }
 
@@ -98,7 +142,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(CharLiteralExpression charLiteralExpression, TP param) {
-        System.out.println("setting charliteral");
         charLiteralExpression.setType(CharType.getInstance());
         return null;
     }
@@ -123,32 +166,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
         return null;
     }
-
-    @Override
-    public Void visit(CharType charType, Void param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(ArrayType arrayType, Void param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(DoubleType doubleType, Void param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(VoidType voidType, Void param) {
-        return null;
-    }
-
-    @Override
-    public Void visit(Parameter parameter, Void param) {
-        return null;
-    }
-
 
     @Override
     public <TP, TR> TR visit(Program program, TP param) {
@@ -197,10 +214,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
         var condition = whileStatement.getCondition();
         if(condition.getType() != IntType.getInstance()){
-            String errorMsg = "\"Conditions for while statements most be integer values: " + condition +
-                    ": Line: " + condition.getLine() + " and column: "
-                    + condition.getColumn() + ".";
-            new ErrorType(errorMsg, condition);
+            new ErrorType("Conditions for while statements most be integer values", condition);
         }
 
         for (Statement statement :whileStatement.getStatements()) {
@@ -216,10 +230,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
         var condition = ifStatement.getCondition();
         if(condition.getType() != IntType.getInstance()){
-            String errorMsg = "\"Conditions for if statements most be integer values: " + condition +
-                    ": Line: " + condition.getLine() + " and column: "
-                    + condition.getColumn() + ".";
-            new ErrorType(errorMsg, condition);
+            new ErrorType("Conditions for if statements most be integer values", condition);
         }
 
         for (Statement statement : ifStatement.getIfBlockStatements()) {
@@ -233,17 +244,11 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(UnaryMinusExpression unaryMinus, Void param) {
-        return null;
-    }
-
-    @Override
     public <TP, TR> TR visit(ArrayAccessExpression exp, TP param) {
 
         exp.getOperand1().accept(this, null);
         exp.getOperand2().accept(this, null);
 
-        System.out.println(exp.getOperand1().getType());
         exp.setType(exp.getOperand1().getType().squareBrackets(exp.getOperand2().getType(), exp));
 
         return null;

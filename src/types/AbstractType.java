@@ -30,7 +30,6 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
 
     @Override
     public Type squareBrackets(Type t, ASTNode node) {
-        System.out.println("Hereeeeeeeee");
         return new ErrorType(String.format("The type %s is not an Array type", t), node);
     }
 
