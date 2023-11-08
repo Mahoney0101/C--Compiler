@@ -45,7 +45,7 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public <TP, TR> TR visit(FunctionDeclaration funcDecl, TP param) {
         if(!symbolTable.insert(funcDecl)) {
-            new ErrorType("Function already declared", funcDecl);
+            new ErrorType("Variable already declared", funcDecl);
         }
         symbolTable.set();
 
