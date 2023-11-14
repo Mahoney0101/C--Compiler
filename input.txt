@@ -6,13 +6,6 @@ int[10][10] w;
 int i;
 double f;
 
-double f(int n) {
-  return n;        // * Error: no implicit conversion int->double
-}
-
-double e(int n) {
-  return n;        // * Error: no implicit conversion int->double
-}
 
 int g(int n) { return n; }
 
@@ -31,36 +24,6 @@ void main() {
     students[0].dateOfBirth.day = 10;
 
     read integer;
-    f('a');           // * Error: no implict conversion char->int
-    f(8.3);           // * Error: double cannot be passed as int
 
-    real = 3;         // * Error: no implicit conversion int->double
-    character = 8.5;  // * Error: double cannot be assigned to char
-
-    3 = integer;      // * Error: lvalue required
-    read integer+2;   // * Error: lvalue required
-
-
-    write i && f;  // * Error: f is not int
-    write a >= 3;  // * Error: a is not declared
-    write f > 3;   // * Error: f and 3 do not have the same type
-    write f * '2'; // * Error: f and 2 do not have the same type
-    while (f)      // * Error: f is not int
-    if (ch)        // * Error: ch is not int
-    write !g;    // * Error: g is not int
     i = 'a' + ch;  // Correct! (arithmetic ops with chars return int)
-
-    f();       // * Error: wrong number of params
-    g(3.2);    // * Error: wrong number of params
-    g(3, 3);   // * Error: the type of the second parameter is wrong
-    i=g(3, 0.0);  // * Error: void cannot be assigned to int
-
-    write i[0];    // * Error: i is not an array
-    v[3] = 3.4;    // * Error: double cannot be assigned to int
-    v[1] = 'a';    // * Error: char is not converted into int
-    write v[1][2]; // * Error: v[1] is not an array
-    w[10] = 3;     // * Error: an int cannot be assigned to int[]
-    w[10] = v;     // * Error: arrays cannot be assigned
-    write v['a'];  // * Error: index must be int
-
 }

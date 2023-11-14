@@ -8,6 +8,8 @@ import visitor.AbstractVisitor;
 
 public class OffsetVisitor extends AbstractVisitor<Void, Void> {
 
+    private int bytesGlobalsSum = 0;
+
     @Override
     public <TP, TR> TR visit(Program program, TP param) {
         for (Definition def : program.getdefinitions()) {
@@ -41,8 +43,6 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
             stmt.accept(this, null);
         }
 
-
-
         return null;
     }
 
@@ -58,8 +58,8 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public <TP, TR> TR visit(StructType struct, TP param) {
 
-        for (VarDeclaration field: struct.getFields()) {
-            field.accept(this,null);
+        for (VarDeclaration field : struct.getFields()) {
+            field.accept(this, null);
         }
         return null;
     }
@@ -73,11 +73,16 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public <TP2, TR2> TR2 visit(VarDeclaration var, TP2 param) {
-        if(var.getType() instanceof  ArrayType){
-            ((ArrayType) var.getType()).getBaseType().accept(this, null);
+        int varSize;
+        if (var.getType() instanceof ArrayType) {
+            ArrayType arrayType = (ArrayType) var.getType();
+            varSize = arrayType.numberOfBytes();
+        } else {
+            varSize = var.getType().numberOfBytes();
         }
-        var.getType().accept(this, null);
-        var.setOffset(var.getType().numberOfBytes());
+
+        var.setOffset(bytesGlobalsSum);
+        bytesGlobalsSum += varSize;
         return null;
     }
 
@@ -155,7 +160,6 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
     public <TP2, TR2> TR2 visit(AssignmentStatement assignment, TP2 param) {
         return null;
     }
-
 
     @Override
     public <TP, TR> TR visit(EqualityExpression logical, TP param) {

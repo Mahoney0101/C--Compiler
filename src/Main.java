@@ -32,11 +32,13 @@ public class Main {
 			ast.accept(new LValueVisitor(), null);
 			ast.accept(new IdentityVisitor(), null);
 			ast.accept(new TypeCheckingVisitor(), null);
-			ast.accept(new OffsetVisitor(), null);
 
 			if (ErrorHandler.getErrorHandler().anyError()) {
 				ErrorHandler.getErrorHandler().showErrors(System.err);
-				System.err.println("Program with semantic errors");
+				System.err.println("Program with semantic errors, no code will be generated");
+			}
+			else {
+				ast.accept(new OffsetVisitor(), null);
 			}
 			IntrospectorModel model=new IntrospectorModel("Program", ast);
 			new IntrospectorTree("Introspector", model);
