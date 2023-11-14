@@ -3,13 +3,13 @@ import errorlistener.Listener;
 import ast.Program;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
-import org.antlr.v4.gui.Trees;
 import org.antlr.v4.runtime.*;
 import parser.CmmLexer;
 import parser.CmmParser;
 
 import semantic.IdentityVisitor;
 import semantic.LValueVisitor;
+import codegenerator.OffsetVisitor;
 import semantic.TypeCheckingVisitor;
 
 public class Main {
@@ -32,6 +32,7 @@ public class Main {
 			ast.accept(new LValueVisitor(), null);
 			ast.accept(new IdentityVisitor(), null);
 			ast.accept(new TypeCheckingVisitor(), null);
+			ast.accept(new OffsetVisitor(), null);
 
 			if (ErrorHandler.getErrorHandler().anyError()) {
 				ErrorHandler.getErrorHandler().showErrors(System.err);

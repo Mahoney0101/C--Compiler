@@ -3,7 +3,6 @@ package semantic;
 import ast.*;
 import ast.expressions.*;
 import ast.statements.*;
-import errorlistener.ErrorHandler;
 import types.*;
 import visitor.*;
 
@@ -14,10 +13,7 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public <TP, TR> TR visit(VarDeclaration varDecl, TP param) {
         if(!symbolTable.insert(varDecl)) {
-            String errorMsg = "\"VarDeclaration symbol already exists: " + varDecl.getName() +
-                    ": Line: " + varDecl.getLine() + " and column: "
-                    + varDecl.getColumn() + ".";
-            new ErrorType(errorMsg, varDecl);
+            new ErrorType("VarDeclaration symbol already exists", varDecl);
         }
 
         if(varDecl.getType() instanceof  ArrayType){
@@ -38,7 +34,6 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
         for (Definition def : program.getdefinitions()) {
             def.accept(this, null);
         }
-
         return null;
     }
 
@@ -62,6 +57,14 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
         }
 
         symbolTable.reset();
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(StructType struct, TP param) {
+        for (VarDeclaration field: struct.getFields()) {
+            field.accept(this,null);
+        }
         return null;
     }
 
@@ -219,16 +222,6 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
         return null;
     }
 
-
-    @Override
-    public <TP, TR> TR visit(StructType struct, TP param) {
-
-        for (VarDeclaration field: struct.getFields()) {
-            field.accept(this,null);
-        }
-        return null;
-    }
-
     @Override
     public <TP, TR> TR visit(StructFieldAccessExpression structFieldAccessExpression, TP param) {
 
@@ -242,6 +235,7 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
 
         return null;
     }
+
 
     @Override
     public <TP, TR> TR visit(CastExpression castExpression, TP param) {

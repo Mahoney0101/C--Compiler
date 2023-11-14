@@ -125,6 +125,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         if (variable.getDefinition() != null) {
             variable.setType(variable.getDefinition().getType());
         }
+
         return null;
     }
 

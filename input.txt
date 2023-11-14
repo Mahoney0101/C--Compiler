@@ -20,11 +20,15 @@ int g(int n) { return n; }
 void main() {
     int i;
     char ch;
+
+
+
     struct {
       int age;
       struct { int day, month, int year; } dateOfBirth;
       char[256] name, surname;
     } [20] students;
+    students[0].dateOfBirth.day = 10;
 
     read integer;
     f('a');           // * Error: no implict conversion char->int
@@ -59,5 +63,4 @@ void main() {
     w[10] = v;     // * Error: arrays cannot be assigned
     write v['a'];  // * Error: index must be int
 
-    students[0].dateOfBirth.day = 10;
 }
