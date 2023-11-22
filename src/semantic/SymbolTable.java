@@ -1,5 +1,6 @@
 package semantic;
 import ast.Definition;
+import ast.VarDeclaration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,9 @@ public class SymbolTable {
             return false;
         }
         currentScope.put(node.getName(), node);
+        if(node instanceof VarDeclaration){
+            ((VarDeclaration)node).setScope(scope);
+        }
         return true;
     }
 

@@ -6,6 +6,7 @@ import visitor.Visitor;
 
 public class VarDeclaration extends AbstractASTNode implements Statement, Definition {
 
+    private int scope;
     private int offset;
 
     public int getOffset() {
@@ -14,6 +15,13 @@ public class VarDeclaration extends AbstractASTNode implements Statement, Defini
 
     public void setOffset(int offset) {
         this.offset = offset;
+    }
+
+    public void setScope(int scope) {
+        this.scope = scope;
+    }
+    public int getScope() {
+        return this.scope;
     }
 
     private String name;

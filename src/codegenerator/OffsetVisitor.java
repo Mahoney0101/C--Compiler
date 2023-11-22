@@ -9,6 +9,8 @@ import visitor.AbstractVisitor;
 public class OffsetVisitor extends AbstractVisitor<Void, Void> {
 
     private int bytesGlobalsSum = 0;
+    private int bytesLocalsSum = 0;
+    private int bytesParamsSum = 0;
 
     @Override
     public <TP, TR> TR visit(Program program, TP param) {
@@ -31,8 +33,13 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(FunctionDeclaration functionDeclaration, TP param) {
-        for (VarDeclaration var : functionDeclaration.getFunctionType().getParameters()) {
-            var.accept(this, null);
+        bytesLocalsSum = 0;
+        bytesParamsSum = 0;
+
+        for (int i = functionDeclaration.getFunctionType().getParameters().size() - 1; i >= 0; i--) {
+            var variableDeclaration = functionDeclaration.getFunctionType().getParameters().get(i);
+            variableDeclaration.setOffset(4 + bytesParamsSum);
+            bytesParamsSum += variableDeclaration.getType().numberOfBytes();
         }
 
         for (VarDeclaration var : functionDeclaration.getVars()) {
@@ -81,8 +88,14 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
             varSize = var.getType().numberOfBytes();
         }
 
-        var.setOffset(bytesGlobalsSum);
-        bytesGlobalsSum += varSize;
+        if (var.getScope() == 0) {
+            var.setOffset(bytesGlobalsSum);
+            bytesGlobalsSum += varSize;
+        } else if (var.getScope() == 1) {
+            bytesLocalsSum += varSize;
+            var.setOffset(-bytesLocalsSum);
+        }
+
         return null;
     }
 
