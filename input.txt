@@ -1,29 +1,33 @@
-int integer;
-char character;
-double real;
-int[10] v;
-int[10][10] w;
-int i;
-double f;
+// * Global variables
+int gi;
+double gd;
+char gc;
 
+// * Functions
+int f(int pi, double pd, char pc) {
+  double ld;
+  int li;
+  char lc;
+  
+  li = pi;
+  ld = pd;
+  lc = pc;
+  
+  return pi;
+}
 
-int g(int n) { return n; }
-
-
+// * Main program
 void main() {
-    int i;
-    char ch;
+  double ld;
+  int li;
+  char lc;
 
+  ld = 0.0;
+  li = 0;
+  lc = '0';
 
-
-    struct {
-      int age;
-      struct { int day, month, int year; } dateOfBirth;
-      char[256] name, surname;
-    } [20] students;
-    students[0].dateOfBirth.day = 10;
-
-    read integer;
-
-    i = 'a' + ch;  // Correct! (arithmetic ops with chars return int)
+  gi = 3 + li;
+  gc = lc;
+  gd = ld * 3.8;
+  f(gi, gd, gc);
 }

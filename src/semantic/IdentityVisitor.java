@@ -145,7 +145,9 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(FunctionCallExpression functionCallExpression, TP param) {
-
+        for (var argument: functionCallExpression.getArguments()) {
+            argument.accept(this, null);
+        }
         Definition definition = symbolTable.find(functionCallExpression.getFunctionName().getName());
         if (definition != null) {
             functionCallExpression.getFunctionName().setDefinition(definition);
