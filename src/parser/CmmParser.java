@@ -1192,8 +1192,8 @@ public class CmmParser extends Parser {
 		public ExprContext e;
 		public Token SUB;
 		public Token NOT;
-		public FunctionCallExpressionContext f;
 		public TypeContext t;
+		public FunctionCallExpressionContext f;
 		public Token op;
 		public ExprContext e2;
 		public TerminalNode INT_CONSTANT() { return getToken(CmmParser.INT_CONSTANT, 0); }
@@ -1210,11 +1210,11 @@ public class CmmParser extends Parser {
 		}
 		public TerminalNode SUB() { return getToken(CmmParser.SUB, 0); }
 		public TerminalNode NOT() { return getToken(CmmParser.NOT, 0); }
-		public FunctionCallExpressionContext functionCallExpression() {
-			return getRuleContext(FunctionCallExpressionContext.class,0);
-		}
 		public TypeContext type() {
 			return getRuleContext(TypeContext.class,0);
+		}
+		public FunctionCallExpressionContext functionCallExpression() {
+			return getRuleContext(FunctionCallExpressionContext.class,0);
 		}
 		public TerminalNode MUL() { return getToken(CmmParser.MUL, 0); }
 		public TerminalNode DIV() { return getToken(CmmParser.DIV, 0); }
@@ -1316,21 +1316,21 @@ public class CmmParser extends Parser {
 			case 8:
 				{
 				setState(237);
-				((ExprContext)_localctx).f = functionCallExpression();
-				 ((ExprContext)_localctx).ast =  ((ExprContext)_localctx).f.ast; 
+				((ExprContext)_localctx).LPAREN = match(LPAREN);
+				setState(238);
+				((ExprContext)_localctx).t = type();
+				setState(239);
+				match(RPAREN);
+				setState(240);
+				((ExprContext)_localctx).e = expr(8);
+				 ((ExprContext)_localctx).ast =  new CastExpression(((ExprContext)_localctx).LPAREN.getLine(), ((ExprContext)_localctx).LPAREN.getCharPositionInLine()+1, ((ExprContext)_localctx).t.ast, ((ExprContext)_localctx).e.ast);     
 				}
 				break;
 			case 9:
 				{
-				setState(240);
-				((ExprContext)_localctx).LPAREN = match(LPAREN);
-				setState(241);
-				((ExprContext)_localctx).t = type();
-				setState(242);
-				match(RPAREN);
 				setState(243);
-				((ExprContext)_localctx).e = expr(1);
-				 ((ExprContext)_localctx).ast =  new CastExpression(((ExprContext)_localctx).LPAREN.getLine(), ((ExprContext)_localctx).LPAREN.getCharPositionInLine()+1, ((ExprContext)_localctx).t.ast, ((ExprContext)_localctx).e.ast);     
+				((ExprContext)_localctx).f = functionCallExpression();
+				 ((ExprContext)_localctx).ast =  ((ExprContext)_localctx).f.ast; 
 				}
 				break;
 			}
@@ -1352,7 +1352,7 @@ public class CmmParser extends Parser {
 						_localctx.e1 = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(248);
-						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
+						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
 						setState(249);
 						((ExprContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
@@ -1365,7 +1365,7 @@ public class CmmParser extends Parser {
 							consume();
 						}
 						setState(250);
-						((ExprContext)_localctx).e2 = expr(9);
+						((ExprContext)_localctx).e2 = expr(8);
 						 ((ExprContext)_localctx).ast =  new ArithmeticExpression((((ExprContext)_localctx).e1!=null?(((ExprContext)_localctx).e1.start):null).getLine(), (((ExprContext)_localctx).e1!=null?(((ExprContext)_localctx).e1.start):null).getCharPositionInLine()+1, ((ExprContext)_localctx).e1.ast, (((ExprContext)_localctx).op!=null?((ExprContext)_localctx).op.getText():null), ((ExprContext)_localctx).e2.ast); 
 						}
 						break;
@@ -1375,7 +1375,7 @@ public class CmmParser extends Parser {
 						_localctx.e1 = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(253);
-						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
+						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
 						setState(254);
 						((ExprContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
@@ -1388,7 +1388,7 @@ public class CmmParser extends Parser {
 							consume();
 						}
 						setState(255);
-						((ExprContext)_localctx).e2 = expr(8);
+						((ExprContext)_localctx).e2 = expr(7);
 						 ((ExprContext)_localctx).ast =  new ArithmeticExpression((((ExprContext)_localctx).e1!=null?(((ExprContext)_localctx).e1.start):null).getLine(), (((ExprContext)_localctx).e1!=null?(((ExprContext)_localctx).e1.start):null).getCharPositionInLine()+1, ((ExprContext)_localctx).e1.ast, (((ExprContext)_localctx).op!=null?((ExprContext)_localctx).op.getText():null), ((ExprContext)_localctx).e2.ast); 
 						}
 						break;
@@ -1398,7 +1398,7 @@ public class CmmParser extends Parser {
 						_localctx.e1 = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(258);
-						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
+						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
 						setState(259);
 						((ExprContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
@@ -1411,7 +1411,7 @@ public class CmmParser extends Parser {
 							consume();
 						}
 						setState(260);
-						((ExprContext)_localctx).e2 = expr(7);
+						((ExprContext)_localctx).e2 = expr(6);
 						 ((ExprContext)_localctx).ast =  new EqualityExpression((((ExprContext)_localctx).e1!=null?(((ExprContext)_localctx).e1.start):null).getLine(), (((ExprContext)_localctx).e1!=null?(((ExprContext)_localctx).e1.start):null).getCharPositionInLine()+1, ((ExprContext)_localctx).e1.ast, (((ExprContext)_localctx).op!=null?((ExprContext)_localctx).op.getText():null), ((ExprContext)_localctx).e2.ast); 
 						}
 						break;
@@ -1421,7 +1421,7 @@ public class CmmParser extends Parser {
 						_localctx.e1 = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(263);
-						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
+						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
 						setState(264);
 						((ExprContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
@@ -1434,7 +1434,7 @@ public class CmmParser extends Parser {
 							consume();
 						}
 						setState(265);
-						((ExprContext)_localctx).e2 = expr(6);
+						((ExprContext)_localctx).e2 = expr(5);
 						 ((ExprContext)_localctx).ast =  new LogicalExpression((((ExprContext)_localctx).e1!=null?(((ExprContext)_localctx).e1.start):null).getLine(), (((ExprContext)_localctx).e1!=null?(((ExprContext)_localctx).e1.start):null).getCharPositionInLine()+1, ((ExprContext)_localctx).e1.ast, (((ExprContext)_localctx).op!=null?((ExprContext)_localctx).op.getText():null), ((ExprContext)_localctx).e2.ast); 
 						}
 						break;
@@ -1444,7 +1444,7 @@ public class CmmParser extends Parser {
 						_localctx.e1 = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(268);
-						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
+						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 						setState(269);
 						match(DOT);
 						setState(270);
@@ -1458,7 +1458,7 @@ public class CmmParser extends Parser {
 						_localctx.e1 = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(272);
-						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
+						if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 						setState(273);
 						match(LBRACKET);
 						setState(274);
@@ -2268,17 +2268,17 @@ public class CmmParser extends Parser {
 	private boolean expr_sempred(ExprContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 0:
-			return precpred(_ctx, 8);
-		case 1:
 			return precpred(_ctx, 7);
-		case 2:
+		case 1:
 			return precpred(_ctx, 6);
-		case 3:
+		case 2:
 			return precpred(_ctx, 5);
+		case 3:
+			return precpred(_ctx, 4);
 		case 4:
-			return precpred(_ctx, 3);
-		case 5:
 			return precpred(_ctx, 2);
+		case 5:
+			return precpred(_ctx, 1);
 		}
 		return true;
 	}
@@ -2453,28 +2453,28 @@ public class CmmParser extends Parser {
 		"\u000e\uffff\uffff\u0000\u00e8\u00f7\u0001\u0000\u0000\u0000\u00e9\u00ea"+
 		"\u0005#\u0000\u0000\u00ea\u00eb\u0003\u001c\u000e\t\u00eb\u00ec\u0006"+
 		"\u000e\uffff\uffff\u0000\u00ec\u00f7\u0001\u0000\u0000\u0000\u00ed\u00ee"+
-		"\u00034\u001a\u0000\u00ee\u00ef\u0006\u000e\uffff\uffff\u0000\u00ef\u00f7"+
-		"\u0001\u0000\u0000\u0000\u00f0\u00f1\u0005\u0010\u0000\u0000\u00f1\u00f2"+
-		"\u0003,\u0016\u0000\u00f2\u00f3\u0005\u0011\u0000\u0000\u00f3\u00f4\u0003"+
-		"\u001c\u000e\u0001\u00f4\u00f5\u0006\u000e\uffff\uffff\u0000\u00f5\u00f7"+
-		"\u0001\u0000\u0000\u0000\u00f6\u00d7\u0001\u0000\u0000\u0000\u00f6\u00da"+
-		"\u0001\u0000\u0000\u0000\u00f6\u00dc\u0001\u0000\u0000\u0000\u00f6\u00de"+
-		"\u0001\u0000\u0000\u0000\u00f6\u00e0\u0001\u0000\u0000\u0000\u00f6\u00e5"+
-		"\u0001\u0000\u0000\u0000\u00f6\u00e9\u0001\u0000\u0000\u0000\u00f6\u00ed"+
-		"\u0001\u0000\u0000\u0000\u00f6\u00f0\u0001\u0000\u0000\u0000\u00f7\u0118"+
-		"\u0001\u0000\u0000\u0000\u00f8\u00f9\n\b\u0000\u0000\u00f9\u00fa\u0007"+
-		"\u0001\u0000\u0000\u00fa\u00fb\u0003\u001c\u000e\t\u00fb\u00fc\u0006\u000e"+
-		"\uffff\uffff\u0000\u00fc\u0117\u0001\u0000\u0000\u0000\u00fd\u00fe\n\u0007"+
-		"\u0000\u0000\u00fe\u00ff\u0007\u0002\u0000\u0000\u00ff\u0100\u0003\u001c"+
-		"\u000e\b\u0100\u0101\u0006\u000e\uffff\uffff\u0000\u0101\u0117\u0001\u0000"+
-		"\u0000\u0000\u0102\u0103\n\u0006\u0000\u0000\u0103\u0104\u0007\u0003\u0000"+
-		"\u0000\u0104\u0105\u0003\u001c\u000e\u0007\u0105\u0106\u0006\u000e\uffff"+
-		"\uffff\u0000\u0106\u0117\u0001\u0000\u0000\u0000\u0107\u0108\n\u0005\u0000"+
+		"\u0005\u0010\u0000\u0000\u00ee\u00ef\u0003,\u0016\u0000\u00ef\u00f0\u0005"+
+		"\u0011\u0000\u0000\u00f0\u00f1\u0003\u001c\u000e\b\u00f1\u00f2\u0006\u000e"+
+		"\uffff\uffff\u0000\u00f2\u00f7\u0001\u0000\u0000\u0000\u00f3\u00f4\u0003"+
+		"4\u001a\u0000\u00f4\u00f5\u0006\u000e\uffff\uffff\u0000\u00f5\u00f7\u0001"+
+		"\u0000\u0000\u0000\u00f6\u00d7\u0001\u0000\u0000\u0000\u00f6\u00da\u0001"+
+		"\u0000\u0000\u0000\u00f6\u00dc\u0001\u0000\u0000\u0000\u00f6\u00de\u0001"+
+		"\u0000\u0000\u0000\u00f6\u00e0\u0001\u0000\u0000\u0000\u00f6\u00e5\u0001"+
+		"\u0000\u0000\u0000\u00f6\u00e9\u0001\u0000\u0000\u0000\u00f6\u00ed\u0001"+
+		"\u0000\u0000\u0000\u00f6\u00f3\u0001\u0000\u0000\u0000\u00f7\u0118\u0001"+
+		"\u0000\u0000\u0000\u00f8\u00f9\n\u0007\u0000\u0000\u00f9\u00fa\u0007\u0001"+
+		"\u0000\u0000\u00fa\u00fb\u0003\u001c\u000e\b\u00fb\u00fc\u0006\u000e\uffff"+
+		"\uffff\u0000\u00fc\u0117\u0001\u0000\u0000\u0000\u00fd\u00fe\n\u0006\u0000"+
+		"\u0000\u00fe\u00ff\u0007\u0002\u0000\u0000\u00ff\u0100\u0003\u001c\u000e"+
+		"\u0007\u0100\u0101\u0006\u000e\uffff\uffff\u0000\u0101\u0117\u0001\u0000"+
+		"\u0000\u0000\u0102\u0103\n\u0005\u0000\u0000\u0103\u0104\u0007\u0003\u0000"+
+		"\u0000\u0104\u0105\u0003\u001c\u000e\u0006\u0105\u0106\u0006\u000e\uffff"+
+		"\uffff\u0000\u0106\u0117\u0001\u0000\u0000\u0000\u0107\u0108\n\u0004\u0000"+
 		"\u0000\u0108\u0109\u0007\u0004\u0000\u0000\u0109\u010a\u0003\u001c\u000e"+
-		"\u0006\u010a\u010b\u0006\u000e\uffff\uffff\u0000\u010b\u0117\u0001\u0000"+
-		"\u0000\u0000\u010c\u010d\n\u0003\u0000\u0000\u010d\u010e\u0005$\u0000"+
+		"\u0005\u010a\u010b\u0006\u000e\uffff\uffff\u0000\u010b\u0117\u0001\u0000"+
+		"\u0000\u0000\u010c\u010d\n\u0002\u0000\u0000\u010d\u010e\u0005$\u0000"+
 		"\u0000\u010e\u010f\u0005%\u0000\u0000\u010f\u0117\u0006\u000e\uffff\uffff"+
-		"\u0000\u0110\u0111\n\u0002\u0000\u0000\u0111\u0112\u0005\u0012\u0000\u0000"+
+		"\u0000\u0110\u0111\n\u0001\u0000\u0000\u0111\u0112\u0005\u0012\u0000\u0000"+
 		"\u0112\u0113\u0003\u001c\u000e\u0000\u0113\u0114\u0005\u0013\u0000\u0000"+
 		"\u0114\u0115\u0006\u000e\uffff\uffff\u0000\u0115\u0117\u0001\u0000\u0000"+
 		"\u0000\u0116\u00f8\u0001\u0000\u0000\u0000\u0116\u00fd\u0001\u0000\u0000"+

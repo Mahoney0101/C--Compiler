@@ -53,7 +53,11 @@ public class CharType extends AbstractType {
             String operator = binaryNode.getOperator();
 
             if ("%".equals(operator)) {
-                return new ErrorType("Modulus operator '%' cannot be applied to char expressions", node);
+                if (type instanceof CharType) {
+                    return IntType.getInstance();
+                } else {
+                    return new ErrorType("Modulus operator '%' can only be applied to char types", node);
+                }
             }
             if ("&&".equals(operator) || "||".equals(operator)) {
                 return new ErrorType(String.format("Logical operator '%s' cannot be applied to char expressions", operator), node);
