@@ -1,3 +1,5 @@
+import codegenerator.CG;
+import codegenerator.ExecuteCGVisitor;
 import errorlistener.ErrorHandler;
 import errorlistener.Listener;
 import ast.Program;
@@ -39,6 +41,7 @@ public class Main {
 			}
 			else {
 				ast.accept(new OffsetVisitor(), null);
+				ast.accept(new ExecuteCGVisitor(new CG("output.txt", "input.txt")), null);
 			}
 			IntrospectorModel model=new IntrospectorModel("Program", ast);
 			new IntrospectorTree("Introspector", model);

@@ -110,7 +110,7 @@ public class CharType extends AbstractType {
 
     @Override
     public char suffix() {
-        return 'c';
+        return 'b';
     }
 
     @Override

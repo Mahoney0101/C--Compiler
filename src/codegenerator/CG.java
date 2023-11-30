@@ -31,6 +31,11 @@ public class CG {
         out.flush();
     }
 
+    public void pushbp() {
+        out.println("\tpushbp");
+        out.flush();
+    }
+
     public void load(Type type) {
         out.println("\tload"+type.suffix());
         out.flush();
@@ -74,6 +79,11 @@ public class CG {
 
     public void push(double constant) {
         out.println("\tpushf\t"+constant+"");
+        out.flush();
+    }
+
+    public void push(char constant) {
+        out.println("\tpushb\t"+(int)constant+"");
         out.flush();
     }
 

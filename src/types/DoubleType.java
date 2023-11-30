@@ -107,7 +107,7 @@ public class DoubleType extends AbstractType {
 
     @Override
     public char suffix() {
-        return 'd';
+        return 'f';
     }
 
     @Override
