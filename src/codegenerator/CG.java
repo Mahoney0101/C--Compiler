@@ -26,6 +26,11 @@ public class CG {
         out.flush();
     }
 
+    public void input(Type type) {
+        out.println("\tin"+type.suffix());
+        out.flush();
+    }
+
     public void pusha(int offset) {
         out.println("\tpusha\t"+offset+"");
         out.flush();
@@ -43,6 +48,21 @@ public class CG {
 
     public void store(Type type) {
         out.println("\tstore"+type.suffix());
+        out.flush();
+    }
+
+    public void castCharToInt() {
+        out.println("\tb2i");
+        out.flush();
+    }
+
+    public void castIntToDouble() {
+        out.println("\ti2f");
+        out.flush();
+    }
+
+    public void castDoubleToInt() {
+        out.println("\ti2f");
         out.flush();
     }
 
@@ -67,8 +87,53 @@ public class CG {
         out.flush();
     }
 
+    public void gt(Type type) {
+        out.println("\tgt"+type.suffix());
+        out.flush();
+    }
+
+    public void gte(Type type) {
+        out.println("\tge"+type.suffix());
+        out.flush();
+    }
+
+    public void lt(Type type) {
+        out.println("\tlt"+type.suffix());
+        out.flush();
+    }
+
+    public void lte(Type type) {
+        out.println("\tle"+type.suffix());
+        out.flush();
+    }
+
+    public void eq(Type type) {
+        out.println("\teq"+type.suffix());
+        out.flush();
+    }
+
+    public void neq(Type type) {
+        out.println("\tneq"+type.suffix());
+        out.flush();
+    }
+
     public void mod(Type type) {
         out.println("\tmod"+type.suffix());
+        out.flush();
+    }
+
+    public void and() {
+        out.println("\tand");
+        out.flush();
+    }
+
+    public void or() {
+        out.println("\tor");
+        out.flush();
+    }
+
+    public void not() {
+        out.println("\tnot");
         out.flush();
     }
 
@@ -106,7 +171,6 @@ public class CG {
         pusha(varDefinition.getOffset());
     }
 
-    // * To generate debug information
     public void line(ASTNode nodo) {
         out.println("\n#line\t"+nodo.getLine());
         out.flush();
@@ -125,6 +189,26 @@ public class CG {
             case '*': this.mul(type); break;
             case '%': this.mod(type); break;
             default: assert false :"Unknown arithmetic operator";
+        }
+    }
+
+    public void logical(String operator) {
+        switch (operator) {
+            case "&&": this.and(); break;
+            case "||": this.or(); break;
+            default: assert false :"Unknown logical operator";
+        }
+    }
+
+    public void relational(String operator, Type type) {
+        switch (operator) {
+            case ">": this.gt(type); break;
+            case ">=": this.gte(type); break;
+            case "<": this.lt(type); break;
+            case "<=": this.lte(type); break;
+            case "==": this.eq(type); break;
+            case "!=": this.neq(type); break;
+            default: assert false :"Unknown relational operator";
         }
     }
 }

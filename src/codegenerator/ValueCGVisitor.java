@@ -3,10 +3,7 @@ package codegenerator;
 import ast.*;
 import ast.expressions.*;
 import ast.statements.*;
-import types.ArrayType;
-import types.CharType;
-import types.StructType;
-import types.VoidType;
+import types.*;
 
 public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
@@ -18,12 +15,28 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 	}
 
 	@Override
-    public <TP, TR> TR visit(ArithmeticExpression arithmetic, TP param) {
-		arithmetic.getOperand1().accept(this, null);
-		arithmetic.getOperand2().accept(this, null);
+	public <TP, TR> TR visit(ArithmeticExpression arithmetic, TP param) {
+		Expression operand1 = arithmetic.getOperand1();
+		Expression operand2 = arithmetic.getOperand2();
+
+		if (operand1 instanceof CharLiteralExpression) {
+			operand1.accept(this, null);
+			cg.castCharToInt();
+		} else {
+			operand1.accept(this, null);
+		}
+
+		if (operand2 instanceof CharLiteralExpression) {
+			operand2.accept(this, null);
+			cg.castCharToInt();
+		} else {
+			operand2.accept(this, null);
+		}
+
 		cg.arithmetic(arithmetic.getOperator(), arithmetic.getType());
 		return null;
 	}
+
 
 	@Override
     public <TP, TR> TR visit(VariableExpression variable, TP param) {
@@ -52,6 +65,10 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
 	@Override
 	public <TP, TR> TR visit(LogicalNegationExpression logicalNegation, TP param) {
+		logicalNegation.getOperand().accept(this, null);
+
+		cg.not();
+
 		return null;
 	}
 
@@ -62,13 +79,35 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
 	@Override
 	public <TP, TR> TR visit(EqualityExpression logical, TP param) {
+		logical.getOperand1().accept(this, null);
+		logical.getOperand2().accept(this, null);
+
+		cg.relational(logical.getOperator(),logical.getOperand1().getType());
+
 		return null;
 	}
 
+
 	@Override
 	public <TP, TR> TR visit(CastExpression castExpression, TP param) {
+		castExpression.getExpression().accept(this, null);
+
+		Type currentType = castExpression.getExpression().getType();
+		Type targetType = castExpression.getTargetType();
+
+		if (currentType instanceof IntType && targetType instanceof DoubleType) {
+			cg.castIntToDouble();
+		} else if (currentType instanceof DoubleType && targetType instanceof IntType) {
+			cg.castDoubleToInt();
+		} else if (currentType instanceof CharType && targetType instanceof DoubleType) {
+			cg.castCharToInt();
+			cg.castIntToDouble();
+		}else if (currentType instanceof CharType && targetType instanceof IntType) {
+			cg.castCharToInt();
+		}
 		return null;
 	}
+
 
 	@Override
 	public <TP, TR> TR visit(ReturnStatement returnStatement, TP param) {
@@ -112,6 +151,11 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
 	@Override
 	public <TP, TR> TR visit(LogicalExpression logicalExpression, TP param) {
+		logicalExpression.getOperand1().accept(this, null);
+		logicalExpression.getOperand2().accept(this, null);
+
+		cg.logical(logicalExpression.getOperator());
+
 		return null;
 	}
 

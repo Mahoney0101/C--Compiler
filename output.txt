@@ -33,6 +33,8 @@
 #line	11
 	' * Assignment
 	pusha	7
+	pushb	48
+	b2i
 	pushi	3
 	muli
 	storei
@@ -60,9 +62,15 @@
 	outb
 
 #line	16
+	' * Read
+	pusha	3
+	inf
+	storef
 
 #line	17
 	' * Write
+	pushi	2
+	i2f
 	pusha	3
 	loadf
 	mulf
@@ -75,6 +83,8 @@
 
 #line	19
 	' * Write
+	pushi	3
+	i2f
 	pushf	4.5
 	subf
 	outf
@@ -86,6 +96,9 @@
 
 #line	20
 	' * Write
+	pushb	48
+	b2i
+	i2f
 	pushf	48.0
 	divf
 	outf
@@ -98,7 +111,9 @@
 #line	21
 	' * Write
 	pushb	48
+	b2i
 	pushb	49
+	b2i
 	modi
 	outi
 
@@ -110,7 +125,9 @@
 #line	22
 	' * Write
 	pushb	48
+	b2i
 	pushb	49
+	b2i
 	addi
 	outi
 
@@ -121,6 +138,9 @@
 
 #line	24
 	' * Write
+	pushi	1
+	pushi	2
+	lti
 	outi
 
 #line	24
@@ -130,6 +150,9 @@
 
 #line	25
 	' * Write
+	pushi	4
+	pushi	3
+	gei
 	outi
 
 #line	25
@@ -139,6 +162,9 @@
 
 #line	26
 	' * Write
+	pushi	5
+	pushi	5
+	eqi
 	outi
 
 #line	26
@@ -148,6 +174,9 @@
 
 #line	27
 	' * Write
+	pushi	1
+	pushi	2
+	and
 	outi
 
 #line	27
@@ -157,6 +186,9 @@
 
 #line	28
 	' * Write
+	pushi	0
+	pushi	3
+	or
 	outi
 
 #line	28
@@ -166,6 +198,8 @@
 
 #line	29
 	' * Write
+	pushi	0
+	not
 	outi
 
 #line	29
@@ -173,4 +207,3 @@
 	pushb	10
 	outb
 
-	' * Sentences

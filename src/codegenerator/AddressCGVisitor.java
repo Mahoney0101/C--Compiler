@@ -3,10 +3,7 @@ package codegenerator;
 import ast.*;
 import ast.expressions.*;
 import ast.statements.*;
-import types.ArrayType;
-import types.CharType;
-import types.StructType;
-import types.VoidType;
+import types.*;
 
 public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
 

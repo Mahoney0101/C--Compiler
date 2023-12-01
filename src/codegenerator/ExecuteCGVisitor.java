@@ -3,10 +3,7 @@ package codegenerator;
 import ast.*;
 import ast.expressions.*;
 import ast.statements.*;
-import types.ArrayType;
-import types.CharType;
-import types.StructType;
-import types.VoidType;
+import types.*;
 
 public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 
@@ -28,14 +25,25 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 		return null;
 	}
 
+    @Override
+    public <TP, TR> TR visit(ReadStatement read, TP param) {
+        cg.comment("Read");
+
+        Expression variable = read.getExpression();
+        variable.accept(this.addressCGVisitor, null);
+
+        cg.input(variable.getType());
+        cg.store(variable.getType());
+
+        return null;
+    }
+
 	@Override
     public <TP, TR> TR visit(Program program, TP param) {
 		// * Global variables
 		cg.comment("Variable definitions");
 		program.getdefinitions().forEach(def -> def.accept(this, null));
 		cg.newLine();
-		cg.comment("Sentences");
-		// * Statements
         //program.getdefinitions().forEach(def -> def.accept(this, null));
 
 //        program.getStatements().forEach(stmt -> {
@@ -54,7 +62,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 	@Override
     public <TP, TR> TR visit(AssignmentStatement assignment, TP param) {
 		cg.comment("Assignment");
-		assignment.getLeftHandSide().accept(this.addressCGVisitor, null); // * lvalue
+        assignment.getLeftHandSide().accept(this.addressCGVisitor, null); // * lvalue
 
         System.out.println(assignment.getRightHandSide().getType().toString());
 
@@ -96,11 +104,6 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(WhileStatement whileStatement, TP param) {
-        return null;
-    }
-
-    @Override
-    public <TP, TR> TR visit(ReadStatement readExpression, TP param) {
         return null;
     }
 
