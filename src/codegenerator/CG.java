@@ -31,13 +31,38 @@ public class CG {
         out.flush();
     }
 
+    private int labelCounter = 0;
+
+    public String generateNewLabel() {
+        return "label" + (labelCounter++);
+    }
+
+    public void label(String labelName) {
+        out.println(" "+labelName + ":");
+        out.flush();
+    }
+    public void jump(String label) {
+        out.println("\tjmp " + label);
+        out.flush();
+    }
+
+    public void jumpIfFalse(String label) {
+        out.println("\tjz " + label);
+        out.flush();
+    }
+
+    public void loopConditionCheck(String endLabel) {
+        out.println("\tjz " + endLabel);
+        out.flush();
+    }
+
     public void pusha(int offset) {
         out.println("\tpusha\t"+offset+"");
         out.flush();
     }
 
     public void pushbp() {
-        out.println("\tpushbp");
+        out.println("\tpush\tbp");
         out.flush();
     }
 

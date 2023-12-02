@@ -1,30 +1,42 @@
-char c;
-int a;
-double r;
-int i;
+// * Example program of using arrays
+
+double[10] v;
 
 void main() {
-	c='a';
-	write c; write '\n';
+	double value;
+	int i;
+	int j;
+	int[4][5] w;
 
-	a=1;
-	i=(int)'0'*3;
 
-	write a; 	write ' ';
-	write i; 	write '\n';
+	read i;
+	value = (double)i/10.0;
 
-	read r;
-	write (double)2*r; 		write '\n';
+	i=0;
+	while (i<10) {
+		v[i] = value;
+		write i; write ':'; write v[i]; write ' ';
+		if (i%2) {
+			write 'o'; write 'd'; write 'd'; write '\n';
+		}
+		else {
+			write 'e'; write 'v'; write 'e'; write 'n'; write '\n';
+		}
+		i=i+1;
+	}
+	write '\n';
 
-	write (double)3-4.5; 	write ' ';
-    write (double)'0'/48.0; write ' ';
-    write '0'%'1'; 			write ' ';
-    write '0'+'1'; 			write '\n';
+	i=0;
+	while (i<4) {
+		j=0;
+		while (j<5) {
+			w[i][j]=i+j;
+			write w[i][j]; write ' ';
+			j=j+1;
+		}
+		write '\n';
+		i=i+1;
+	}
 
-	write 1<2;	write ' ';
-	write 4>=3;	write ' ';
-	write 5==5;	write ' ';
-	write 1&&2;	write ' ';
-	write 0||3;	write ' ';
-	write !0;	write '\n';
 }
+

@@ -41,19 +41,18 @@ public class ArrayType extends AbstractType {
         }
 
         if (dimensions.size() > 1) {
-            return ((ArrayAccessExpression) node).getOperand1().getType();
+            return new ArrayType(node.getLine(), node.getColumn(), baseType, dimensions.subList(1, dimensions.size()));
         } else {
             return baseType;
         }
     }
 
-
     @Override
     public Type assignment(Type type, ASTNode node) {
-        if (type instanceof ErrorType)
+        if (type instanceof ErrorType) {
             return type;
-        if (type instanceof ArrayType)
-            return new ErrorType(String.format("Cannot assign %s to array type", type), node);
+        }
+
         return new ErrorType(String.format("Cannot assign %s to array type", type), node);
     }
 
@@ -65,7 +64,7 @@ public class ArrayType extends AbstractType {
     @Override
     public int numberOfBytes() {
         int totalSize = baseType.numberOfBytes();
-        for(int dim : dimensions) {
+        for (int dim : dimensions) {
             totalSize *= dim;
         }
         return totalSize;
@@ -84,4 +83,3 @@ public class ArrayType extends AbstractType {
         return visitor.visit(this, param);
     }
 }
-

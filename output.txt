@@ -2,208 +2,272 @@
 #source	"input.txt"
 
 	' * Variable definitions
-	' * char c (offset 0)
-	' * int a (offset 1)
-	' * double r (offset 3)
-	' * int i (offset 7)
+	' * double[10] v (offset 0)
+
+#line	6
+	' * double value (offset -4)
 
 #line	7
-	' * Assignment
-	pusha	0
-	pushb	97
-	storeb
+	' * int i (offset -6)
 
 #line	8
-	' * Write
-	pusha	0
-	loadb
-	outb
+	' * int j (offset -8)
 
-#line	8
-	' * Write
-	pushb	10
-	outb
+#line	9
+	' * int[4][5] w (offset -48)
 
-#line	10
-	' * Assignment
-	pusha	1
-	pushi	1
-	storei
-
-#line	11
-	' * Assignment
-	pusha	7
-	pushb	48
-	b2i
-	pushi	3
-	muli
-	storei
-
-#line	13
-	' * Write
-	pusha	1
-	loadi
-	outi
-
-#line	13
-	' * Write
-	pushb	32
-	outb
-
-#line	14
-	' * Write
-	pusha	7
-	loadi
-	outi
-
-#line	14
-	' * Write
-	pushb	10
-	outb
-
-#line	16
+#line	12
 	' * Read
-	pusha	3
-	inf
+	push	bp
+	pushi	-6
+	addi
+	ini
+	storei
+
+#line	13
+	' * Assignment
+	push	bp
+	pushi	-4
+	addf
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	i2f
+	pushf	10.0
+	divf
 	storef
 
-#line	17
-	' * Write
-	pushi	2
-	i2f
-	pusha	3
-	loadf
-	mulf
-	outf
+#line	15
+	' * Assignment
+	push	bp
+	pushi	-6
+	addi
+	pushi	0
+	storei
+
+#line	16
+ label0:
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	10
+	lti
+	jz label1
 
 #line	17
+	' * Assignment
+	push	bp
+	pushi	-4
+	addf
+	loadf
+	storef
+
+#line	18
+	' * Write
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	outi
+
+#line	18
+	' * Write
+	pushb	58
+	outb
+
+#line	18
+	' * Write
+	pusha	0
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	4
+	mulf
+	addf
+	outf
+
+#line	18
+	' * Write
+	pushb	32
+	outb
+
+#line	19
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	2
+	modi
+	jz label2
+
+#line	19
+	' * Write
+	pushb	111
+	outb
+
+#line	19
+	' * Write
+	pushb	100
+	outb
+
+#line	19
+	' * Write
+	pushb	100
+	outb
+
+#line	19
+	' * Write
+	pushb	10
+	outb
+	jmp label3
+ label2:
+
+#line	19
+	' * Write
+	pushb	101
+	outb
+
+#line	19
+	' * Write
+	pushb	118
+	outb
+
+#line	19
+	' * Write
+	pushb	101
+	outb
+
+#line	19
+	' * Write
+	pushb	110
+	outb
+
+#line	19
+	' * Write
+	pushb	10
+	outb
+ label3:
+
+#line	25
+	' * Assignment
+	push	bp
+	pushi	-6
+	addi
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	1
+	addi
+	storei
+	jmp label0
+ label1:
+
+#line	27
 	' * Write
 	pushb	10
 	outb
 
-#line	19
-	' * Write
-	pushi	3
-	i2f
-	pushf	4.5
-	subf
-	outf
+#line	29
+	' * Assignment
+	push	bp
+	pushi	-6
+	addi
+	pushi	0
+	storei
 
-#line	19
-	' * Write
-	pushb	32
-	outb
+#line	30
+ label4:
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	4
+	lti
+	jz label5
 
-#line	20
-	' * Write
-	pushb	48
-	b2i
-	i2f
-	pushf	48.0
-	divf
-	outf
+#line	31
+	' * Assignment
+	push	bp
+	pushi	-8
+	addi
+	pushi	0
+	storei
 
-#line	20
-	' * Write
-	pushb	32
-	outb
+#line	32
+ label6:
+	push	bp
+	pushi	-8
+	addi
+	loadi
+	pushi	5
+	lti
+	jz label7
 
-#line	21
-	' * Write
-	pushb	48
-	b2i
-	pushb	49
-	b2i
-	modi
-	outi
+#line	33
+	' * Assignment
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	push	bp
+	pushi	-8
+	addi
+	loadi
+	addi
+	storei
 
-#line	21
+#line	34
 	' * Write
-	pushb	32
-	outb
-
-#line	22
-	' * Write
-	pushb	48
-	b2i
-	pushb	49
-	b2i
+	push	bp
+	pushi	-8
+	addi
+	loadi
+	pushi	2
+	muli
 	addi
 	outi
 
-#line	22
+#line	34
+	' * Write
+	pushb	32
+	outb
+
+#line	35
+	' * Assignment
+	push	bp
+	pushi	-8
+	addi
+	push	bp
+	pushi	-8
+	addi
+	loadi
+	pushi	1
+	addi
+	storei
+	jmp label6
+ label7:
+
+#line	37
 	' * Write
 	pushb	10
 	outb
 
-#line	24
-	' * Write
+#line	38
+	' * Assignment
+	push	bp
+	pushi	-6
+	addi
+	push	bp
+	pushi	-6
+	addi
+	loadi
 	pushi	1
-	pushi	2
-	lti
-	outi
-
-#line	24
-	' * Write
-	pushb	32
-	outb
-
-#line	25
-	' * Write
-	pushi	4
-	pushi	3
-	gei
-	outi
-
-#line	25
-	' * Write
-	pushb	32
-	outb
-
-#line	26
-	' * Write
-	pushi	5
-	pushi	5
-	eqi
-	outi
-
-#line	26
-	' * Write
-	pushb	32
-	outb
-
-#line	27
-	' * Write
-	pushi	1
-	pushi	2
-	and
-	outi
-
-#line	27
-	' * Write
-	pushb	32
-	outb
-
-#line	28
-	' * Write
-	pushi	0
-	pushi	3
-	or
-	outi
-
-#line	28
-	' * Write
-	pushb	32
-	outb
-
-#line	29
-	' * Write
-	pushi	0
-	not
-	outi
-
-#line	29
-	' * Write
-	pushb	10
-	outb
+	addi
+	storei
+	jmp label4
+ label5:
 

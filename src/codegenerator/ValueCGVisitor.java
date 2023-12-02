@@ -74,6 +74,16 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
 	@Override
 	public <TP, TR> TR visit(ArrayAccessExpression arrayAccess, TP param) {
+		arrayAccess.getOperand1().accept(this.addressCGVisitor, null);
+
+		arrayAccess.getOperand2().accept(this, null);
+		var type = arrayAccess.getType();
+
+		cg.push(type.numberOfBytes());
+		cg.mul(type);
+		cg.add(type);
+
+		//TODO: This may need work
 		return null;
 	}
 

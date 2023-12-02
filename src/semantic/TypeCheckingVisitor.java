@@ -246,7 +246,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(ArrayAccessExpression exp, TP param) {
-
         exp.getOperand1().accept(this, null);
         exp.getOperand2().accept(this, null);
 

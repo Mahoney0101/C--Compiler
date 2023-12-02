@@ -20,6 +20,7 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
         else if (((VarDeclaration) variable.getDefinition()).getScope() == 1) {
             cg.pushbp();
             cg.push(((VarDeclaration) variable.getDefinition()).getOffset());
+            cg.add(variable.getType());
         }
         return null;
 	}
