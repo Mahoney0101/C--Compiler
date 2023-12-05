@@ -2,8 +2,8 @@
 #source	"input.txt"
 
 	' * 	Invocation to the main function
-	call main
-	halt
+call main
+halt
 	' * Definitions
 	' * double[10] v (offset 0)
 
@@ -316,4 +316,3 @@
  label5:
 	ret 0, 48, 0
 
-	' * Invocation to the main function

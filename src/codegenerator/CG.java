@@ -62,12 +62,12 @@ public class CG {
     }
 
     public void callMain() {
-        out.println("\tcall main");
+        out.println("call main");
         out.flush();
     }
 
     public void halt() {
-        out.println("\thalt");
+        out.println("halt");
         out.flush();
     }
 
