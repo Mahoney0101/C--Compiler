@@ -45,6 +45,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
         cg.comment("Definitions");
         program.getdefinitions().forEach(def -> def.accept(this, null));
         cg.newLine();
+
         return null;
     }
 
@@ -120,7 +121,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 
         cg.jumpIfFalse(elseLabel);
         ifStatement.getIfBlockStatements().forEach(statement -> {
-            cg.line(ifStatement);
+            cg.line(statement);
             statement.accept(this, null);
         });
 
@@ -129,7 +130,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
         cg.label(elseLabel);
 
         ifStatement.getElseBlockStatements().forEach(statement -> {
-            cg.line(ifStatement);
+            cg.line(statement);
             statement.accept(this, null);
         });
 
@@ -165,19 +166,54 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(FunctionDeclaration functionDeclaration, TP param) {
+
+        int returnValueSize = calculateReturnValueSize(functionDeclaration);
+        int argSize = calculateArgumentSize(functionDeclaration);
+        int localVarSize = calculateLocalVarSize(functionDeclaration);
+
+        cg.line(functionDeclaration);
+        cg.label(functionDeclaration.getName());
+        cg.enter(localVarSize);
+
         functionDeclaration.getVars().forEach(stmt -> {
             cg.line(stmt);
             stmt.accept(this, null);
         });
+
         functionDeclaration.getFunctionType().getParameters().forEach(stmt -> {
             cg.line(stmt);
             stmt.accept(this, null);
         });
+
         functionDeclaration.getStatements().forEach(stmt -> {
             cg.line(stmt);
             stmt.accept(this, null);
         });
+
+        cg.ret(returnValueSize, localVarSize, argSize);
+
         return null;
+    }
+
+    private int calculateArgumentSize(FunctionDeclaration functionDeclaration) {
+        int totalSize = 0;
+        for (VarDeclaration arg : functionDeclaration.getFunctionType().getParameters()) {
+            totalSize += arg.getType().numberOfBytes();
+        }
+        return totalSize;
+    }
+
+    private int calculateReturnValueSize(FunctionDeclaration functionDeclaration) {
+        Type returnType = functionDeclaration.getFunctionType().getReturnType();
+        return returnType.numberOfBytes();
+    }
+
+    private int calculateLocalVarSize(FunctionDeclaration functionDeclaration) {
+        int totalSize = 0;
+        for (VarDeclaration var : functionDeclaration.getVars()) {
+            totalSize += var.getType().numberOfBytes();
+        }
+        return totalSize;
     }
 
     @Override

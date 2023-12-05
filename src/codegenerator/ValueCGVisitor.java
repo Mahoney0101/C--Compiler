@@ -39,7 +39,12 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 	@Override
 	public <TP, TR> TR visit(VariableExpression variable, TP param) {
 		variable.accept(this.addressCGVisitor, null);
-		cg.load(variable.getType());
+		var type = variable.getType();
+		if (type instanceof ArrayType){
+			type.accept(this,null);
+			type = IntType.getInstance();
+		}
+		cg.load(type);
 		return null;
 	}
 

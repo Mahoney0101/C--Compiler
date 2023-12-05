@@ -7,30 +7,28 @@ import types.*;
 
 public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
 
+    public AddressCGVisitor(CG gc) {
+        super(gc);
+    }
 
-	public AddressCGVisitor(CG gc) {
-		super(gc);
-	}
-
-	@Override
-	public <TP, TR> TR visit(VariableExpression variable, TP param) {
+    @Override
+    public <TP, TR> TR visit(VariableExpression variable, TP param) {
         var type = variable.getType();
-        if (type instanceof ArrayType){
-            type.accept(this,null);
-            type = ((ArrayType)type).getBaseType();
+        if (type instanceof ArrayType) {
+            type.accept(this, null);
+            type = ((ArrayType) type).getBaseType();
         }
 
-        if(((VarDeclaration) variable.getDefinition()).getScope() == 0){
+        if (((VarDeclaration) variable.getDefinition()).getScope() == 0) {
             cg.pushAddress(variable);
-        }
-        else if (((VarDeclaration) variable.getDefinition()).getScope() == 1) {
+        } else if (((VarDeclaration) variable.getDefinition()).getScope() == 1) {
             cg.pushbp();
             cg.push(((VarDeclaration) variable.getDefinition()).getOffset());
 
-            cg.add(type);
+            cg.add(IntType.getInstance());
         }
         return null;
-	}
+    }
 
     @Override
     public <TP, TR> TR visit(CharLiteralExpression charLiteralExpression, TP param) {
@@ -48,27 +46,13 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
 
         arrayAccess.getOperand2().accept(this, null);
 
-        var type = arrayAccess.getType();
-        if (type instanceof ArrayType){
-            var innerType = ((ArrayType)type).getBaseType();
-            cg.load(innerType);
-            cg.push(arrayAccess.getType().numberOfBytes());
-            cg.mul(innerType);
-
-            cg.add(innerType);
-        }
-        else {
-            cg.load(type);
-            cg.push(arrayAccess.getType().numberOfBytes());
-
-            cg.mul(type);
-
-            cg.add(type);
-        }
+        cg.load(IntType.getInstance());
+        cg.push(arrayAccess.getType().numberOfBytes());
+        cg.mul(IntType.getInstance());
+        cg.add(IntType.getInstance());
 
         return null;
     }
-
 
     @Override
     public <TP, TR> TR visit(EqualityExpression logical, TP param) {
@@ -159,6 +143,4 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
     public <TP, TR> TR visit(UnaryMinusExpression unaryMinusExpression, TP param) {
         return null;
     }
-
-
 }

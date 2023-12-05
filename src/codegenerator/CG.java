@@ -19,6 +19,10 @@ public class CG {
             System.exit(-1);
         }
         this.source(sourceFilename);
+
+        this.comment("\tInvocation to the main function");
+        this.callMain();
+        this.halt();
     }
 
     public void output(Type type) {
@@ -41,8 +45,29 @@ public class CG {
         out.println(" "+labelName + ":");
         out.flush();
     }
+
+    public void enter(int constant) {
+        out.println("\tenter: " + constant);
+        out.flush();
+    }
+
+    public void ret(int returnValueSize, int localVariableSize, int parameterVariableSize) {
+        out.println("\tret " + returnValueSize +", "+localVariableSize+", "+parameterVariableSize);
+        out.flush();
+    }
+
     public void jump(String label) {
         out.println("\tjmp " + label);
+        out.flush();
+    }
+
+    public void callMain() {
+        out.println("\tcall main");
+        out.flush();
+    }
+
+    public void halt() {
+        out.println("\thalt");
         out.flush();
     }
 
