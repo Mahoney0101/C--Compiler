@@ -162,6 +162,11 @@ public class CG {
         out.flush();
     }
 
+    public void debug() {
+        out.println("\tdebug\t");
+        out.flush();
+    }
+
     public void push(int constant) {
         out.println("\tpushi\t"+constant+"");
         out.flush();

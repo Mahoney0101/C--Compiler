@@ -1,7 +1,7 @@
 
 #source	"input.txt"
 
-	' * Variable definitions
+	' * Definitions
 	' * double[10] v (offset 0)
 
 #line	6
@@ -58,6 +58,14 @@
 
 #line	17
 	' * Assignment
+	pusha	0
+	push	bp
+	pushi	-6
+	addi
+	loadf
+	pushi	4
+	mulf
+	addf
 	push	bp
 	pushi	-4
 	addf
@@ -83,10 +91,11 @@
 	push	bp
 	pushi	-6
 	addi
-	loadi
+	loadf
 	pushi	4
 	mulf
 	addf
+	loadf
 	outf
 
 #line	18
@@ -210,6 +219,23 @@
 #line	33
 	' * Assignment
 	push	bp
+	pushi	-48
+	addi
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	10
+	muli
+	addi
+	push	bp
+	pushi	-8
+	addi
+	loadi
+	pushi	2
+	muli
+	addi
+	push	bp
 	pushi	-6
 	addi
 	loadi
@@ -223,12 +249,23 @@
 #line	34
 	' * Write
 	push	bp
+	pushi	-48
+	addi
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	pushi	10
+	muli
+	addi
+	push	bp
 	pushi	-8
 	addi
 	loadi
 	pushi	2
 	muli
 	addi
+	loadi
 	outi
 
 #line	34

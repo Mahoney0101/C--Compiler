@@ -21,6 +21,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     public <TP, TR> TR visit(WriteStatement write, TP param) {
         cg.comment("Write");
         write.getExpression().accept(this.valueCGVisitor, null);
+
         cg.output(write.getExpression().getType());
         return null;
     }
@@ -57,7 +58,6 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     public <TP, TR> TR visit(AssignmentStatement assignment, TP param) {
         cg.comment("Assignment");
         assignment.getLeftHandSide().accept(this.addressCGVisitor, null); // * lvalue
-
         assignment.getRightHandSide().accept(this.valueCGVisitor, null); // * rvalue
         cg.store(assignment.getLeftHandSide().getType());
         return null;

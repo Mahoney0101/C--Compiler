@@ -18,7 +18,6 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 	public <TP, TR> TR visit(ArithmeticExpression arithmetic, TP param) {
 		Expression operand1 = arithmetic.getOperand1();
 		Expression operand2 = arithmetic.getOperand2();
-
 		if (operand1 instanceof CharLiteralExpression) {
 			operand1.accept(this, null);
 			cg.castCharToInt();
@@ -37,22 +36,21 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 		return null;
 	}
 
-
 	@Override
-    public <TP, TR> TR visit(VariableExpression variable, TP param) {
+	public <TP, TR> TR visit(VariableExpression variable, TP param) {
 		variable.accept(this.addressCGVisitor, null);
 		cg.load(variable.getType());
 		return null;
 	}
 
 	@Override
-    public <TP, TR> TR visit(IntLiteralExpression intLiteral, TP param) {
+	public <TP, TR> TR visit(IntLiteralExpression intLiteral, TP param) {
 		cg.push(intLiteral.value);
 		return null;
 	}
 
 	@Override
-    public <TP, TR> TR visit(DoubleLiteralExpression realLiteral, TP param) {
+	public <TP, TR> TR visit(DoubleLiteralExpression realLiteral, TP param) {
 		cg.push(realLiteral.value);
 		return null;
 	}
@@ -74,16 +72,13 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
 	@Override
 	public <TP, TR> TR visit(ArrayAccessExpression arrayAccess, TP param) {
-		arrayAccess.getOperand1().accept(this.addressCGVisitor, null);
-
-		arrayAccess.getOperand2().accept(this, null);
+		arrayAccess.accept(this.addressCGVisitor, null);
 		var type = arrayAccess.getType();
-
-		cg.push(type.numberOfBytes());
-		cg.mul(type);
-		cg.add(type);
-
-		//TODO: This may need work
+		if (type instanceof ArrayType) {
+			type.accept(this, null);
+			type = ((ArrayType) type).getBaseType();
+		}
+		cg.load(type);
 		return null;
 	}
 
@@ -92,11 +87,10 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 		logical.getOperand1().accept(this, null);
 		logical.getOperand2().accept(this, null);
 
-		cg.relational(logical.getOperator(),logical.getOperand1().getType());
+		cg.relational(logical.getOperator(), logical.getOperand1().getType());
 
 		return null;
 	}
-
 
 	@Override
 	public <TP, TR> TR visit(CastExpression castExpression, TP param) {
@@ -112,12 +106,11 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 		} else if (currentType instanceof CharType && targetType instanceof DoubleType) {
 			cg.castCharToInt();
 			cg.castIntToDouble();
-		}else if (currentType instanceof CharType && targetType instanceof IntType) {
+		} else if (currentType instanceof CharType && targetType instanceof IntType) {
 			cg.castCharToInt();
 		}
 		return null;
 	}
-
 
 	@Override
 	public <TP, TR> TR visit(ReturnStatement returnStatement, TP param) {
