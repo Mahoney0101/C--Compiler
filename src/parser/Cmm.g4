@@ -145,13 +145,13 @@ expr returns [Expression ast]
      | SUB e=expr                                   { $ast = new UnaryMinusExpression($SUB.getLine(), $SUB.getCharPositionInLine()+1, $e.ast); }
      | NOT e=expr                                   { $ast = new LogicalNegationExpression($NOT.getLine(), $NOT.getCharPositionInLine()+1, $e.ast); }
      | LPAREN t=type RPAREN e=expr                  { $ast = new CastExpression($LPAREN.getLine(), $LPAREN.getCharPositionInLine()+1, $t.ast, $e.ast);     }
+     | e1=expr LBRACKET e2=expr RBRACKET            { $ast = new ArrayAccessExpression($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $e2.ast); }
      | e1=expr op=(MUL|DIV|MOD) e2=expr             { $ast = new ArithmeticExpression($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $op.text, $e2.ast); }
      | e1=expr op=(ADD|SUB)e2=expr                  { $ast = new ArithmeticExpression($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $op.text, $e2.ast); }
      | e1=expr op=(GT|GTE|LT|LTE|NEQ|EQ) e2=expr    { $ast = new EqualityExpression($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $op.text, $e2.ast); }
      | e1=expr op=(AND|OR) e2=expr                  { $ast = new LogicalExpression($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $op.text, $e2.ast); }
      | f=functionCallExpression                     { $ast = $f.ast; }
      | e1=expr DOT ID                               { $ast = new StructFieldAccessExpression($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $ID.text); }
-     | e1=expr LBRACKET e2=expr RBRACKET            { $ast = new ArrayAccessExpression($e1.start.getLine(), $e1.start.getCharPositionInLine()+1, $e1.ast, $e2.ast); }
      ;
 
 exprList returns [List<Expression> expressions = new ArrayList<Expression>()]

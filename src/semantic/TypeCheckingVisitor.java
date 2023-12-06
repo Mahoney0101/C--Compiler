@@ -81,7 +81,18 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     public <TP, TR> TR visit(ArithmeticExpression exp, TP param) {
         exp.getOperand1().accept(this,null);
         exp.getOperand2().accept(this,null);
+
         exp.setType(exp.getOperand1().getType().arithmetic(exp.getOperand2().getType(), exp));
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(ArrayAccessExpression exp, TP param) {
+        exp.getOperand1().accept(this, null);
+        exp.getOperand2().accept(this, null);
+
+        exp.setType(exp.getOperand1().getType().squareBrackets(exp.getOperand2().getType(), exp));
+
         return null;
     }
 
@@ -244,15 +255,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         return null;
     }
 
-    @Override
-    public <TP, TR> TR visit(ArrayAccessExpression exp, TP param) {
-        exp.getOperand1().accept(this, null);
-        exp.getOperand2().accept(this, null);
-
-        exp.setType(exp.getOperand1().getType().squareBrackets(exp.getOperand2().getType(), exp));
-
-        return null;
-    }
 
     @Override
     public <TP, TR> TR visit(StructFieldAccessExpression exp, TP param) {

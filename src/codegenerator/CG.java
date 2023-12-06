@@ -47,7 +47,7 @@ public class CG {
     }
 
     public void enter(int constant) {
-        out.println("\tenter: " + constant);
+        out.println("\tenter\t" + constant);
         out.flush();
     }
 
@@ -106,13 +106,18 @@ public class CG {
         out.flush();
     }
 
+    public void castIntToChar() {
+        out.println("\ti2b");
+        out.flush();
+    }
+
     public void castIntToDouble() {
         out.println("\ti2f");
         out.flush();
     }
 
     public void castDoubleToInt() {
-        out.println("\ti2f");
+        out.println("\tf2i");
         out.flush();
     }
 

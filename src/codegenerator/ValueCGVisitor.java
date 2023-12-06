@@ -40,8 +40,8 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 	public <TP, TR> TR visit(VariableExpression variable, TP param) {
 		variable.accept(this.addressCGVisitor, null);
 		var type = variable.getType();
-		if (type instanceof ArrayType){
-			type.accept(this,null);
+		if (type instanceof ArrayType) {
+			type.accept(this, null);
 			type = IntType.getInstance();
 		}
 		cg.load(type);
@@ -106,6 +106,8 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
 		if (currentType instanceof IntType && targetType instanceof DoubleType) {
 			cg.castIntToDouble();
+		} else if (currentType instanceof IntType && targetType instanceof CharType) {
+			cg.castIntToChar();
 		} else if (currentType instanceof DoubleType && targetType instanceof IntType) {
 			cg.castDoubleToInt();
 		} else if (currentType instanceof CharType && targetType instanceof DoubleType) {
@@ -118,7 +120,9 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 	}
 
 	@Override
-	public <TP, TR> TR visit(ReturnStatement returnStatement, TP param) {
+	public <TP, TR> TR visit(ReturnStatement returnStmt, TP param) {
+		returnStmt.getExpression().accept(this, null);
+
 		return null;
 	}
 

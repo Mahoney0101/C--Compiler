@@ -31,6 +31,17 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
+    public <TP, TR> TR visit(ArithmeticExpression arithmeticExpr, TP param) {
+        arithmeticExpr.getOperand1().accept(this, null);
+
+        arithmeticExpr.getOperand2().accept(this, null);
+
+        cg.arithmetic(arithmeticExpr.getOperator(), arithmeticExpr.getType());
+
+        return null;
+    }
+
+    @Override
     public <TP, TR> TR visit(CharLiteralExpression charLiteralExpression, TP param) {
         return null;
     }
@@ -43,10 +54,12 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public <TP, TR> TR visit(ArrayAccessExpression arrayAccess, TP param) {
         arrayAccess.getOperand1().accept(this, null);
-
         arrayAccess.getOperand2().accept(this, null);
 
-        cg.load(IntType.getInstance());
+        if (!(arrayAccess.getOperand1() instanceof ArrayAccessExpression)) {
+            cg.load(IntType.getInstance());
+        }
+
         cg.push(arrayAccess.getType().numberOfBytes());
         cg.mul(IntType.getInstance());
         cg.add(IntType.getInstance());
@@ -116,6 +129,12 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(RealLiteralExpression realLiteralExpression, TP param) {
+        return null;
+    }
+
+    @Override
+    public <TP, TR> TR visit(IntLiteralExpression intLiteral, TP param) {
+        cg.push(intLiteral.value);
         return null;
     }
 

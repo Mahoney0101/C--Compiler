@@ -91,6 +91,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(ReturnStatement returnStatement, TP param) {
+        returnStatement.getExpression().accept(this.valueCGVisitor, null);
         return null;
     }
 
