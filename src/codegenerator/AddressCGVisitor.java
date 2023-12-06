@@ -54,11 +54,13 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public <TP, TR> TR visit(ArrayAccessExpression arrayAccess, TP param) {
         arrayAccess.getOperand1().accept(this, null);
+
         arrayAccess.getOperand2().accept(this, null);
 
-        if (!(arrayAccess.getOperand1() instanceof ArrayAccessExpression)) {
+        //TODO: Theres a problem with this
+       // if (!(arrayAccess.getOperand1() instanceof ArrayAccessExpression)) {
             cg.load(IntType.getInstance());
-        }
+       // }
 
         cg.push(arrayAccess.getType().numberOfBytes());
         cg.mul(IntType.getInstance());

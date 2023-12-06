@@ -69,7 +69,6 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 	@Override
 	public <TP, TR> TR visit(LogicalNegationExpression logicalNegation, TP param) {
 		logicalNegation.getOperand().accept(this, null);
-
 		cg.not();
 
 		return null;
@@ -142,12 +141,36 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 	}
 
 	@Override
-	public <TP, TR> TR visit(FunctionCallExpression functionCallExpression, TP param) {
+	public <TP, TR> TR visit(FunctionCallExpression functionCall, TP param) {
+
+		for (Expression arg : functionCall.getArguments()) {
+			arg.accept(this, null);
+		}
+
+		cg.call(functionCall.getFunctionName().getName());
+
+		Type returnType = ((FunctionDeclaration) functionCall.getFunctionName().getDefinition()).getFunctionType()
+				.getReturnType();
+
+		if (!(returnType instanceof VoidType)) {
+			cg.pop(((FunctionDeclaration) functionCall.getFunctionName().getDefinition()).getFunctionType()
+					.getReturnType());
+		}
+
 		return null;
+	}
+
+	private <TP, TR> boolean isReturnValueUsed(TP node) {
+		return node instanceof AssignmentStatement ||
+				node instanceof ArithmeticExpression ||
+				node instanceof ReturnStatement ||
+				(node instanceof FunctionCallExpression
+						&& ((FunctionCallExpression) node).getArguments().contains(node));
 	}
 
 	@Override
 	public <TP, TR> TR visit(FunctionCallStatement functionCallStatement, TP param) {
+		functionCallStatement.getFunctionCallExpression().accept(this, null);
 		return null;
 	}
 

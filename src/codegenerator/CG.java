@@ -101,6 +101,16 @@ public class CG {
         out.flush();
     }
 
+    public void call(String functionName) {
+        out.println("\tcall\t"+functionName);
+        out.flush();
+    }
+
+    public void pop(Type type) {
+        out.println("\tpop"+type.suffix());
+        out.flush();
+    }
+
     public void castCharToInt() {
         out.println("\tb2i");
         out.flush();

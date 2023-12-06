@@ -58,9 +58,10 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public <TP, TR> TR visit(AssignmentStatement assignment, TP param) {
         cg.comment("Assignment");
-        assignment.getLeftHandSide().accept(this.addressCGVisitor, null); // * lvalue
-        assignment.getRightHandSide().accept(this.valueCGVisitor, null); // * rvalue
+        assignment.getLeftHandSide().accept(this.addressCGVisitor, null);
+        assignment.getRightHandSide().accept(this.valueCGVisitor, null);
         cg.store(assignment.getLeftHandSide().getType());
+
         return null;
     }
 
@@ -142,11 +143,13 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public <TP, TR> TR visit(FunctionCallExpression functionCallExpression, TP param) {
+        functionCallExpression.accept(this.valueCGVisitor, null);
         return null;
     }
 
     @Override
     public <TP, TR> TR visit(FunctionCallStatement functionCallStatement, TP param) {
+        functionCallStatement.accept(this.valueCGVisitor, null);
         return null;
     }
 

@@ -20,7 +20,7 @@ public abstract class AbstractCGVisitor<TP, TR> implements Visitor<TP, TR> {
 	public CG getCG() {
 		return this.cg;
 	}
-	
+
 	public AbstractCGVisitor(CG cg) {
 		this.cg=cg;
 	}
