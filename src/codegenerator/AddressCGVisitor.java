@@ -60,12 +60,7 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
     public <TP, TR> TR visit(ArrayAccessExpression arrayAccess, TP param) {
         arrayAccess.getOperand1().accept(this, null);
 
-        arrayAccess.getOperand2().accept(this, null);
-
-        // TODO: Theres a problem with this
-        //if (!(arrayAccess.getOperand1() instanceof ArrayAccessExpression)) {
-            cg.load(IntType.getInstance());
-        //}
+        arrayAccess.getOperand2().accept(this.executeVisitor.getValueCGVisitor(), null);
 
         cg.push(arrayAccess.getType().numberOfBytes());
         cg.mul(IntType.getInstance());

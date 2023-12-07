@@ -1,42 +1,68 @@
-// * Example program of using arrays
+// * Example program computing the Fibonacci sequence and some other operations
 
-double[10] v;
+int[8][3] fibonacci;
 
-void main() {
-	double value;
-	int i;
-	int j;
-	int[4][5] w;
+void p() {}
+
+int f(double r, int e) {
+  double real;
+  char c;
+  int result;
+  real = r * 10.0;
+  c='0';
+  if (e < 256) {
+    c = (char)e;
+    result = (int)c;
+  }
+  else
+    result = (int)real;
+  return result;
+}
+
+void initialize() {
+  int i;
+  fibonacci[0][0] = 0;
+  fibonacci[0][1] = 1;
+  fibonacci[0][2] = 1;
+  i = 1;
+  while(i < 8) {
+    fibonacci[i][0] = fibonacci[i - 1][1];
+    fibonacci[i][1] = fibonacci[i - 1][2];
+    fibonacci[i][2] = fibonacci[i][0] + fibonacci[i][1];
+    i = i + 1;
+  }
+}
 
 
-	read i;
-	value = (double)i/10.0;
+void main(){
+  int i;
+  int j;
+  char ch;
+  p();
+  i=0;
+  ch = '0';
 
-	i=0;
-	while (i<10) {
-		v[i] = value;
-		write i; write ':'; write v[i]; write ' ';
-		if (i%2) {
-			write 'o'; write 'd'; write 'd'; write '\n';
-		}
-		else {
-			write 'e'; write 'v'; write 'e'; write 'n'; write '\n';
-		}
-		i=i+1;
-	}
-	write '\n';
+  // * Shows 48 (decimal value of '0')
+  write f((double)i, (int)ch);
+  write '\n';
 
-	i=0;
-	while (i<4) {
-		j=0;
-		while (j<5) {
-			w[i][j]=i+j;
-			write w[i][j]; write ' ';
-			j=j+1;
-		}
-		write '\n';
-		i=i+1;
-	}
+  f(1.3, 2);
+
+  initialize();
+  i = 0;
+  while(i < 8) {
+    // Shows the Fib sequence, from 1 to 8 (34)
+    write '(';
+    write i + 1;
+    write ')';
+    write fibonacci[i][0];
+    write '+';
+    write fibonacci[i][1];
+    write '=';
+    write fibonacci[i][2];
+    write '\n';
+    i = i + 1;
+  }
 
 }
 
