@@ -28,6 +28,9 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
 
     @Override
     public <TP, TR> TR visit(WhileStatement whileStatement, TP param) {
+        whileStatement.getCondition().accept(this, null);
+        whileStatement.getStatements().forEach(statement -> statement.accept(this, null));
+
         return null;
     }
 
@@ -163,6 +166,9 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
 
     @Override
     public <TP, TR> TR visit(IfStatement ifStatement, TP param) {
+        ifStatement.getCondition().accept(this, null);
+        ifStatement.getIfBlockStatements().forEach(statement -> statement.accept(this, null));
+        ifStatement.getElseBlockStatements().forEach(statement -> statement.accept(this, null));
         return null;
     }
 }
