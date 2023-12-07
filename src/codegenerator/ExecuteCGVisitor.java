@@ -7,14 +7,23 @@ import types.*;
 
 public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 
-    private AddressCGVisitor addressCGVisitor;
-
+    private CG cg;
     private ValueCGVisitor valueCGVisitor;
+    private AddressCGVisitor addressCGVisitor;
 
     public ExecuteCGVisitor(CG cg) {
         super(cg);
-        this.valueCGVisitor = new ValueCGVisitor(cg);
-        this.addressCGVisitor = new AddressCGVisitor(cg);
+        this.cg = cg;
+        this.valueCGVisitor = new ValueCGVisitor(cg, this);
+        this.addressCGVisitor = new AddressCGVisitor(cg, this);
+    }
+
+    public ValueCGVisitor getValueCGVisitor() {
+        return valueCGVisitor;
+    }
+
+    public AddressCGVisitor getAddressCGVisitor() {
+        return addressCGVisitor;
     }
 
     @Override

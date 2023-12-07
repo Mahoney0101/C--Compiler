@@ -7,11 +7,13 @@ import types.*;
 
 public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
-	private AddressCGVisitor addressCGVisitor;
+	private CG cg;
+	private ExecuteCGVisitor executeVisitor;
 
-	public ValueCGVisitor(CG cg) {
+	public ValueCGVisitor(CG cg, ExecuteCGVisitor executeVisitor) {
 		super(cg);
-		this.addressCGVisitor = new AddressCGVisitor(cg);
+		this.cg = cg;
+		this.executeVisitor = executeVisitor;
 	}
 
 	@Override
@@ -38,7 +40,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
 	@Override
 	public <TP, TR> TR visit(VariableExpression variable, TP param) {
-		variable.accept(this.addressCGVisitor, null);
+		variable.accept(this.executeVisitor.getAddressCGVisitor(), null);
 		var type = variable.getType();
 		if (type instanceof ArrayType) {
 			type.accept(this, null);
@@ -76,7 +78,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
 	@Override
 	public <TP, TR> TR visit(ArrayAccessExpression arrayAccess, TP param) {
-		arrayAccess.accept(this.addressCGVisitor, null);
+		arrayAccess.accept(this.executeVisitor.getAddressCGVisitor(), null);
 		var type = arrayAccess.getType();
 		if (type instanceof ArrayType) {
 			type.accept(this, null);

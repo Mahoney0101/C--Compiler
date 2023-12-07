@@ -7,8 +7,13 @@ import types.*;
 
 public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
 
-    public AddressCGVisitor(CG gc) {
-        super(gc);
+    private CG cg;
+    private ExecuteCGVisitor executeVisitor;
+
+    public AddressCGVisitor(CG cg, ExecuteCGVisitor executeVisitor) {
+        super(cg);
+        this.cg = cg;
+        this.executeVisitor = executeVisitor;
     }
 
     @Override
@@ -57,10 +62,10 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
 
         arrayAccess.getOperand2().accept(this, null);
 
-        //TODO: Theres a problem with this
-       // if (!(arrayAccess.getOperand1() instanceof ArrayAccessExpression)) {
+        // TODO: Theres a problem with this
+        //if (!(arrayAccess.getOperand1() instanceof ArrayAccessExpression)) {
             cg.load(IntType.getInstance());
-       // }
+        //}
 
         cg.push(arrayAccess.getType().numberOfBytes());
         cg.mul(IntType.getInstance());
