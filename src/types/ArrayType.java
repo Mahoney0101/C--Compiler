@@ -58,7 +58,7 @@ public class ArrayType extends AbstractType {
 
     @Override
     public char suffix() {
-        return 'a'; // This is arbitrary; you can choose any other character for array.
+        return 'a';
     }
 
     @Override

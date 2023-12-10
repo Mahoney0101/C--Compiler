@@ -19,15 +19,7 @@ public interface Visitor<TP, TR> {
 
     <TP, TR>TR visit(CharLiteralExpression charLiteralExpression, TP param);
 
-    // ************ Statements ***************
-
-
     <TP, TR> TR visit(AssignmentStatement assignment, TP param);
-
-
-    // ************ Program ****************
-
-    // ************ Types ****************
 
     <TP, TR> TR visit(LogicalNegationExpression logicalNegation, TP param);
 
@@ -51,7 +43,7 @@ public interface Visitor<TP, TR> {
 
     <TP, TR>TR visit(StructType structType, TP param);
 
-    <TP, TR>TR visit(StructFieldAccessExpression nestedStructFieldExpression, TP param);
+    <TP, TR>TR visit(StructFieldAccessExpression structFieldExpression, TP param);
 
     <TP, TR> TR visit(LogicalExpression logicalExpression, TP param);
 

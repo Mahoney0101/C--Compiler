@@ -2,7 +2,6 @@ package types;
 
 import ast.ASTNode;
 import ast.AbstractASTNode;
-import ast.expressions.AbstractBinaryExpression;
 
 public abstract class AbstractType extends AbstractASTNode implements Type {
 
@@ -53,8 +52,6 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     public Type equivalent(Type type, ASTNode node){
         return new ErrorType(String.format("Equivalent checks not allowed on type %s", type), node);
     }
-
-    /******** Code Generation ***************/
 
     @Override
     public abstract char suffix();

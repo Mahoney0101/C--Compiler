@@ -38,10 +38,6 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     public abstract <TP, TR> TR visit(FunctionCallExpression functionCallExpression, TP param);
 
-    public <TP, TR> TR visit(Definition defintion, TP param) {
-        return null;
-    }
-
     public abstract <TP2, TR2> TR2 visit(VarDeclaration var, TP2 param);
 
     public abstract <TP2, TR2> TR2 visit(ReturnStatement returnStatement, TP2 param);

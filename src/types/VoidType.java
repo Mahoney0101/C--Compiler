@@ -21,15 +21,11 @@ public class VoidType extends AbstractType {
 
     @Override
     public char suffix() {
-        // Void type typically does not need a suffix when used in generated code, considering its non-instantiable nature.
-        // If your language requires it for some reason, you might add a suffix here.
         throw new UnsupportedOperationException("Void type does not have a suffix");
     }
 
     @Override
     public int numberOfBytes() {
-        // Void type should not have a size since it does not represent a value and thus cannot be stored.
-        // Depending on your language specifications, this might throw an error or return 0.
         return 0;
     }
 
