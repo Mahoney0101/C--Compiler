@@ -5,11 +5,11 @@ import ast.expressions.*;
 import ast.statements.*;
 import types.*;
 
-public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
-
+public class ExecuteCGVisitor<TP, TR> extends AbstractCGVisitor<TP, TR> {
     private CG cg;
     private ValueCGVisitor valueCGVisitor;
     private AddressCGVisitor addressCGVisitor;
+
 
     public ExecuteCGVisitor(CG cg) {
         super(cg);
@@ -29,7 +29,9 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public <TP, TR> TR visit(WriteStatement write, TP param) {
         cg.comment("Write");
+        this.valueCGVisitor.setReturnValueUsage(true);
         write.getExpression().accept(this.valueCGVisitor, null);
+        this.valueCGVisitor.setReturnValueUsage(false);
 
         cg.output(write.getExpression().getType());
         return null;
@@ -67,8 +69,13 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public <TP, TR> TR visit(AssignmentStatement assignment, TP param) {
         cg.comment("Assignment");
+
         assignment.getLeftHandSide().accept(this.addressCGVisitor, null);
+
+        this.valueCGVisitor.setReturnValueUsage(true);
         assignment.getRightHandSide().accept(this.valueCGVisitor, null);
+        this.valueCGVisitor.setReturnValueUsage(false);
+
         cg.store(assignment.getLeftHandSide().getType());
 
         return null;

@@ -10,6 +10,12 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 	private CG cg;
 	private ExecuteCGVisitor executeVisitor;
 
+	private boolean isReturnValueUsed = false;
+
+	public void setReturnValueUsage(boolean usage) {
+		this.isReturnValueUsed = usage;
+	}
+
 	public ValueCGVisitor(CG cg, ExecuteCGVisitor executeVisitor) {
 		super(cg);
 		this.cg = cg;
@@ -154,7 +160,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 		Type returnType = ((FunctionDeclaration) functionCall.getFunctionName().getDefinition()).getFunctionType()
 				.getReturnType();
 
-		if (!(returnType instanceof VoidType)) {
+		if (!(returnType instanceof VoidType) && !isReturnValueUsed) {
 			cg.pop(((FunctionDeclaration) functionCall.getFunctionName().getDefinition()).getFunctionType()
 					.getReturnType());
 		}
@@ -162,13 +168,6 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 		return null;
 	}
 
-	private <TP, TR> boolean isReturnValueUsed(TP node) {
-		return node instanceof AssignmentStatement ||
-				node instanceof ArithmeticExpression ||
-				node instanceof ReturnStatement ||
-				(node instanceof FunctionCallExpression
-						&& ((FunctionCallExpression) node).getArguments().contains(node));
-	}
 
 	@Override
 	public <TP, TR> TR visit(FunctionCallStatement functionCallStatement, TP param) {

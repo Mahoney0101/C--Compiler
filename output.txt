@@ -340,7 +340,6 @@ halt
 	loadb
 	b2i
 	call	f
-	popi // TODO: Problem here issue is how to decide when to pop. Is the value needed on the stack?
 	outi
 
 #line	47
