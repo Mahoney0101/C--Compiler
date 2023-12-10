@@ -1,7 +1,6 @@
 package types;
 
 import ast.ASTNode;
-import ast.expressions.ArrayAccessExpression;
 import visitor.Visitor;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,7 +78,7 @@ public class ArrayType extends AbstractType {
     }
 
     @Override
-    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+    public <TP, TR> TR accept(Visitor visitor, TP param) {
         return visitor.visit(this, param);
     }
 }

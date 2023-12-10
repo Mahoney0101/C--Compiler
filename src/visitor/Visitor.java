@@ -7,7 +7,7 @@ import ast.VarDeclaration;
 import types.*;
 import types.ErrorType;
 
-public interface Visitor<TP, TR> {
+public interface Visitor {
 
     <TP, TR> TR visit(ArithmeticExpression arithmeticExpression, TP param);
 
@@ -68,8 +68,6 @@ public interface Visitor<TP, TR> {
     <TP, TR> TR visit(IntType intType, TP param);
 
     <TP, TR> TR visit(VoidType voidType, TP param);
-
-    <TP, TR> TR visit(Parameter parameter, TP param);
 
     <TP, TR> TR visit(UnaryMinusExpression unaryMinusExpression, TP param);
 }

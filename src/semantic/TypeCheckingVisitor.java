@@ -50,11 +50,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     }
 
     @Override
-    public <TP, TR> TR visit(Parameter parameter, TP param) {
-        return null;
-    }
-
-    @Override
     public <TP, TR> TR visit(UnaryMinusExpression unaryMinusExpression, TP param) {
         return null;
     }
@@ -254,7 +249,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         }
         return null;
     }
-
 
     @Override
     public <TP, TR> TR visit(StructFieldAccessExpression exp, TP param) {

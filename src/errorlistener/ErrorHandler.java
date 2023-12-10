@@ -17,23 +17,12 @@ import java.util.List;
 
 public class ErrorHandler {
 
-	/**
-	 * Singleton: private default constructor
-	 */
 	private ErrorHandler()  {}
-	
-	/**
-	 * Singleton: unique static instance
-	 */
+
 	private static ErrorHandler instance=new ErrorHandler();
-	
-	
-	/** 
-	 * @return Singleton: the unique class instance
-	 */
+
 	public static ErrorHandler getErrorHandler() { return instance; }
 
-	
 	private List<ErrorType> errors=new ArrayList<ErrorType>();
 	
 	public void addError(ErrorType error) {
@@ -48,5 +37,4 @@ public class ErrorHandler {
 	public boolean anyError() {
 		return errors.size()>0;
 	}
-	
 }

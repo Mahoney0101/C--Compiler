@@ -10,11 +10,8 @@ import types.*;
 import visitor.Visitor;
 import ast.*;
 
-public abstract class AbstractCGVisitor<TP, TR> implements Visitor<TP, TR> {
+public abstract class AbstractCGVisitor<TP, TR> implements Visitor {
 
-	/**
-	 * Handles the code generation responsibilities
-	 */
 	protected CG cg;
 
 	public CG getCG() {

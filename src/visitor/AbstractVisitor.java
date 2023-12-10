@@ -1,15 +1,13 @@
 package visitor;
 
 import ast.Definition;
-import ast.FunctionDeclaration;
 import ast.Program;
 import ast.VarDeclaration;
 import ast.statements.*;
 import ast.expressions.*;
 import types.*;
 
-public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
-
+public abstract class AbstractVisitor<TP, TR> implements Visitor {
 
     @Override
     public <TP, TR> TR visit(Program program, TP param) {

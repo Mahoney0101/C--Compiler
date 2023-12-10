@@ -162,11 +162,6 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public <TP, TR> TR visit(Parameter parameter, TP param) {
-        return null;
-    }
-
-    @Override
     public <TP, TR> TR visit(UnaryMinusExpression unaryMinusExpression, TP param) {
         return null;
     }

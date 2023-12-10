@@ -9,7 +9,6 @@ import ast.expressions.FunctionCallExpression;
 import ast.statements.ReturnStatement;
 import ast.statements.Statement;
 import visitor.Visitor;
-
 import java.util.List;
 
 public class FunctionType extends AbstractType {
@@ -152,8 +151,7 @@ public class FunctionType extends AbstractType {
     }
 
     @Override
-    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+    public <TP, TR> TR accept(Visitor visitor, TP param) {
         return null;
     }
-
 }

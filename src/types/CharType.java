@@ -5,8 +5,6 @@ import ast.expressions.AbstractBinaryExpression;
 import ast.expressions.AbstractUnaryExpression;
 import visitor.Visitor;
 
-import java.util.Objects;
-
 public class CharType extends AbstractType {
 
     private CharType() {
@@ -124,7 +122,7 @@ public class CharType extends AbstractType {
     }
 
     @Override
-    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+    public <TP, TR> TR accept(Visitor visitor, TP param) {
         return visitor.visit(this, param);
     }
 }

@@ -121,11 +121,6 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
     }
 
     @Override
-    public <TP, TR> TR visit(Parameter parameter, TP param) {
-        return null;
-    }
-
-    @Override
     public <TP, TR> TR visit(UnaryMinusExpression unaryMinusExpression, TP param) {
         return null;
     }
@@ -238,7 +233,6 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
         return null;
     }
 
-
     @Override
     public <TP, TR> TR visit(CastExpression castExpression, TP param) {
 
@@ -261,5 +255,4 @@ public class IdentityVisitor extends AbstractVisitor<Void, Void> {
         functionCallStatement.getFunctionCallExpression().accept(this, null);
         return null;
     }
-
 }

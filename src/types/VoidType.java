@@ -11,7 +11,6 @@ public class VoidType extends AbstractType {
 
     private static VoidType instance=new VoidType();
 
-
     public static VoidType getInstance() { return instance; }
 
     @Override
@@ -35,8 +34,7 @@ public class VoidType extends AbstractType {
     }
 
     @Override
-    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+    public <TP, TR> TR accept(Visitor visitor, TP param) {
         return visitor.visit(this, param);
     }
-
 }

@@ -1,7 +1,6 @@
 package codegenerator;
 
 import java.io.*;
-
 import ast.*;
 import ast.expressions.VariableExpression;
 import types.*;

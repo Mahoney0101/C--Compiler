@@ -42,7 +42,6 @@ varDeclarations returns [List<VarDeclaration> ast]
         }
     ;
 
-
 fieldDeclaration returns [List<VarDeclaration> ast = new ArrayList<VarDeclaration>()]
     : t=type ids=idList {
             Type finalType = $t.ast;
@@ -97,14 +96,11 @@ statements returns [List<Statement> ast]
         }
     ;
 
-// ** Specific Statement Types **
-
 ifStatement returns [IfStatement ast]
     : IF LPAREN expr1=expr RPAREN (LBRACE stmts1=statements RBRACE { $ast = new IfStatement($IF.getLine(), $IF.getCharPositionInLine() + 1, $expr1.ast, $stmts1.ast, null);} | stmt2=statement{$ast = new IfStatement($IF.getLine(), $IF.getCharPositionInLine() + 1, $expr1.ast, $stmt2.ast, null);})
 
       (ELSE (LBRACE stmts3=statements RBRACE {$ast.setElseBlockStatements($stmts3.ast);} | stmt4=statement{ $ast.setElseBlockStatements($stmt4.ast);}))?
     ;
-
 
 whileStatement returns [WhileStatement ast]
     : WHILE LPAREN condition=expr RPAREN (LBRACE stmts1=statements RBRACE { $ast = new WhileStatement($WHILE.getLine(), $WHILE.getCharPositionInLine() + 1, $condition.ast, $stmts1.ast); }
@@ -112,8 +108,12 @@ whileStatement returns [WhileStatement ast]
       )
     ;
 
-
-returnStatement returns [Statement ast] : RETURN exp=expr SEMI { $ast = new ReturnStatement($RETURN.getLine(), $RETURN.getCharPositionInLine()+1, $exp.ast); };
+returnStatement returns [Statement ast]
+    : RETURN exp=expr SEMI
+    {
+        $ast = new ReturnStatement($RETURN.getLine(), $RETURN.getCharPositionInLine()+1, $exp.ast);
+    }
+    ;
 
 writeStatement returns [List<Statement> ast = new ArrayList<Statement>()]
     : WRITE exprs=exprList SEMI
@@ -133,9 +133,13 @@ readStatement returns [List<Statement> ast = new ArrayList<>()]
     }
     ;
 
-assignment returns [Statement ast] : lhs=expr ASSIGN rhs=expr SEMI{$ast = new AssignmentStatement($start.getLine(),$start.getCharPositionInLine()+1,$lhs.ast,$rhs.ast);};
+assignment returns [Statement ast]
+    : lhs=expr ASSIGN rhs=expr SEMI
+    {
+        $ast = new AssignmentStatement($start.getLine(),$start.getCharPositionInLine()+1,$lhs.ast,$rhs.ast);
+    }
+    ;
 
-// ** Expressions and Types **
 expr returns [Expression ast]
      : INT_CONSTANT                                 { $ast = new IntLiteralExpression($INT_CONSTANT.getLine(), $INT_CONSTANT.getCharPositionInLine()+1, LexerHelper.lexemeToInt($INT_CONSTANT.text)); }
      | DOUBLE_CONSTANT                              { $ast = new DoubleLiteralExpression($DOUBLE_CONSTANT.getLine(), $DOUBLE_CONSTANT.getCharPositionInLine()+1, LexerHelper.lexemeToReal($DOUBLE_CONSTANT.text)); }
@@ -241,7 +245,6 @@ functionCallExpression returns [FunctionCallExpression ast]
     }
     ;
 
-// ** LEXER RULES **
 IF : 'if';
 ELSE : 'else';
 WHILE : 'while';
@@ -279,7 +282,6 @@ OR : '||';
 NOT : '!';
 DOT : '.';
 
-// ** Identifiers and Literals **
 ID : [a-zA-Z_] [a-zA-Z_0-9]* ;
 CHAR_CONSTANT : '\'' ( ESCAPE_SEQUENCE | '\\' INT_CONSTANT | ~('\'' | '\\') ) '\'';
 DOUBLE_CONSTANT : INT_CONSTANT '.' [0-9]* EXPONENT? | '.' [0-9]+ EXPONENT? | [0-9]+ EXPONENT;
@@ -288,7 +290,6 @@ INT_CONSTANT : '0' | [1-9][0-9]* ;
 fragment ESCAPE_SEQUENCE : '\\' ('n' | 't' | 'b' | 'r' | '\'' | '\\');
 fragment EXPONENT : [eE] [+-]? INT_CONSTANT;
 
-// ** Comments and Whitespace **
 ONE_LINE_COMMENT : '//' ~('\n')* '\n'? -> skip ;
 MULTI_LINE_COMMENT : '/*' .*? '*/' -> skip ;
 WS : [ \t\r\n]+ -> skip ;

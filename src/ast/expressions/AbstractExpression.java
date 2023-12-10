@@ -2,7 +2,6 @@ package ast.expressions;
 
 import ast.AbstractASTNode;
 import types.Type;
-import visitor.Visitor;
 
 abstract class AbstractExpression extends AbstractASTNode implements Expression {
 

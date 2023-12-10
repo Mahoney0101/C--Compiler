@@ -1027,7 +1027,9 @@ public class CmmParser extends Parser {
 			((ReturnStatementContext)_localctx).exp = expr(0);
 			setState(196);
 			match(SEMI);
-			 ((ReturnStatementContext)_localctx).ast =  new ReturnStatement(((ReturnStatementContext)_localctx).RETURN.getLine(), ((ReturnStatementContext)_localctx).RETURN.getCharPositionInLine()+1, ((ReturnStatementContext)_localctx).exp.ast); 
+
+			        ((ReturnStatementContext)_localctx).ast =  new ReturnStatement(((ReturnStatementContext)_localctx).RETURN.getLine(), ((ReturnStatementContext)_localctx).RETURN.getCharPositionInLine()+1, ((ReturnStatementContext)_localctx).exp.ast);
+			    
 			}
 		}
 		catch (RecognitionException re) {
@@ -1166,7 +1168,9 @@ public class CmmParser extends Parser {
 			((AssignmentContext)_localctx).rhs = expr(0);
 			setState(212);
 			match(SEMI);
-			((AssignmentContext)_localctx).ast =  new AssignmentStatement(_localctx.start.getLine(),_localctx.start.getCharPositionInLine()+1,((AssignmentContext)_localctx).lhs.ast,((AssignmentContext)_localctx).rhs.ast);
+
+			        ((AssignmentContext)_localctx).ast =  new AssignmentStatement(_localctx.start.getLine(),_localctx.start.getCharPositionInLine()+1,((AssignmentContext)_localctx).lhs.ast,((AssignmentContext)_localctx).rhs.ast);
+			    
 			}
 		}
 		catch (RecognitionException re) {

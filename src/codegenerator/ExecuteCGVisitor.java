@@ -258,11 +258,6 @@ public class ExecuteCGVisitor<TP, TR> extends AbstractCGVisitor<TP, TR> {
     }
 
     @Override
-    public <TP, TR> TR visit(Parameter parameter, TP param) {
-        return null;
-    }
-
-    @Override
     public <TP, TR> TR visit(UnaryMinusExpression unaryMinusExpression, TP param) {
         return null;
     }

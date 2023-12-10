@@ -15,6 +15,7 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
         }
         return null;
     }
+
     @Override
     public <TP, TR> TR  visit(VarDeclaration var, TP param) {
 
@@ -33,7 +34,6 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
 
         return null;
     }
-
 
     @Override
     public <TP, TR> TR visit(FunctionDeclaration functionDeclaration, TP param) {
@@ -134,11 +134,6 @@ public class LValueVisitor extends AbstractVisitor<Type, Void> {
 
     @Override
     public <TP, TR> TR visit(VoidType voidType, TP param) {
-        return null;
-    }
-
-    @Override
-    public <TP, TR> TR visit(Parameter parameter, TP param) {
         return null;
     }
 

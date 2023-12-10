@@ -12,9 +12,7 @@ public class IntType extends AbstractType {
 
     private static IntType instance=new IntType();
 
-
     public static IntType getInstance() { return instance; }
-
 
     @Override
     public Type arithmetic(Type type, ASTNode node) {
@@ -77,7 +75,6 @@ public class IntType extends AbstractType {
         return 2;
     }
 
-
     @Override
     public String toString() {
         return "int";
@@ -92,11 +89,10 @@ public class IntType extends AbstractType {
         if (type instanceof ArrayType)
             return new ErrorType("Arrays can not be assigned", node);
         return new ErrorType(String.format("Cannot assign %s to int type", type), node);
-
     }
 
     @Override
-    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+    public <TP, TR> TR accept(Visitor visitor, TP param) {
         return visitor.visit(this,param);
     }
 }

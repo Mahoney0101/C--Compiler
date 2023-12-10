@@ -1,7 +1,6 @@
 package ast.expressions;
 
 import visitor.Visitor;
-
 import java.util.List;
 
 public class FunctionCallExpression extends AbstractExpression {
@@ -38,7 +37,7 @@ public class FunctionCallExpression extends AbstractExpression {
     }
 
     @Override
-    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+    public <TP, TR> TR accept(Visitor visitor, TP param) {
         return visitor.visit(this, param);
     }
 }

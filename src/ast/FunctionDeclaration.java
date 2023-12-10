@@ -3,7 +3,6 @@ package ast;
 import visitor.Visitor;
 import types.*;
 import ast.statements.*;
-
 import java.util.List;
 
 public class FunctionDeclaration extends AbstractASTNode implements Definition{
@@ -12,17 +11,18 @@ public class FunctionDeclaration extends AbstractASTNode implements Definition{
     private List<VarDeclaration> vars;
     private List<Statement> statements;
 
-    public FunctionDeclaration(int line,
-                               int column,
-                               FunctionType functionType,
-                               String functionName,
-                               List<VarDeclaration> vars,
-                               List<Statement> statements) {
-        super(line, column);
-        this.functionType = functionType;
-        this.functionName = functionName;
-        this.vars = vars;
-        this.statements = statements;
+    public FunctionDeclaration(
+        int line,
+        int column,
+        FunctionType functionType,
+        String functionName,
+        List<VarDeclaration> vars,
+        List<Statement> statements) {
+            super(line, column);
+            this.functionType = functionType;
+            this.functionName = functionName;
+            this.vars = vars;
+            this.statements = statements;
     }
 
     public FunctionType getFunctionType() {
@@ -58,7 +58,7 @@ public class FunctionDeclaration extends AbstractASTNode implements Definition{
     }
 
     @Override
-    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param)
+    public <TP, TR> TR accept(Visitor visitor, TP param)
     {
         return visitor.visit(this, param);
     }
