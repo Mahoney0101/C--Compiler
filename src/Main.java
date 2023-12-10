@@ -1,7 +1,6 @@
 import codegenerator.CG;
 import codegenerator.ExecuteCGVisitor;
 import errorlistener.ErrorHandler;
-import errorlistener.Listener;
 import ast.Program;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
@@ -17,19 +16,18 @@ import semantic.TypeCheckingVisitor;
 public class Main {
 	public static void main(String[] args) throws Exception {
 		try {
-			String file = "input.txt";
+			if (args.length<2) {
+				System.err.println("Please, pass me the input and output file names.");
+				return;
+			}
 
-			CharStream input = CharStreams.fromFileName(file);
+			CharStream input = CharStreams.fromFileName(args[0]);
 			CmmLexer lexer = new CmmLexer(input);
 
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
 			CmmParser parser = new CmmParser(tokens);
-			parser.removeErrorListeners();
-			parser.addErrorListener(new Listener());
-
 			CmmParser.ProgramContext tree = parser.program();
 			Program ast = tree.ast;
-
 
 			ast.accept(new LValueVisitor(), null);
 			ast.accept(new IdentityVisitor(), null);
@@ -41,7 +39,7 @@ public class Main {
 			}
 			else {
 				ast.accept(new OffsetVisitor(), null);
-				ast.accept(new ExecuteCGVisitor(new CG("output.txt", "input.txt")), null);
+				ast.accept(new ExecuteCGVisitor(new CG(args[1], args[0])), null);
 			}
 			IntrospectorModel model=new IntrospectorModel("Program", ast);
 			new IntrospectorTree("Introspector", model);
