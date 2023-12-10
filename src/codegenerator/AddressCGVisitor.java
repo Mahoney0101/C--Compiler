@@ -115,7 +115,13 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public <TP, TR> TR visit(StructFieldAccessExpression nestedStructFieldExpression, TP param) {
+    public <TP, TR> TR visit(StructFieldAccessExpression structFieldAccess, TP param) {
+        structFieldAccess.getStructure().accept(this, null);
+
+        int offset = structFieldAccess.getDefinition().getType().numberOfBytes();
+        cg.push(offset);
+        cg.add(IntType.getInstance());
+
         return null;
     }
 

@@ -171,11 +171,12 @@ public class ExecuteCGVisitor<TP, TR> extends AbstractCGVisitor<TP, TR> {
 
     @Override
     public <TP, TR> TR visit(StructType structType, TP param) {
+
         return null;
     }
 
     @Override
-    public <TP, TR> TR visit(StructFieldAccessExpression nestedStructFieldExpression, TP param) {
+    public <TP, TR> TR visit(StructFieldAccessExpression structFieldExpression, TP param) {
         return null;
     }
 

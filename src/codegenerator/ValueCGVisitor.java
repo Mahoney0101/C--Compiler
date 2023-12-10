@@ -24,6 +24,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
 	@Override
 	public <TP, TR> TR visit(ArithmeticExpression arithmetic, TP param) {
+		setReturnValueUsage(true);
 		Expression operand1 = arithmetic.getOperand1();
 		Expression operand2 = arithmetic.getOperand2();
 		if (operand1 instanceof CharLiteralExpression) {
@@ -41,6 +42,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 		}
 
 		cg.arithmetic(arithmetic.getOperator(), arithmetic.getType());
+		setReturnValueUsage(false);
 		return null;
 	}
 
@@ -96,9 +98,10 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
 	@Override
 	public <TP, TR> TR visit(EqualityExpression logical, TP param) {
+		setReturnValueUsage(true);
 		logical.getOperand1().accept(this, null);
 		logical.getOperand2().accept(this, null);
-
+		setReturnValueUsage(false);
 		cg.relational(logical.getOperator(), logical.getOperand1().getType());
 
 		return null;
@@ -181,14 +184,21 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 	}
 
 	@Override
-	public <TP, TR> TR visit(StructFieldAccessExpression nestedStructFieldExpression, TP param) {
+	public <TP, TR> TR visit(StructFieldAccessExpression structFieldAccess, TP param) {
+		structFieldAccess.accept(this.executeVisitor.getValueCGVisitor(), null);
+
+		Type fieldType = structFieldAccess.getDefinition().getType();
+		cg.load(fieldType);
+
 		return null;
 	}
 
 	@Override
 	public <TP, TR> TR visit(LogicalExpression logicalExpression, TP param) {
+		setReturnValueUsage(true);
 		logicalExpression.getOperand1().accept(this, null);
 		logicalExpression.getOperand2().accept(this, null);
+		setReturnValueUsage(false);
 
 		cg.logical(logicalExpression.getOperator());
 
